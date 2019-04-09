@@ -2,8 +2,8 @@ import { Component, h } from "preact";
 import { Route, Router, RouterOnChangeArgs } from "preact-router";
 
 
-import Home from "../routes/home";
-import {Profile} from "../routes/profile";
+import Home from "./routes/home";
+import {Profile} from "./routes/profile";
 import Header from "./header";
 
 if ((module as any).hot) {
