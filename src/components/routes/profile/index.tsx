@@ -2,8 +2,6 @@ import { Component, h } from "preact";
 import { connect } from "redux-zero/preact";
 import actions from "../../actions";
 import * as style from "./style.css";
-import { Provider } from "redux-zero/preact";
-import store from "../../store";
 
 interface Props {
     user: string;
@@ -18,7 +16,7 @@ interface State {
 
 const mapToProps = ({ count }: any) => ({ count });
 
-export class ProfileRaw extends Component<Props, State> {
+class ProfileRaw extends Component<Props, State> {
     public state = {
         time: Date.now(),
         count: 10
@@ -59,10 +57,4 @@ export class ProfileRaw extends Component<Props, State> {
     }
 }
 
-export const ProfileWrapper = connect(mapToProps, actions)(ProfileRaw);
-
-export const Profile = () => (
-    <Provider store={store}>
-        <ProfileWrapper/>
-    </Provider>
-)
+export const Profile = connect(mapToProps, actions)(ProfileRaw);
