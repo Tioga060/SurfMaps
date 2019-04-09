@@ -3,8 +3,13 @@ import { connect } from "redux-zero/preact";
 import actions from "../../actions";
 import * as style from "./style.css";
 
+import Card, {CardActionButtons} from 'preact-material-components/Card';
+import 'preact-material-components/Typography/style.css';
+import 'preact-material-components/Card/style.css';
+import 'preact-material-components/Button/style.css';
+
 interface Props {
-    user: string;
+    map: string;
     count: number;
     increment: any;
     decrement: any;
@@ -40,11 +45,11 @@ class ProfileRaw extends Component<Props, State> {
         this.setState({ time: Date.now() });
     };
 
-    public render({ user, increment, count }: Props, { time }: State) {
+    public render({ map, increment, count }: Props, { time }: State) {
         return (
             <div class={style.profile}>
-                <h1>Profile: {user}</h1>
-                <p>This is the user profile for a user named {user}.</p>
+                <h1>Profile: {map}</h1>
+                <p>This is the user profile for a user named {map}.</p>
 
                 <div>Current time: {new Date(time).toLocaleString()}</div>
 
@@ -52,6 +57,23 @@ class ProfileRaw extends Component<Props, State> {
                     <button onClick={increment}>Click Me</button> Clicked{" "}
                     {count} times.
                 </p>
+                <Card class={style.card}>
+                    <Card.Media>
+                        <img class={style.cardImage} src="/assets/dev/surf_obliteration.jpg"/>
+                    </Card.Media>
+                    <div class={style.cardBody}>
+                        <h2 class="mdc-typography--headline6">Title</h2>
+                        <div class="mdc-typography mdc-typography--subtitle2">Caption</div>
+                    </div>
+                    <Card.Actions>
+                        <CardActionButtons>
+                            <Card.ActionButton>OK</Card.ActionButton>
+                        </CardActionButtons>
+                        <Card.ActionIcons>
+                            <Card.ActionIcon>share</Card.ActionIcon>
+                        </Card.ActionIcons>
+                    </Card.Actions>
+                </Card>
             </div>
         );
     }

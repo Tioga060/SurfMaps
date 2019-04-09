@@ -3,9 +3,9 @@ import { Route, Router, RouterOnChangeArgs } from "preact-router";
 import { Provider } from "redux-zero/preact";
 import store from "./store";
 
+import Header from "./header";
 import Home from "./routes/home";
 import {Profile} from "./routes/profile";
-import Header from "./header";
 
 if ((module as any).hot) {
     // tslint:disable-next-line:no-var-requires
@@ -26,8 +26,8 @@ export default class App extends Component {
                 <Provider store={store}>
                     <Router onChange={this.handleRoute}>
                         <Route path="/" component={Home} />
-                        <Route path="/profile/" component={Profile} user="me" />
-                        <Route path="/profile/:user" component={Profile} />
+                        <Route path="/maps/" component={Profile} map={null} />
+                        <Route path="/maps/:map" component={Profile} />
                     </Router>
                 </Provider>
             </div>
