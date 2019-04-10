@@ -7,7 +7,7 @@ import {
     Headline6,
     Subtitle2,
 } from '@material/react-typography';
-import { createFragmentContainer, graphql, QueryRenderer } from 'react-relay';
+import { createFragmentContainer, QueryRenderer, graphql } from 'react-relay';
 import environment from '../../../../environment';
 
 import './styles.scss';
@@ -66,6 +66,14 @@ export const MapCard: React.StatelessComponent = () => (
             }
             `
         }
-        render={MapCardContainer}
+        variables={{}}
+        render={({ error, props }) => {
+            if (error) {
+                return <div>{error.message}</div>;
+            } else if (props) {
+                return <MapCardContainer map={props.map} />;
+            }
+            return <div>Loading</div>;
+        }}
     />
 )

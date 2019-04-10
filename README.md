@@ -56,3 +56,5 @@ mutation {
     }
   }
 }
+
+Look for babel-plugin-macros typescript support or just native react-relay in cra2
