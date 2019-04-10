@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+
 import { MapCard } from './pages/MapSearchPage/components/MapCard/component';
 import './App.css';
 
