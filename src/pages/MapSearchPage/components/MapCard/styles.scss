@@ -1,0 +1,19 @@
+@import "~@material/react-card/index.scss";
+@import '~@material/react-typography/index.scss';
+
+.map-card {
+    width: 350px;
+}
+
+.map-primary {
+    padding: 1rem;
+}
+
+.map-title {
+    margin: 0;
+}
+
+.map-subtitle {
+    margin: 0;
+    color: var(--mdc-theme-text-secondary-on-background,rgba(0,0,0,.54));
+}
