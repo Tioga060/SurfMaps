@@ -47,7 +47,7 @@ class MapCardComponent extends React.Component<IProps> {
 
 const MapCardContainer = createFragmentContainer(MapCardComponent, {
     map: graphql`
-        fragment MapCardComponent_map on SurfMap {
+        fragment component_map on SurfMap {
             mapname
             author
             tier
@@ -55,25 +55,21 @@ const MapCardContainer = createFragmentContainer(MapCardComponent, {
     `
 })
 
-interface temp {
-    error: any;
-    props: any;
-}
-
 export const MapCard: React.StatelessComponent = () => (
     <QueryRenderer
         environment={environment}
         query={
             graphql`
-            query GetSurfMapById($mapId: ID!) {
-                surfMap(id: $mapId) {
-                    ...MapCardComponent_map
+                query componentGetSurfMapByIdQuery($mapId: ID!) {
+                    surfMap(id: $mapId) {
+                        ...component_map
+                    }
                 }
-            }
             `
         }
         variables={{mapId: "WyJTdXJmTWFwcyIsMl0="}}
-        render={({ error, props }: temp) => {
+        render={({ error, props }) => {
+            console.log(error, props);
             if (error) {
                 return <div>{error.message}</div>;
             } else if (props) {

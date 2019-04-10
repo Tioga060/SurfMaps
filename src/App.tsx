@@ -6,13 +6,14 @@ import './App.css';
 class App extends Component {
   render() {
     return (
-      <div className="App">
+      <>
         <header className="App-header">
         </header>
-        <body className="App-body">
-        <MapCard/>
-        </body>
-      </div>
+        
+        <div className="App-body">
+          <MapCard/>
+        </div>
+      </>
     );
   }
 }

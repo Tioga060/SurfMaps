@@ -3,17 +3,17 @@ import {
     Network,
     RecordSource,
     Store,
-    Variables,
 } from 'relay-runtime';
 
 const GRAPHQL_HOST = 'http://localhost:5000';
 
 function fetchQuery(
     operation: any,
-    variables: Variables,
+    variables: any,
 ) {
     return fetch(GRAPHQL_HOST + '/graphql', {
         method: 'POST',
+        mode: 'no-cors', //TODO
         headers: {
             'Content-Type': 'application/json',
         },

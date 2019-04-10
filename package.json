@@ -2,6 +2,7 @@
   "name": "surfmaps",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:5000",
   "dependencies": {
     "@material/react-card": "^0.11.0",
     "@material/react-typography": "^0.11.0",
@@ -13,15 +14,17 @@
     "node-sass": "^4.11.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-relay": "^3.0.0",
     "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.8",
     "typescript": "3.4.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-scripts eject",
+    "relay": "relay-compiler --language typescript --src ./src --schema ./schema.graphql"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -34,6 +37,10 @@
   ],
   "devDependencies": {
     "babel-plugin-relay": "^3.0.0",
-    "graphql": "^14.2.1"
+    "customize-cra": "^0.2.12",
+    "graphql": "^14.2.1",
+    "react-app-rewired": "^2.1.1",
+    "relay-compiler": "^3.0.0",
+    "relay-compiler-language-typescript": "^2.0.0"
   }
 }
