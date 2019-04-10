@@ -8,6 +8,7 @@ import {
     Subtitle2,
 } from '@material/react-typography';
 import { createFragmentContainer, QueryRenderer, graphql } from 'react-relay';
+//const { createFragmentContainer, QueryRenderer, graphql } = require('babel-plugin-relay/macro');
 import environment from '../../../../environment';
 
 import './styles.scss';
@@ -54,20 +55,25 @@ const MapCardContainer = createFragmentContainer(MapCardComponent, {
     `
 })
 
+interface temp {
+    error: any;
+    props: any;
+}
+
 export const MapCard: React.StatelessComponent = () => (
     <QueryRenderer
         environment={environment}
         query={
             graphql`
-            {
-                surfMap(id: "WyJTdXJmTWFwcyIsMl0=") {
+            query GetSurfMapById($mapId: ID!) {
+                surfMap(id: $mapId) {
                     ...MapCardComponent_map
                 }
             }
             `
         }
-        variables={{}}
-        render={({ error, props }) => {
+        variables={{mapId: "WyJTdXJmTWFwcyIsMl0="}}
+        render={({ error, props }: temp) => {
             if (error) {
                 return <div>{error.message}</div>;
             } else if (props) {
