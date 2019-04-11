@@ -1,0 +1,12 @@
+@import '@material/react-layout-grid/index.scss';
+
+.map-list {
+    max-width: 1000px;
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.map-list > .map-card {
+    margin: .5em;
+}

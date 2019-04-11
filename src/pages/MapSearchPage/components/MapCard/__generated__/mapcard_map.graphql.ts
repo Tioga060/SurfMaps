@@ -1,19 +1,19 @@
 /* tslint:disable */
 
 import { ReaderFragment } from "relay-runtime";
-export type component_map$ref = any;
-export type component_map = {
+export type mapcard_map$ref = any;
+export type mapcard_map = {
     readonly mapname: string;
     readonly author: string;
     readonly tier: number;
-    readonly " $refType": component_map$ref;
+    readonly " $refType": mapcard_map$ref;
 };
 
 
 
 const node: ReaderFragment = {
   "kind": "Fragment",
-  "name": "component_map",
+  "name": "mapcard_map",
   "type": "SurfMap",
   "metadata": null,
   "argumentDefinitions": [],
@@ -41,5 +41,5 @@ const node: ReaderFragment = {
     }
   ]
 };
-(node as any).hash = 'ebda975d4d32fe98f22c481b4ea29cf0';
+(node as any).hash = 'bded966ccdcb265d1b8119d4d9da1075';
 export default node;

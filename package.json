@@ -5,6 +5,10 @@
   "proxy": "http://localhost:5000",
   "dependencies": {
     "@material/react-card": "^0.11.0",
+    "@material/react-layout-grid": "^0.11.0",
+    "@material/react-material-icon": "^0.11.0",
+    "@material/react-text-field": "^0.11.0",
+    "@material/react-top-app-bar": "^0.11.0",
     "@material/react-typography": "^0.11.0",
     "@types/jest": "24.0.11",
     "@types/node": "11.13.2",
@@ -24,7 +28,8 @@
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
-    "relay": "relay-compiler --language typescript --src ./src --schema ./schema.graphql"
+    "relay": "relay-compiler --language typescript --src ./src --schema ./schema.graphql",
+    "postgraphile": "postgraphile -c postgres://postgres:a@localhost:5432/postgres -a -j -o --export-schema-graphql ./schema.graphql"
   },
   "eslintConfig": {
     "extends": "react-app"

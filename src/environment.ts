@@ -13,7 +13,6 @@ function fetchQuery(
 ) {
     return fetch(GRAPHQL_HOST + '/graphql', {
         method: 'POST',
-        mode: 'no-cors', //TODO
         headers: {
             'Content-Type': 'application/json',
         },

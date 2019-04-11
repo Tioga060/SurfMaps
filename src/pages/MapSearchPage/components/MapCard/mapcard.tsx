@@ -23,13 +23,13 @@ interface IProps {
     map: IMap;
 }
 
-class MapCardComponent extends React.Component<IProps> {
+export class MapCard extends React.Component<IProps> {
     public render() {
         const map = this.props.map;
         return (
             <Card className='map-card'>
                 <CardPrimaryContent>
-                    <CardMedia wide imageUrl='http://puu.sh/DcrAi/6e3c7b259a.jpg' />
+                    <CardMedia className="map-image" wide imageUrl={`${process.env.PUBLIC_URL}/dev/${map.mapname}.jpg`}/>
                     <div className="map-primary">
                         <Headline6 className='map-title'>
                             {map.mapname}
@@ -45,9 +45,10 @@ class MapCardComponent extends React.Component<IProps> {
     }
 }
 
+/*
 const MapCardContainer = createFragmentContainer(MapCardComponent, {
     map: graphql`
-        fragment component_map on SurfMap {
+        fragment mapcard_map on SurfMap {
             mapname
             author
             tier
@@ -55,27 +56,34 @@ const MapCardContainer = createFragmentContainer(MapCardComponent, {
     `
 })
 
+const defaultMap: IMap = {
+    mapname: "Loading...",
+    author: "Loading...",
+    tier: 0,
+}
+
 export const MapCard: React.StatelessComponent = () => (
     <QueryRenderer
         environment={environment}
         query={
             graphql`
-                query componentGetSurfMapByIdQuery($mapId: ID!) {
+                query mapcardGetSurfMapByIdQuery($mapId: ID!) {
                     surfMap(id: $mapId) {
-                        ...component_map
+                        ...mapcard_map
                     }
                 }
             `
         }
         variables={{mapId: "WyJTdXJmTWFwcyIsMl0="}}
         render={({ error, props }) => {
-            console.log(error, props);
             if (error) {
                 return <div>{error.message}</div>;
-            } else if (props) {
-                return <MapCardContainer map={props.map} />;
             }
-            return <div>Loading</div>;
+            const map: IMap = props
+                ? props.surfMap
+                : defaultMap
+            return <MapCardContainer map={map}/>;
         }}
     />
 )
+*/

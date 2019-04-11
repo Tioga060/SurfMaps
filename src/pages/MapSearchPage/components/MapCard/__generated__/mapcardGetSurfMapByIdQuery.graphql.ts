@@ -1,33 +1,33 @@
 /* tslint:disable */
 
 import { ConcreteRequest } from "relay-runtime";
-type component_map$ref = any;
-export type componentGetSurfMapByIdQueryVariables = {
+type mapcard_map$ref = any;
+export type mapcardGetSurfMapByIdQueryVariables = {
     readonly mapId: string;
 };
-export type componentGetSurfMapByIdQueryResponse = {
+export type mapcardGetSurfMapByIdQueryResponse = {
     readonly surfMap: ({
-        readonly " $fragmentRefs": component_map$ref;
+        readonly " $fragmentRefs": mapcard_map$ref;
     }) | null;
 };
-export type componentGetSurfMapByIdQuery = {
-    readonly response: componentGetSurfMapByIdQueryResponse;
-    readonly variables: componentGetSurfMapByIdQueryVariables;
+export type mapcardGetSurfMapByIdQuery = {
+    readonly response: mapcardGetSurfMapByIdQueryResponse;
+    readonly variables: mapcardGetSurfMapByIdQueryVariables;
 };
 
 
 
 /*
-query componentGetSurfMapByIdQuery(
+query mapcardGetSurfMapByIdQuery(
   $mapId: ID!
 ) {
   surfMap(id: $mapId) {
-    ...component_map
+    ...mapcard_map
     id
   }
 }
 
-fragment component_map on SurfMap {
+fragment mapcard_map on SurfMap {
   mapname
   author
   tier
@@ -55,7 +55,7 @@ return {
   "kind": "Request",
   "fragment": {
     "kind": "Fragment",
-    "name": "componentGetSurfMapByIdQuery",
+    "name": "mapcardGetSurfMapByIdQuery",
     "type": "Query",
     "metadata": null,
     "argumentDefinitions": (v0/*: any*/),
@@ -71,7 +71,7 @@ return {
         "selections": [
           {
             "kind": "FragmentSpread",
-            "name": "component_map",
+            "name": "mapcard_map",
             "args": null
           }
         ]
@@ -80,7 +80,7 @@ return {
   },
   "operation": {
     "kind": "Operation",
-    "name": "componentGetSurfMapByIdQuery",
+    "name": "mapcardGetSurfMapByIdQuery",
     "argumentDefinitions": (v0/*: any*/),
     "selections": [
       {
@@ -126,12 +126,12 @@ return {
   },
   "params": {
     "operationKind": "query",
-    "name": "componentGetSurfMapByIdQuery",
+    "name": "mapcardGetSurfMapByIdQuery",
     "id": null,
-    "text": "query componentGetSurfMapByIdQuery(\n  $mapId: ID!\n) {\n  surfMap(id: $mapId) {\n    ...component_map\n    id\n  }\n}\n\nfragment component_map on SurfMap {\n  mapname\n  author\n  tier\n}\n",
+    "text": "query mapcardGetSurfMapByIdQuery(\n  $mapId: ID!\n) {\n  surfMap(id: $mapId) {\n    ...mapcard_map\n    id\n  }\n}\n\nfragment mapcard_map on SurfMap {\n  mapname\n  author\n  tier\n}\n",
     "metadata": {}
   }
 };
 })();
-(node as any).hash = 'd646c9e23f26705d7befd86fc41464fc';
+(node as any).hash = 'bea711f8d1d82232c8f53b78afa02119';
 export default node;
