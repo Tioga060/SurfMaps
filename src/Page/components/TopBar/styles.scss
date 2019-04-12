@@ -6,6 +6,16 @@
     @include mdc-text-field-ink-color(white);
     @include mdc-text-field-label-color(white);
     @include mdc-text-field-caret-color(white);
-    @include mdc-text-field-bottom-line-color(transparent);
-    @include mdc-text-field-hover-bottom-line-color(transparent);
+    @include mdc-text-field-bottom-line-color(white);
+    @include mdc-text-field-hover-bottom-line-color(white);
+    @include mdc-text-field-fullwidth-bottom-line-color(transparent);
+    padding: 0 1em;
+}
+
+.search-box-icon {
+    color: white !important;
+}
+
+.top-app-bar {
+    @include mdc-top-app-bar-fill-color(skyblue)
 }
