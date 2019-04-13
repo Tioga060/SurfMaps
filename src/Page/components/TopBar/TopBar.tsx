@@ -1,22 +1,12 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import TopAppBar, {
     TopAppBarFixedAdjust,
-    TopAppBarIcon,
     TopAppBarRow,
-    TopAppBarSection,
-    TopAppBarTitle,
 } from "@material/react-top-app-bar";
-import MaterialIcon from '@material/react-material-icon';
-import TextField, { Input } from '@material/react-text-field';
 import debounce from 'lodash/debounce';
-import {
-    Headline6,
-    Subtitle2,
-} from '@material/react-typography';
-import { createFragmentContainer, QueryRenderer, graphql } from 'react-relay';
-//const { createFragmentContainer, QueryRenderer, graphql } = require('babel-plugin-relay/macro');
-import environment from '../../../environment';
 import { MapList } from '../../../pages/MapSearchPage/components/MapCardList/mapcardlist';
+import { TopBarSearch } from './components/TopBarSearch';
+import { TopBarLayout } from './components/TopBarLayout';
 import './styles.scss';
 
 interface IState {
@@ -28,8 +18,6 @@ interface IState {
 interface IBlankProps { }
 
 export class TopBar extends React.Component<IBlankProps, IState> {
-    public searchInputRef: React.RefObject<Input>;
-
     public constructor(props: IBlankProps) {
         super(props);
         this.state = {
@@ -39,7 +27,6 @@ export class TopBar extends React.Component<IBlankProps, IState> {
         };
         this.updateQuery = debounce(this.updateQuery, 250);
         this.keyEvent = this.keyEvent.bind(this);
-        this.searchInputRef = createRef();
     }
 
     public keyEvent(event: any) {
@@ -85,43 +72,12 @@ export class TopBar extends React.Component<IBlankProps, IState> {
                 <TopAppBar className="top-app-bar">
                     <TopAppBarRow>
                         {this.state.searchIsOpen
-                            ? (
-                                <TopAppBarSection align='end' role='toolbar'>
-                                    <TextField
-                                        label='Map name, Author ...'
-                                        className='search-box mdc-text-field__input mdc-text-field--fullwidth'
-                                        onTrailingIconSelect={this.closedSearch}
-                                        trailingIcon={<MaterialIcon role="button" icon="close" className="search-box-icon" />}
-                                        fullWidth
-                                    >
-                                        <Input
-                                            autoFocus
-                                            value={this.state.searchText}
-                                            onChange={this.setSearchText}
-                                        />
-                                    </TextField>
-
-                                </TopAppBarSection>
-                            )
-                            : (<>
-                                <TopAppBarSection align='start'>
-                                    <TopAppBarIcon navIcon tabIndex={0}>
-                                        <MaterialIcon hasRipple icon='menu' onClick={() => console.log('click')} />
-                                    </TopAppBarIcon>
-                                    <TopAppBarTitle>Miami, FL</TopAppBarTitle>
-                                </TopAppBarSection>
-                                <TopAppBarSection align='end' role='toolbar'>
-                                    <TopAppBarIcon actionItem tabIndex={0}>
-                                        <MaterialIcon
-                                            aria-label="close"
-                                            hasRipple
-                                            icon='search'
-                                            onClick={this.clickedSearch}
-                                        />
-                                    </TopAppBarIcon>
-                                </TopAppBarSection>
-                            </>)
-
+                            ?   <TopBarSearch 
+                                    onChange={this.setSearchText}
+                                    closeSearch={this.closedSearch}
+                                    searchText={this.state.searchText}
+                                />
+                            : <TopBarLayout clickedSearch={this.clickedSearch} />
                         }
 
                     </TopAppBarRow>
