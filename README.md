@@ -43,7 +43,7 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
-postgraphile -c 'postgres://postgres:a@localhost:5432/postgres'
+postgraphile -c 'postgres://postgres:a@localhost:5432/postgres' -a -j -o --export-schema-graphql './schema.graphql'
 
 mutation {
   createSurfMap(
