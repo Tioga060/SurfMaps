@@ -1,0 +1,1 @@
+create type public.jwt_token as (role text, user_id uuid);

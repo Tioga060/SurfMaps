@@ -58,3 +58,6 @@ mutation {
 }
 
 Look for babel-plugin-macros typescript support or just native react-relay in cra2
+
+article on how to do roles well in postgres: https://stackoverflow.com/questions/760210/how-do-you-create-a-read-only-user-in-postgresql
+

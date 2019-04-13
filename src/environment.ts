@@ -4,6 +4,7 @@ import {
     RecordSource,
     Store,
 } from 'relay-runtime';
+import * as Cookie from 'es-cookie';
 
 const GRAPHQL_HOST = 'http://localhost:5000';
 
@@ -11,10 +12,12 @@ function fetchQuery(
     operation: any,
     variables: any,
 ) {
+    const token = Cookie.get('token');
     return fetch(GRAPHQL_HOST + '/graphql', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            authorization: token ? `Bearer ${token}` : "", // TODO: better authentication for default user
         },
         body: JSON.stringify({
             query: operation.text,

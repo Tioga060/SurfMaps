@@ -4,9 +4,12 @@
   "private": true,
   "proxy": "http://localhost:5000",
   "dependencies": {
+    "@material/react-button": "^0.11.0",
     "@material/react-card": "^0.11.0",
     "@material/react-layout-grid": "^0.11.0",
+    "@material/react-list": "^0.11.0",
     "@material/react-material-icon": "^0.11.0",
+    "@material/react-menu-surface": "^0.11.0",
     "@material/react-text-field": "^0.11.0",
     "@material/react-top-app-bar": "^0.11.0",
     "@material/react-typography": "^0.11.0",
@@ -16,6 +19,7 @@
     "@types/react": "16.8.13",
     "@types/react-dom": "16.8.3",
     "@types/react-relay": "^1.3.14",
+    "es-cookie": "^1.2.0",
     "node-sass": "^4.11.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -29,8 +33,8 @@
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
-    "relay": "relay-compiler --language typescript --src ./src --schema ./schema.graphql",
-    "postgraphile": "postgraphile -c postgres://postgres:a@localhost:5432/postgres -a -j -o --export-schema-graphql ./schema.graphql"
+    "relay": "relay-compiler --language typescript --src ./src --schema ./graphql/schema.graphql",
+    "postgraphile": "postgraphile -c postgres://postgres:a@localhost:5432/postgres -a -j -o --export-schema-graphql ./graphql/schema.graphql --jwt-secret KEYGOESHERETODO --jwt-token-identifier public.jwt_token"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -43,6 +47,7 @@
   ],
   "devDependencies": {
     "babel-plugin-relay": "^3.0.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "customize-cra": "^0.2.12",
     "graphql": "^14.2.1",
     "react-app-rewired": "^2.1.1",

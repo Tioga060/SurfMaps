@@ -1,7 +1,7 @@
 import React from 'react';
-import TextField, { Input } from '@material/react-text-field';
 import { TopAppBarSection, TopAppBarIcon, TopAppBarTitle } from "@material/react-top-app-bar";
 import MaterialIcon from '@material/react-material-icon';
+import { TopAppBarUserMenu } from '../TopAppBarUserMenu'
 import './styles.scss';
 
 export interface IProps {
@@ -25,6 +25,7 @@ export const TopBarLayout: React.StatelessComponent<IProps> = (props) => (
                     onClick={props.clickedSearch}
                 />
             </TopAppBarIcon>
+            <TopAppBarUserMenu/>
         </TopAppBarSection>
     </>
 )

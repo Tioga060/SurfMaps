@@ -1,0 +1,11 @@
+@import '@material/react-button/index.scss';
+
+.icon-only-button {
+    min-width: 36px;
+    @include mdc-button-horizontal-padding(0);
+    //@include mdc-button-filled-accessible(skyblue);
+}
+
+.icon-only-icon {
+    margin: 0 !important;
+}

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Cell, Grid, Row } from '@material/react-layout-grid';
 import { createFragmentContainer, QueryRenderer, graphql } from 'react-relay';
 import environment from '../../../../environment';
 

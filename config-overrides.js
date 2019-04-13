@@ -6,6 +6,6 @@ const {
 
 module.exports = override(
     ...addBabelPlugins(
-        "relay"
+        "relay",
     )
 );
