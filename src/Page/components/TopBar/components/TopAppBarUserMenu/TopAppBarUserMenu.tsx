@@ -2,7 +2,6 @@ import React from 'react';
 import MenuSurface, {Corner} from '@material/react-menu-surface';
 import List, {ListItem, ListItemText} from '@material/react-list';
 import { UserBadgeForSignedInUser } from '../../../UserBadge';
-import * as Cookie from 'es-cookie';
 
 import './styles.scss'
 
@@ -29,7 +28,7 @@ export class TopAppBarUserMenu extends React.Component<{},IState> {
   }
 
   public logOut = () => { //TODO
-    Cookie.remove('token');
+    console.log('logged out');
   }
 
   render() {

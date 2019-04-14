@@ -61,3 +61,4 @@ Look for babel-plugin-macros typescript support or just native react-relay in cr
 
 article on how to do roles well in postgres: https://stackoverflow.com/questions/760210/how-do-you-create-a-read-only-user-in-postgresql
 
+https://material.io/design/components/text-fields.html#usage steal this earch bar
