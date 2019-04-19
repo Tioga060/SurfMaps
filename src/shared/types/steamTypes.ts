@@ -1,3 +1,5 @@
+import { IUser } from './user';
+
 export interface IUserSteamInfo {
     name: string,
     profileUrl: string,
@@ -6,4 +8,5 @@ export interface IUserSteamInfo {
     avatarMedium: string,
     avatarFull: string,
     numericSteamId: string,
+    user?: IUser;
 }

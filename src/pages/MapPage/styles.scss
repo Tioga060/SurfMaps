@@ -1,0 +1,30 @@
+.map-page-body {
+    max-width: 1200px;
+    width: 1200px;
+    height: 200vh;
+    background-color: #33333d;
+    padding: 1rem;
+}
+
+.map-page-container {
+    width: 100vw;
+    max-width:100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+}
+
+.map-background-image {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: 'center';
+    //filter: blur(8px);
+    //-webkit-filter: blur(8px);
+}
+
+.map-card {
+    background-color: #373740;
+    margin: 1rem;
+}

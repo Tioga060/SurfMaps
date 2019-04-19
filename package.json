@@ -32,8 +32,7 @@
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
-    "relay": "relay-compiler --language typescript --src ./src --schema ./graphql/schema.graphql",
-    "postgraphile": "postgraphile -c postgres://postgres:a@localhost:5432/postgres -a -j -o --export-schema-graphql ./graphql/schema.graphql --jwt-secret KEYGOESHERETODO --jwt-token-identifier public.jwt_token"
+    "relay": "relay-compiler --language typescript --src ./src --schema ../surfmaps-rest/schema.graphql"
   },
   "eslintConfig": {
     "extends": "react-app"
