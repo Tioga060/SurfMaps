@@ -1,0 +1,25 @@
+@import '../../../../globalStyles';
+@import '@material/react-card/index.scss';
+
+.scroll-image {
+    width: 150px;
+    height: 150px;
+    margin: 0.5rem;
+}
+
+.scroll-image-container {
+    height: 340px;
+    overflow-x: auto;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+}
+
+.scroll-image-container::-webkit-scrollbar {
+    display: none;
+}

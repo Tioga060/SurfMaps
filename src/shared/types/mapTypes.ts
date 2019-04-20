@@ -19,7 +19,7 @@ export interface IMap {
 export interface IStage {
     id: string;
     name?: string;
-    number?: number;
+    number: number;
     stageType: string;
     author?: IUser;
     images?: IImage[];
