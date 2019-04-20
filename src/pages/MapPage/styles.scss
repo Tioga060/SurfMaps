@@ -1,17 +1,17 @@
+@import '@material/react-layout-grid/index.scss';
+
 .map-page-body {
     max-width: 1200px;
-    width: 1200px;
     height: 200vh;
     background-color: #33333d;
     padding: 1rem;
+    margin: auto;
 }
 
 .map-page-container {
     width: 100vw;
     max-width:100%;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
     align-items: center;
     overflow: hidden;
 }
@@ -26,5 +26,9 @@
 
 .map-card {
     background-color: #373740;
-    margin: 1rem;
+    padding: 1rem;
+}
+
+.map-body {
+    padding-top: 1rem;
 }

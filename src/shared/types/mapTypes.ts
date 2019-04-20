@@ -9,7 +9,8 @@ export interface IMap {
     gameMode: string;
     game: string;
     mapType: string;
-    author?: IUser[];
+    tier?: number;
+    authors?: IUser[];
     uploader: IUser;
     stages?: IStage[];
     images?: IMapImage[];

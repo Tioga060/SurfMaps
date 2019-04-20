@@ -1,0 +1,46 @@
+@import '../../../../globalStyles';
+@import '~@material/react-typography/index.scss';
+
+.info-sub-headers {
+    margin: -0.5rem 0;
+}
+
+.bonus-box {
+    border: 2px solid;
+    border-color: #996666;
+    margin-top: 0.5rem;
+    height: 40px;
+}
+
+.bonus-triangle {
+    width: 0;
+    height: 0;
+    border-top: 40px solid #996666;
+    border-right: 40px solid transparent;
+    position: absolute;
+}
+
+.stage-box {
+    border: 2px solid;
+    border-color: #5c7293;
+    margin-top: 0.5rem;
+    height: 40px;
+}
+
+.stage-triangle {
+    width: 0;
+    height: 0;
+    border-top: 40px solid #5c7293;
+    border-right: 40px solid transparent;
+    position: absolute;
+}
+
+.stage-text {
+    margin: 0.5rem;
+    position: absolute;
+}
+
+.stage-author {
+    margin: 0.5rem;
+    float: right;
+}

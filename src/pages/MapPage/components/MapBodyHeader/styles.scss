@@ -1,0 +1,10 @@
+@import '../../../../globalStyles';
+@import '~@material/react-typography/index.scss';
+
+.author-card-container {
+    margin-top: 0.5rem;
+}
+
+.author-card-container > Button {
+    margin-right: 0.5rem;
+}

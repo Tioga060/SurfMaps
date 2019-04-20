@@ -1,8 +1,8 @@
 import React from 'react';
 import Button from '@material/react-button';
 import { createFragmentContainer, QueryRenderer, graphql } from 'react-relay';
-import environment from '../../../environment';
-import { IUserSteamInfo } from '../../../shared/types';
+import environment from 'environment';
+import { IUserSteamInfo } from 'shared/types';
 
 import './styles.scss';
 

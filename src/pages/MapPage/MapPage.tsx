@@ -1,7 +1,9 @@
 import React, { CSSProperties } from 'react';
 import get from 'lodash/get';
-import { IMap } from '../../shared/types';
-import { MapBodyHeader } from './components/MapBodyHeader/MapBodyHeader';
+import { Cell, Grid, Row } from '@material/react-layout-grid';
+import { IMap } from 'shared/types';
+import { MapBodyHeader } from './components/MapBodyHeader';
+import { StageInfo } from './components/StageInfo';
 import './styles.scss';
 
 interface IProps {
@@ -32,6 +34,16 @@ export class MapPage extends React.Component<IProps> {
             <div className={`${bgClass} map-page-container`} style={backgroundImageStyle(backgroundImage)}>
                 <div className="map-page-body">
                     <MapBodyHeader map={this.props.map}/>
+                    <div className="map-body">
+                        <Row>
+                            <Cell columns={5}>
+                                <StageInfo map={this.props.map}/>
+                            </Cell>
+                            <Cell columns={7}>
+                                COL 2
+                            </Cell>
+                        </Row>
+                    </div>
                 </div>
             </div>
         )

@@ -1,4 +1,4 @@
-import { IMap, IStage, IImage, IMapImage } from '../../../shared/types';
+import { IMap, IStage, IImage, IMapImage } from 'shared/types';
 
 const mockUser = {
     id: '321',
@@ -105,8 +105,9 @@ export const mockMap: IMap = {
     createdAt: '2019-01-08 04:05:06 -8:00',
     gameMode: 'Surf',
     game: 'Counter-Strike: Source',
+    tier: 6,
     mapType: 'Staged',
-    author: [mockUser],
+    authors: [mockUser],
     uploader: mockUser,
     images: mapImages.slice(0,3),
     stages,
