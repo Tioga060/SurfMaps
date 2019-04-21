@@ -1,5 +1,6 @@
 import { IUser } from './user';
 import { IImage } from './image';
+import { IFile } from './file';
 
 export interface IMap {
     id: string;
@@ -14,6 +15,7 @@ export interface IMap {
     uploader: IUser;
     stages?: IStage[];
     images?: IMapImage[];
+    mapFiles: IMapFile[];
 }
 
 export interface IStage {
@@ -30,4 +32,10 @@ export interface IMapImage {
     primaryImage?: boolean;
     order: number;
     image: IImage;
+}
+
+export interface IMapFile {
+    game: string;
+    label: string;
+    file: IFile;
 }

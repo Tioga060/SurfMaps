@@ -1,0 +1,31 @@
+@import '@material/react-tab-bar/index.scss';
+@import '@material/react-tab-scroller/index.scss';
+@import '@material/react-tab/index.scss';
+@import '@material/react-tab-indicator/index.scss';
+@import '@material/react-select/index.scss';
+@import '@material/react-button/index.scss';
+
+.download-tab {
+    color: white;
+}
+
+.download-body {
+    display: flex;
+    margin-top: 1rem;
+}
+
+.select-color {
+    @include mdc-select-ink-color(white);
+    @include mdc-select-outline-color(#5c7293);
+
+    margin-right: 1rem;
+}
+
+.vertical-center {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.pull-right {
+    margin-left: auto;
+}

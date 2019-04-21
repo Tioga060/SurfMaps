@@ -1,4 +1,4 @@
-import { IMap, IStage, IImage, IMapImage } from 'shared/types';
+import { IMap, IStage, IImage, IMapImage, IMapFile } from 'shared/types';
 
 const mockUser = {
     id: '321',
@@ -96,6 +96,32 @@ const stages: IStage[] = [
         author: mockUser,
         images: [mapImages[7].image],
     },
+];
+
+const mapFiles: IMapFile[] = [
+    {
+        game: 'Counter-Strike: Source',
+        label: 'Official Release',
+        file: {
+            id: '123',
+            storeLocation: 'A place',
+            uploader: mockUser,
+            createdAt: '2019-01-08 04:05:06 -8:00',
+            active: true,
+            fileType: 'bsp',
+        }
+    }, {
+        game: 'Counter-Strike: Global Offensive',
+        label: 'Unofficial Port',
+        file: {
+            id: '321',
+            storeLocation: 'A place 2',
+            uploader: mockUser,
+            createdAt: '2019-02-10 04:05:06 -8:00',
+            active: true,
+            fileType: 'bsp',
+        }
+    }
 ]
 
 export const mockMap: IMap = {
@@ -111,4 +137,5 @@ export const mockMap: IMap = {
     uploader: mockUser,
     images: mapImages.slice(0,3),
     stages,
+    mapFiles,
 }

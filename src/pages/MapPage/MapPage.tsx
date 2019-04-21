@@ -6,6 +6,7 @@ import { MapBodyHeader } from './components/MapBodyHeader';
 import { StageInfo } from './components/StageInfo';
 import { HeaderImage } from './components/HeaderImage';
 import { ImageList } from './components/ImageList';
+import { DownloadCard } from './components/DownloadCard';
 import './styles.scss';
 
 interface IProps {
@@ -94,6 +95,11 @@ export class MapPage extends React.Component<IProps, IState> {
                                     setHeaderImage={this.setHeaderImage}
                                     images={getAllImages(this.props.map)}
                                 />
+                                {this.props.map.mapFiles && (
+                                    <DownloadCard
+                                        mapFiles={this.props.map.mapFiles}
+                                    />
+                                )}
                             </Cell>
                         </Row>
                     </div>

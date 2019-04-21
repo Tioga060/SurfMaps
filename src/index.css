@@ -16,6 +16,11 @@ body {
 
 */
 
+:root {
+  --mdc-theme-primary: #5c7293;
+  --mdc-theme-secondary: #996666;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

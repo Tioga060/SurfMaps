@@ -17,8 +17,10 @@ interface IProps {
 }
 
 const sortStages = (stageList: IStage[]) => {
-    const stages = stageList.filter((stage) => stage.stageType.toLowerCase() !== BONUS);
-    const bonuses = stageList.filter((stage) => stage.stageType.toLowerCase() === BONUS);
+    const [stages, bonuses] = stageList.reduce((result: IStage[][], stage) => {
+        result[stage.stageType.toLowerCase() === BONUS ? 1 : 0].push(stage);
+        return result;
+    }, [[], []]);
 
     return [
         ...stages.sort((a: IStage, b: IStage) => a.number - b.number),
