@@ -1,6 +1,7 @@
 import { IUser } from './user';
 import { IImage } from './image';
 import { IFile } from './file';
+import { ITextMarkdown } from './text';
 
 export interface IMap {
     id: string;
@@ -16,6 +17,8 @@ export interface IMap {
     stages?: IStage[];
     images?: IMapImage[];
     mapFiles: IMapFile[];
+    descriptions?: IMapDescription[];
+    contributors?: IMapContributor[];
 }
 
 export interface IStage {
@@ -38,4 +41,15 @@ export interface IMapFile {
     game: string;
     label: string;
     file: IFile;
+    isPrimary?: boolean;
+}
+
+export interface IMapDescription {
+    order: number;
+    textInformation: ITextMarkdown;
+}
+
+export interface IMapContributor {
+    contribution: string;
+    user: IUser;
 }

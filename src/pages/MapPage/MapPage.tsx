@@ -1,12 +1,14 @@
 import React, { CSSProperties } from 'react';
 import get from 'lodash/get';
 import { Cell, Row } from '@material/react-layout-grid';
-import { IMap, IImage } from 'shared/types';
+import { IMap, IImage, IMapDescription } from 'shared/types';
 import { MapBodyHeader } from './components/MapBodyHeader';
 import { StageInfo } from './components/StageInfo';
 import { HeaderImage } from './components/HeaderImage';
 import { ImageList } from './components/ImageList';
 import { DownloadCard } from './components/DownloadCard';
+import { MapDescription } from './components/MapDescription';
+import { MapContributors } from './components/MapContributors';
 import './styles.scss';
 
 interface IProps {
@@ -67,6 +69,9 @@ export class MapPage extends React.Component<IProps, IState> {
     }
 
     public render() {
+        const descriptions: IMapDescription[] = this.props.map.descriptions
+            ? this.props.map.descriptions.sort((a, b) => a.order - b.order)
+            : [];
         const images = this.props.map.images;
         const backgroundImage: string = images
             ? get(
@@ -88,6 +93,10 @@ export class MapPage extends React.Component<IProps, IState> {
                                     map={this.props.map}
                                     onStageClick={this.setHeaderImage}
                                 />
+                                {descriptions.map((description) => (
+                                    <MapDescription description={description} />
+                                ))}
+                                <MapContributors contributors={this.props.map.contributors!} />
                             </Cell>
                             <Cell columns={7}>
                                 <HeaderImage image={this.state.headerImage} />

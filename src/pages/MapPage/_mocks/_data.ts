@@ -1,4 +1,4 @@
-import { IMap, IStage, IImage, IMapImage, IMapFile } from 'shared/types';
+import { IMap, IStage, IImage, IMapImage, IMapFile, IMapDescription, IMapContributor } from 'shared/types';
 
 const mockUser = {
     id: '321',
@@ -122,7 +122,28 @@ const mapFiles: IMapFile[] = [
             fileType: 'bsp',
         }
     }
-]
+];
+
+const description: IMapDescription = {
+    order: 0,
+    textInformation: {
+        id: '123',
+        createdAt: '2019-01-08 04:05:06 -8:00',
+        updatedAt: '2019-01-08 04:05:06 -8:00',
+        author: mockUser,
+        text: '# Surf_Obliteration\nThis map is freaking amazing!! I made it in just 20 hours and you won\'t believe how fun it is, just ask Obregon',
+    }
+}
+
+const mockContribution: IMapContributor = {
+    contribution: 'Tester',
+    user: mockUser,
+};
+
+const mockSupportContribution: IMapContributor = {
+    contribution: 'Support',
+    user: mockUser,
+};
 
 export const mockMap: IMap = {
     id: '123',
@@ -138,4 +159,6 @@ export const mockMap: IMap = {
     images: mapImages.slice(0,3),
     stages,
     mapFiles,
+    descriptions: [description],
+    contributors: [mockContribution, mockContribution, mockSupportContribution, mockSupportContribution],
 }

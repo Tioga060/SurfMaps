@@ -3,6 +3,7 @@ import Tab from '@material/react-tab';
 import TabBar from '@material/react-tab-bar';
 import {
     Headline4,
+    Body1
 } from '@material/react-typography';
 import Select from '@material/react-select';
 import Button from '@material/react-button';
@@ -81,22 +82,26 @@ export class DownloadCard extends React.Component<IProps, IState> {
                 <div className="download-body">
                     <Select
                         outlined
-                        className="select-color"
+                        className="select-color vertical-center"
                     >
                         {this.state.mapFiles.map((mapFile, index) => (
                             <option key={index} value={mapFile.file.id}>{mapFile.label}</option>
                         ))}
                     </Select>
                     <div className="vertical-center">
+                        <Body1>Uploader</Body1>
                         <UserBadge
                             steamUser={this.state.activeMap.file.uploader.userSteam!}
                             showName
                             onPressed={() => {}}
                         />
                     </div>
-                    <Button raised className="vertical-center pull-right">
-                        Download
-                    </Button>
+                    <div className="vertical-center pull-right">
+                        <Body1>Link</Body1>
+                        <Button raised>
+                            Download
+                        </Button>
+                    </div>
                 </div>
             </div> 
         );
