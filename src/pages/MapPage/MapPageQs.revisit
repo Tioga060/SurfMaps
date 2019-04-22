@@ -1,0 +1,137 @@
+import { graphql } from 'react-relay';
+
+export const fragment =
+graphql`
+fragment MapPageQsuserWithSteamInfo on User {
+  rowId
+  role
+  createdAt
+  userSteamInfosByUserId {
+    nodes {
+      name
+      profileUrl
+      timeCreated
+      avatar
+      avatarMedium
+      avatarFull
+      numericSteamId
+    }
+  }
+}
+
+fragment MapPageQsimageInfo on Image {
+  storeLocation
+  userByUploaderId {
+    ...MapPageQsuserWithSteamInfo
+  }
+  uploadedAt
+}
+
+fragment MapPageQs_map on Map {
+    rowId
+    name
+    public
+    createdAt
+    gameModeByGameModeId {
+        name
+    }
+    gameByGameId {
+        name
+    }
+    tier
+    mapTypeByMapTypeId {
+        name
+    }
+    mapAuthorsByMapId {
+        nodes {
+        contribution
+        userByAuthorId {
+            ...MapPageQsuserWithSteamInfo
+        }
+        }
+    }
+    userByUploaderId {
+        ...MapPageQsuserWithSteamInfo
+    }
+    mapImagesByMapId {
+        nodes {
+        primaryImage
+        backgroundImage
+        order
+        imageByImageId {
+            ...MapPageQsimageInfo
+        }
+        }
+    }
+    stagesByMapId {
+        nodes {
+        rowId
+        name
+        number
+        stageTypeByStageTypeId {
+            name
+        }
+        userByAuthorId {
+            ...MapPageQsuserWithSteamInfo
+        }
+        stageImagesByStageId {
+            nodes {
+            imageByImageId {
+                ...MapPageQsimageInfo
+            }
+            }
+        }
+        }
+    }
+    mapFilesByMapId {
+        nodes {
+        gameByGameId {
+            name
+        }
+        label
+        isPrimary
+        fileByFileId {
+            fileTypeByFileTypeId {
+            type
+            }
+            rowId
+            storeLocation
+            createdAt
+            active
+            userByUploaderId {
+            ...MapPageQsuserWithSteamInfo
+                    }
+        }
+        }
+    }
+    mapDescriptionsByMapId {
+        nodes {
+        order
+        textMarkdownByTextMarkdownId {
+            rowId
+            text
+            createdAt
+            updatedAt
+            userByAuthorId {
+            ...MapPageQsuserWithSteamInfo
+            }
+        }
+        }
+    }
+    mapContributorsByMapId {
+        nodes {
+        contribution
+        userByUserId {
+            ...MapPageQsuserWithSteamInfo
+        }
+        }
+    }
+}
+`
+export const query = graphql`
+query MapPageQs_getMapByIdQuery {
+    mapByRowId(rowId: "25728233-4e54-49ac-b78b-21aca6e3807b") {
+        ...MapPageQs_map
+    }
+}
+`

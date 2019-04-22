@@ -127,7 +127,7 @@ const mapFiles: IMapFile[] = [
 
 const description: IMapDescription = {
     order: 0,
-    textInformation: {
+    textMarkdownByTextMarkdownId: {
         rowId: '123',
         createdAt: '2019-01-08 04:05:06 -8:00',
         updatedAt: '2019-01-08 04:05:06 -8:00',

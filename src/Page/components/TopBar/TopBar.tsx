@@ -5,7 +5,8 @@ import TopAppBar, {
 } from "@material/react-top-app-bar";
 import debounce from 'lodash/debounce';
 import { MapList } from 'pages/MapSearchPage/components/MapCardList/mapcardlist';
-import { MapPage } from 'pages/MapPage/MapPage';
+import { MapPage } from 'pages/MapPage';
+import { MapPageContainer } from 'pages/MapPage';
 import { mockMap } from 'pages/MapPage/_mocks/_data';
 import { TopBarSearch } from './components/TopBarSearch';
 import { TopBarLayout } from './components/TopBarLayout';
@@ -86,8 +87,8 @@ export class TopBar extends React.Component<IBlankProps, IState> {
                 </TopAppBar>
                 <TopAppBarFixedAdjust>
                     <div className="App-body">
-                        <MapPage
-                            map={mockMap}
+                        <MapPageContainer
+                            //map={mockMap}
                         />
                     </div>
                 </TopAppBarFixedAdjust>

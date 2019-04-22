@@ -84,7 +84,7 @@ export interface IMapDescrtionAsNodes {
 
 export interface IMapDescription {
     order: number;
-    textInformation: ITextMarkdown;
+    textMarkdownByTextMarkdownId: ITextMarkdown;
 }
 
 export interface IMapContributorAsNodes {

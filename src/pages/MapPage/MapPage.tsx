@@ -39,10 +39,10 @@ const getDefaultImage = (map: IMap) => {
 
 const getAllImages = (map: IMap): IImage[] => {
     const images: IImage[] = [];
-    map.mapImagesByMapId.nodes.sort((a, b) => a.order - b.order).map((mapImage) => {
+    map.mapImagesByMapId.nodes.slice().sort((a, b) => a.order - b.order).map((mapImage) => {
         images.push(mapImage.imageByImageId);
     });
-    map.stagesByMapId.nodes.sort((a, b) => a.number - b.number).map((stage) => {
+    map.stagesByMapId.nodes.slice().sort((a, b) => a.number - b.number).map((stage) => {
         stage.stageImagesByStageId.nodes.map((image) => {
             images.push(image.imageByImageId)
         })
@@ -76,7 +76,6 @@ export class MapPage extends React.Component<IProps, IState> {
                 'imageByImageId.storeLocation',
                 null)
             : null;
-        console.log(backgroundImage);
         const bgClass = backgroundImage
             ? 'map-background-image'
             : '';

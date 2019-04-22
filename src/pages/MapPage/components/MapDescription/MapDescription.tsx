@@ -10,11 +10,13 @@ interface IProps {
 
 export class MapDescription extends React.Component<IProps> {
     public render() {
+        console.log(this.props.description.textMarkdownByTextMarkdownId.text)
         return (
             <div className="map-card">
                 <ReactMarkdown
+                    skipHtml
                     className="white-text"
-                    source={this.props.description.textInformation.text}
+                    source={this.props.description.textMarkdownByTextMarkdownId.text}
                 />
             </div> 
         );
