@@ -1,10 +1,10 @@
-import { IUser } from './';
+import { IUser, IFileType } from './';
 
 export interface IFile {
-    id: string;
+    rowId: string;
     storeLocation: string;
     createdAt: string;
     active: boolean;
-    uploader: IUser;
-    fileType: string;
+    userByUploaderId: IUser;
+    fileTypeByFileTypeId: IFileType;
 }

@@ -2,46 +2,84 @@ import { IUser } from './user';
 import { IImage } from './image';
 import { IFile } from './file';
 import { ITextMarkdown } from './text';
+import { IGame, IGameMode, IMapType, IStageType} from './descriptors';
 
 export interface IMap {
-    id: string;
+    rowId: string;
     name: string;
     public?: boolean;
     createdAt: string;
-    gameMode: string;
-    game: string;
-    mapType: string;
+    gameModeByGameModeId: IGameMode;
+    gameByGameId: IGame;
+    mapTypeByMapTypeId: IMapType;
     tier?: number;
-    authors?: IUser[];
-    uploader: IUser;
-    stages?: IStage[];
-    images?: IMapImage[];
-    mapFiles: IMapFile[];
-    descriptions?: IMapDescription[];
-    contributors?: IMapContributor[];
+    mapAuthorsByMapId: IMapAuthorAsNodes;
+    userByUploaderId: IUser;
+    stagesByMapId: IStageAsNodes;
+    mapImagesByMapId: IMapImageAsNodes;
+    mapFilesByMapId: IMapFileAsNodes;
+    mapDescriptionsByMapId: IMapDescrtionAsNodes;
+    mapContributorsByMapId: IMapContributorAsNodes;
+}
+
+export interface IMapAuthorAsNodes {
+    nodes: IMapAuthor[];
+}
+
+export interface IMapAuthor {
+    contribution: string;
+    userByAuthorId: IUser;
+}
+
+export interface IStageAsNodes {
+    nodes: IStage[];
 }
 
 export interface IStage {
-    id: string;
+    rowId: string;
     name?: string;
     number: number;
-    stageType: string;
-    author?: IUser;
-    images?: IImage[];
+    stageTypeByStageTypeId: IStageType;
+    userByAuthorId: IUser;
+    stageImagesByStageId: IStageImageAsNodes;
+}
+
+export interface IStageImageAsNodes {
+    nodes: IStageImage[];
+}
+
+export interface IStageImage {
+    imageByImageId: IImage;
+}
+
+export interface IMapImageAsNodes {
+    nodes: IMapImage[];
 }
 
 export interface IMapImage {
     backgroundImage?: boolean;
     primaryImage?: boolean;
     order: number;
-    image: IImage;
+    imageByImageId: IImage;
+}
+
+export interface IMapFileAsNodes {
+    nodes: IMapFile[];
+}
+
+export interface IMapFileAsNodes {
+    nodes: IMapFile[];
 }
 
 export interface IMapFile {
-    game: string;
+    gameByGameId: IGame;
     label: string;
-    file: IFile;
     isPrimary?: boolean;
+    fileByFileId: IFile;
+}
+
+export interface IMapDescrtionAsNodes {
+    nodes: IMapDescription[];
 }
 
 export interface IMapDescription {
@@ -49,7 +87,11 @@ export interface IMapDescription {
     textInformation: ITextMarkdown;
 }
 
+export interface IMapContributorAsNodes {
+    nodes: IMapContributor[];
+}
+
 export interface IMapContributor {
     contribution: string;
-    user: IUser;
+    userByUserId: IUser;
 }

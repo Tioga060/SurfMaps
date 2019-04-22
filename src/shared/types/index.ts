@@ -4,3 +4,4 @@ export * from './mapTypes';
 export * from './image';
 export * from './file';
 export * from './text';
+export * from './descriptors';

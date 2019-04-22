@@ -1,4 +1,6 @@
-import { IUser } from './user';
+export interface IUserSteamInfoAsNodes {
+    nodes: IUserSteamInfo[];
+}
 
 export interface IUserSteamInfo {
     name: string,
@@ -8,5 +10,4 @@ export interface IUserSteamInfo {
     avatarMedium: string,
     avatarFull: string,
     numericSteamId: string,
-    user?: IUser;
 }

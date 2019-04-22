@@ -30,13 +30,13 @@ export class DownloadCard extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
         this.gameModes = props.mapFiles.reduce((result: string[], mapfile) => {
-            if (!(mapfile.game in result)) {
-                result.push(mapfile.game);
+            if (!(mapfile.gameByGameId.name in result)) {
+                result.push(mapfile.gameByGameId.name);
             }
             return result;
         }, []);
         const mapFiles = this.props.mapFiles.filter((mapFile) =>
-                (mapFile.game === this.gameModes[0]));
+                (mapFile.gameByGameId.name === this.gameModes[0]));
         const activeMap = mapFiles[0];
         this.state = {
             currentTab: 0,
@@ -48,7 +48,7 @@ export class DownloadCard extends React.Component<IProps, IState> {
     public componentDidUpdate(prevProps: IProps, prevState: IState) {
         if (prevState.currentTab !== this.state.currentTab) {
             const mapFiles = this.props.mapFiles.filter((mapFile) =>
-                (mapFile.game === this.gameModes[this.state.currentTab]));
+                (mapFile.gameByGameId.name === this.gameModes[this.state.currentTab]));
             const activeMap = mapFiles[0];
             this.setState({
                 mapFiles,
@@ -85,13 +85,13 @@ export class DownloadCard extends React.Component<IProps, IState> {
                         className="select-color vertical-center"
                     >
                         {this.state.mapFiles.map((mapFile, index) => (
-                            <option key={index} value={mapFile.file.id}>{mapFile.label}</option>
+                            <option key={index} value={mapFile.fileByFileId.rowId}>{mapFile.label}</option>
                         ))}
                     </Select>
                     <div className="vertical-center">
                         <Body1>Uploader</Body1>
                         <UserBadge
-                            steamUser={this.state.activeMap.file.uploader.userSteam!}
+                            steamUser={this.state.activeMap.fileByFileId.userByUploaderId.userSteamInfosByUserId.nodes[0]}
                             showName
                             onPressed={() => {}}
                         />

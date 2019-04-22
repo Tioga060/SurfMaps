@@ -1,9 +1,9 @@
 import { IUser } from './';
 
 export interface ITextMarkdown {
-    id: string;
+    rowId: string;
     text: string;
     createdAt: string;
     updatedAt: string;
-    author: IUser;
+    userByAuthorId: IUser;
 }

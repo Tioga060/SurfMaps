@@ -20,11 +20,11 @@ export class MapBodyHeader extends React.Component<IProps> {
                     {this.props.map.name}
                 </Headline2>
                 <div className="author-card-container">
-                    {this.props.map.authors!.map((author) => (
+                    {this.props.map.mapAuthorsByMapId.nodes.map((author) => (
                         <UserBadge
-                            key={author.id}
+                            key={author.userByAuthorId.rowId}
                             onPressed={() => {}}
-                            steamUser={author.userSteam!}
+                            steamUser={author.userByAuthorId.userSteamInfosByUserId.nodes[0]}
                             showName
                         />
                     ))}

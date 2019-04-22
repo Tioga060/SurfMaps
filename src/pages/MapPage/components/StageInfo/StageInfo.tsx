@@ -18,7 +18,7 @@ interface IProps {
 
 const sortStages = (stageList: IStage[]) => {
     const [stages, bonuses] = stageList.reduce((result: IStage[][], stage) => {
-        result[stage.stageType.toLowerCase() === BONUS ? 1 : 0].push(stage);
+        result[stage.stageTypeByStageTypeId.name.toLowerCase() === BONUS ? 1 : 0].push(stage);
         return result;
     }, [[], []]);
 
@@ -30,38 +30,36 @@ const sortStages = (stageList: IStage[]) => {
 
 export class StageInfo extends React.Component<IProps> {
     public onStageClick = (stage: IStage) => () => {
-        if (stage.images) {
-            this.props.onStageClick(stage.images[0]);
+        if (stage.stageImagesByStageId.nodes.length) {
+            this.props.onStageClick(stage.stageImagesByStageId.nodes[0].imageByImageId);
         }
     }
 
     public render() {
-        const stages: IStage[] = this.props.map.stages
-            ? sortStages(this.props.map.stages)
-            : [];
+        const stages: IStage[] = sortStages(this.props.map.stagesByMapId.nodes);
         return (
             <div className="map-card">
                 <Headline3>
-                    {`${this.props.map.gameMode} - Tier ${this.props.map.tier}`}
+                    {`${this.props.map.gameModeByGameModeId.name} - Tier ${this.props.map.tier}`}
                 </Headline3>
                 <Headline6 className="info-sub-headers">
-                    {this.props.map.game}
+                    {this.props.map.gameByGameId.name}
                 </Headline6>
                 <Headline6 className="info-sub-headers">
-                    {`${this.props.map.mapType} Map`}
+                    {`${this.props.map.mapTypeByMapTypeId.name} Map`}
                 </Headline6>
                 {stages.map((stage) => (
                     <div
-                        className={stage.stageType ? `${stage.stageType.toLowerCase()}-box` : 'stage-box'}
-                        key={stage.id}
+                        className={stage.stageTypeByStageTypeId.name ? `${stage.stageTypeByStageTypeId.name.toLowerCase()}-box` : 'stage-box'}
+                        key={stage.rowId}
                         onClick={this.onStageClick(stage)}
                     >
-                        <div className={stage.stageType ? `${stage.stageType.toLowerCase()}-triangle` : 'stage-triangle'} />
+                        <div className={stage.stageTypeByStageTypeId.name ? `${stage.stageTypeByStageTypeId.name.toLowerCase()}-triangle` : 'stage-triangle'} />
                         <Body1 className="stage-text">
-                            {`${stage.stageType} ${stage.number}`}
+                            {`${stage.stageTypeByStageTypeId.name} ${stage.number}`}
                         </Body1>
                         <Body1 className="stage-author">
-                            {stage.author!.name}
+                            {stage.userByAuthorId.userSteamInfosByUserId.nodes[0].name}
                         </Body1>
                     </div>
                 ))}

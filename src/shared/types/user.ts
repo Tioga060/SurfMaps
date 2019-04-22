@@ -1,9 +1,12 @@
-import { IUserSteamInfo } from './steamTypes';
+import { IUserSteamInfoAsNodes } from './steamTypes';
+
+export interface IUserAsNodes {
+    nodes: IUser[];
+}
 
 export interface IUser {
-    id: string;
+    rowId: string;
     role: string;
     createdAt: string;
-    name: string;
-    userSteam?: IUserSteamInfo;
+    userSteamInfosByUserId: IUserSteamInfoAsNodes;
 }

@@ -28,26 +28,24 @@ const backgroundImageStyle = (imageUrl: string): CSSProperties => {
 }
 
 const getDefaultImage = (map: IMap) => {
-    if (!map.images) {
+    if (!map.mapImagesByMapId.nodes.length) {
         return null;
     }
-    const headerImage = map.images.find((image) => !!image.primaryImage);
+    const headerImage = map.mapImagesByMapId.nodes.find((image) => !!image.primaryImage);
     return headerImage
-        ? headerImage.image
-        : map.images[0].image;
+        ? headerImage.imageByImageId
+        : map.mapImagesByMapId.nodes[0].imageByImageId;
 }
 
 const getAllImages = (map: IMap): IImage[] => {
     const images: IImage[] = [];
-    map.images!.sort((a, b) => a.order - b.order).map((mapImage) => {
-        images.push(mapImage.image);
+    map.mapImagesByMapId.nodes.sort((a, b) => a.order - b.order).map((mapImage) => {
+        images.push(mapImage.imageByImageId);
     });
-    map.stages!.sort((a, b) => a.number - b.number).map((stage) => {
-        if (stage.images) {
-            stage.images.map((image) => {
-                images.push(image)
-            })
-        }
+    map.stagesByMapId.nodes.sort((a, b) => a.number - b.number).map((stage) => {
+        stage.stageImagesByStageId.nodes.map((image) => {
+            images.push(image.imageByImageId)
+        })
     });
     return images.concat(images);
 }
@@ -69,16 +67,16 @@ export class MapPage extends React.Component<IProps, IState> {
     }
 
     public render() {
-        const descriptions: IMapDescription[] = this.props.map.descriptions
-            ? this.props.map.descriptions.sort((a, b) => a.order - b.order)
-            : [];
-        const images = this.props.map.images;
-        const backgroundImage: string = images
+        const descriptions: IMapDescription[] =
+            this.props.map.mapDescriptionsByMapId.nodes.sort((a, b) => a.order - b.order);
+        const images = this.props.map.mapImagesByMapId.nodes;
+        const backgroundImage: string = images.length
             ? get(
                 images.find((mapImage) => (!!mapImage.backgroundImage)),
-                'image.storeLocation',
+                'imageByImageId.storeLocation',
                 null)
             : null;
+        console.log(backgroundImage);
         const bgClass = backgroundImage
             ? 'map-background-image'
             : '';
@@ -96,7 +94,7 @@ export class MapPage extends React.Component<IProps, IState> {
                                 {descriptions.map((description) => (
                                     <MapDescription description={description} />
                                 ))}
-                                <MapContributors contributors={this.props.map.contributors!} />
+                                <MapContributors contributors={this.props.map.mapContributorsByMapId.nodes} />
                             </Cell>
                             <Cell columns={7}>
                                 <HeaderImage image={this.state.headerImage} />
@@ -104,9 +102,9 @@ export class MapPage extends React.Component<IProps, IState> {
                                     setHeaderImage={this.setHeaderImage}
                                     images={getAllImages(this.props.map)}
                                 />
-                                {this.props.map.mapFiles && (
+                                {this.props.map.mapFilesByMapId.nodes.length && (
                                     <DownloadCard
-                                        mapFiles={this.props.map.mapFiles}
+                                        mapFiles={this.props.map.mapFilesByMapId.nodes}
                                     />
                                 )}
                             </Cell>
