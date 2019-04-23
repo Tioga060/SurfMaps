@@ -1,9 +1,8 @@
 import React from 'react';
-import { createFragmentContainer, QueryRenderer } from 'react-relay';
-import {query} from './MapPageQs';
+import { QueryRenderer } from 'react-relay';
+import {query} from './MapPageGQL';
 import environment from 'environment';
-import { MapPage } from './MapPage';
-import { IMap } from 'shared/types';
+import { MapPage } from './component';
 
 export class MapPageContainer extends React.Component {
     public render() {

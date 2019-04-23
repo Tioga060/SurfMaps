@@ -1,1 +1,1 @@
-export * from './StageInfo';
+export * from './component';

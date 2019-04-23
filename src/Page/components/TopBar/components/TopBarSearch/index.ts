@@ -1,1 +1,1 @@
-export * from './TopBarSearch';
+export * from './component';

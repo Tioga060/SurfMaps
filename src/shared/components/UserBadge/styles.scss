@@ -3,7 +3,6 @@
 .icon-only-button {
     min-width: 36px;
     @include mdc-button-horizontal-padding(0);
-    //@include mdc-button-filled-accessible(skyblue);
 }
 
 .icon-only-icon {

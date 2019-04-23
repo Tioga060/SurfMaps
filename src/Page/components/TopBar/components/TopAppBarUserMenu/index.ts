@@ -1,1 +1,1 @@
-export * from './TopAppBarUserMenu';
+export * from './component';

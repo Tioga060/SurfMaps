@@ -1,1 +1,1 @@
-export * from './HeaderImage';
+export * from './component';

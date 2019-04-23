@@ -1,2 +1,2 @@
-export * from './MapPage';
-export * from './MapPageContainer';
+export * from './component';
+export * from './container';

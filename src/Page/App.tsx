@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { TopBar } from './components/TopBar/TopBar';
+import { TopBar } from './components/TopBar';
 import './App.scss';
 
 class App extends Component {

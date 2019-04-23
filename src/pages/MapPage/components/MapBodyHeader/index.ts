@@ -1,1 +1,1 @@
-export * from './MapBodyHeader';
+export * from './component';

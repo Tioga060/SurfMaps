@@ -1,1 +1,2 @@
-export * from './UserBadge';
+export * from './component';
+export * from './UserBadgeContainer';

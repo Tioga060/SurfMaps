@@ -4,7 +4,7 @@ import TopAppBar, {
     TopAppBarRow,
 } from "@material/react-top-app-bar";
 import debounce from 'lodash/debounce';
-import { MapList } from 'pages/MapSearchPage/components/MapCardList/mapcardlist';
+import { MapList } from 'pages/MapSearchPage/components/MapCardList';
 import { MapPage } from 'pages/MapPage';
 import { MapPageContainer } from 'pages/MapPage';
 import { mockMap } from 'pages/MapPage/_mocks/_data';

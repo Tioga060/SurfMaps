@@ -2,7 +2,7 @@ import { graphql } from 'react-relay';
 
 
 export const query = graphql`
-query MapPageQs_getMapByIdQuery($mapId: UUID!) {
+query MapPageGQL_getMapByIdQuery($mapId: UUID!) {
     mapByRowId(rowId: $mapId) {
         rowId
         name

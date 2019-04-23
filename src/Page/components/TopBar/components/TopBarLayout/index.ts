@@ -1,1 +1,1 @@
-export * from './TopBarLayout';
+export * from './component';

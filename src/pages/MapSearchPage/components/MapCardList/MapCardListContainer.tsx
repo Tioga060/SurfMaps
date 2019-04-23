@@ -1,52 +1,17 @@
 import React from 'react';
 import { createFragmentContainer, QueryRenderer, graphql } from 'react-relay';
 import environment from 'environment';
-
-import { MapCard } from '../MapCard/mapcard';
-
-import './styles.scss';
-
-interface IMap {
-    mapname: string;
-    tier: number;
-    author: string;
-}
-
-interface IMaps {
-    maps: IMap[];
-}
-
-interface IProps {
-    maps: IMaps;
-}
-
-export class MapCardList extends React.Component<IProps> {
-    public render() {
-        const maps = this.props.maps
-            ? this.props.maps.maps
-            : [];
-        return (
-            <div className="map-list">
-                {maps.map((map: IMap) => (
-                    <MapCard
-                        key={map.mapname}
-                        map={map}
-                    />
-                ))}
-            </div>
-        )
-    }
-}
+import { MapCardList, IMaps } from './component';
 
 const MapCardListContainer = createFragmentContainer(MapCardList, {
     maps: graphql`
-        fragment mapcardlist_maps on SurfMapsConnection {
-            maps: nodes {
-                mapname
-                author
-                tier
-            }
+    fragment MapCardListContainer_maps on SurfMapsConnection {
+        maps: nodes {
+            mapname
+            author
+            tier
         }
+    }
     `
 })
 
@@ -61,12 +26,12 @@ export class MapList extends React.Component<ISearchProps> {
             : '';
         return (
             <QueryRenderer
-                environment={environment}
+            environment={environment}
                 query={
                     graphql`
-                        query mapcardlistGetMapsByTextQuery($searchText: String) {
+                        query MapCardListContainer_GetMapsByTextQuery($searchText: String) {
                             searchMaps(search: $searchText) {
-                                ...mapcardlist_maps
+                                ...MapCardListContainer_maps
                             }
                         }
                     `
@@ -85,3 +50,4 @@ export class MapList extends React.Component<ISearchProps> {
         )
     }
 }
+

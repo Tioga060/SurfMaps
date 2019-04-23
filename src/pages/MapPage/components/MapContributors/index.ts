@@ -1,1 +1,1 @@
-export * from './MapContributors';
+export * from './component';
