@@ -8,6 +8,7 @@ import { MapList } from 'pages/MapSearchPage/components/MapCardList';
 import { MapPage } from 'pages/MapPage';
 import { MapPageContainer } from 'pages/MapPage';
 import { mockMap } from 'pages/MapPage/_mocks/_data';
+import { EditMap } from 'pages/MapPage/views/EditMap';
 import { TopBarSearch } from './components/TopBarSearch';
 import { TopBarLayout } from './components/TopBarLayout';
 import './styles.scss';
@@ -71,7 +72,7 @@ export class TopBar extends React.Component<IBlankProps, IState> {
 
     public render() {
         return (
-            <>
+            <div className="drawer-container">
                 <TopAppBar className="top-app-bar">
                     <TopAppBarRow>
                         {this.state.searchIsOpen
@@ -85,14 +86,10 @@ export class TopBar extends React.Component<IBlankProps, IState> {
 
                     </TopAppBarRow>
                 </TopAppBar>
-                <TopAppBarFixedAdjust>
-                    <div className="App-body">
-                        <MapPageContainer
-                            //map={mockMap}
-                        />
-                    </div>
+                <TopAppBarFixedAdjust className='top-app-bar-fix-adjust'>
+                    <EditMap />
                 </TopAppBarFixedAdjust>
-            </>
+            </div>
         )
     }
 }

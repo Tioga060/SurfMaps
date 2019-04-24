@@ -90,8 +90,8 @@ export class MapPage extends React.Component<IProps, IState> {
                                     map={this.props.map}
                                     onStageClick={this.setHeaderImage}
                                 />
-                                {descriptions.map((description) => (
-                                    <MapDescription description={description} />
+                                {descriptions.map((description, index) => (
+                                    <MapDescription key={index} description={description} />
                                 ))}
                                 <MapContributors contributors={this.props.map.mapContributorsByMapId.nodes} />
                             </Cell>

@@ -1,1 +1,13 @@
 @import '@material/react-top-app-bar/index.scss';
+
+.drawer-container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.top-app-bar-fix-adjust {
+    display: flex;
+    width: 100%;
+}

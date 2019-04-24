@@ -1,0 +1,27 @@
+@import '../../../../globalStyles';
+@import '@material/react-drawer/index.scss';
+
+.drawer-app-content {
+    flex: auto;
+    overflow: auto;
+}
+
+.drawer {
+    background-color: #33333d;
+}
+
+.mdc-drawer--dismissible {
+    top: auto;
+}
+
+.drawer-header {
+    margin: 0;
+}
+
+.drawer-header-text {
+    margin-top: 1rem;
+}
+
+.drawer-content {
+    padding: 0.5rem;
+}
