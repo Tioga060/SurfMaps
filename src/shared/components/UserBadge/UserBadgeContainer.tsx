@@ -22,7 +22,7 @@ const CurrentUserBadgeContainer = createFragmentContainer(UserBadge, {
 
 export interface IBadgeContainerProps {
     showName?: boolean;
-    onPressed: () => void;
+    onPressed?: () => void;
 }
 
 export class UserBadgeForSignedInUser extends React.Component<IBadgeContainerProps> {
@@ -42,7 +42,6 @@ export class UserBadgeForSignedInUser extends React.Component<IBadgeContainerPro
                     if (error) {
                         return <div>{error.message}</div>;
                     }
-                    console.log(props);
                     const steamUser: IUserSteamInfo = props
                         ? props.currentUserSteamInfo
                         : null;

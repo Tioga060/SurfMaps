@@ -1,0 +1,26 @@
+@import '../../../../../globalStyles';
+@import '@material/react-icon-button/index.scss';
+
+.user-search-box {
+    width: 150px;
+}
+
+.search-box-container {
+    display: flex;
+    justify-content: left;
+    margin-bottom: 4px;
+}
+
+.search-icon-container {
+    margin-top: 4px;
+}
+
+.user-badge {
+    width: 150px;
+    overflow-x: hidden;
+    margin-top: 10px;
+}
+
+.error-text {
+    margin-top: 6px !important;
+}

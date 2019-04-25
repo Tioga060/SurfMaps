@@ -23,7 +23,6 @@ export class MapBodyHeader extends React.Component<IProps> {
                     {this.props.map.mapAuthorsByMapId.nodes.map((author) => (
                         <UserBadge
                             key={author.userByAuthorId.rowId}
-                            onPressed={() => {}}
                             steamUser={author.userByAuthorId.userSteamInfosByUserId.nodes[0]}
                             showName
                         />

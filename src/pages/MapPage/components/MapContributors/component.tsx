@@ -33,7 +33,7 @@ export class MapContributors extends React.Component<IProps> {
                     <div className='pad-badges' key={contributorType}>
                         <Headline6>{contributorType}</Headline6>
                         {contributorMap[contributorType].map((contributor, index) => (
-                            <UserBadge key={index} showName steamUser={contributor.userByUserId.userSteamInfosByUserId.nodes[0]} onPressed={() => {}} />
+                            <UserBadge key={index} showName steamUser={contributor.userByUserId.userSteamInfosByUserId.nodes[0]} />
                         ))}
                     </div>
                 ))}

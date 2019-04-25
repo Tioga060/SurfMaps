@@ -93,7 +93,6 @@ export class DownloadCard extends React.Component<IProps, IState> {
                         <UserBadge
                             steamUser={this.state.activeMap.fileByFileId.userByUploaderId.userSteamInfosByUserId.nodes[0]}
                             showName
-                            onPressed={() => {}}
                         />
                     </div>
                     <div className="vertical-center pull-right">

@@ -1,8 +1,6 @@
 import React from 'react';
 import {
     Headline4,
-    Headline5,
-    Body1,
 } from '@material/react-typography';
 import Drawer, { DrawerAppContent, DrawerContent, DrawerHeader, DrawerTitle } from '@material/react-drawer';
 import { EditMapDrawerContent } from './components/EditMapDrawerContent';
