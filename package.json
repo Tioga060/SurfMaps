@@ -4,6 +4,8 @@
   "private": true,
   "proxy": "http://localhost:5000",
   "dependencies": {
+    "@material-ui/core": "^3.9.3",
+    "@material-ui/lab": "^3.0.0-alpha.30",
     "@material/react-button": "^0.11.0",
     "@material/react-card": "^0.11.0",
     "@material/react-drawer": "^0.11.0",

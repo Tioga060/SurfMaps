@@ -3,7 +3,7 @@ import get from 'lodash/get';
 import { Body1 } from '@material/react-typography';
 import IconButton from '@material/react-icon-button';
 import MaterialIcon from '@material/react-material-icon';
-import TextField, {Input} from '@material/react-text-field';
+import TextField from '@material-ui/core/TextField';
 import { IUserSteamInfo } from 'shared/types';
 import { fetchSteamUser } from 'shared/resources/fetchSteamUser';
 import { UserBadge } from 'shared/components/UserBadge';
@@ -88,15 +88,24 @@ export class UserSearch extends React.Component<IProps, IState> {
             <>
                 <div className="search-box-container">
                     <TextField
+                        label="SteamID64"
                         className="user-search-box"
-                        label='SteamID64'
-                        dense
-                    >
-                        <Input
-                            value={this.state.searchText}
-                            onChange={this.setSearchText}
-                        />
-                    </TextField>
+                        margin="dense"
+                        variant="outlined"
+                        value={this.state.searchText}
+                        onChange={this.setSearchText}
+                        InputProps={{
+                            classes: {
+                                input: 'text-field-input',
+                                notchedOutline: 'text-field-border',
+                            }
+                        }}
+                        InputLabelProps={{
+                            classes: {
+                                root: 'text-field-input'
+                            }
+                        }}
+                    />
                     <IconButton className="pull-right search-icon-container" onClick={this.fetchSteamUser}>
                         <MaterialIcon className="icon-color" icon='search' />
                     </IconButton>

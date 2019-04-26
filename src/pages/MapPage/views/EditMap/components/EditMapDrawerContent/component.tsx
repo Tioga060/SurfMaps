@@ -1,15 +1,28 @@
 import React from 'react';
 import { MapTitle } from '../MapTitle';
+import { TierPicker } from '../TierPicker';
 import { AddUser } from 'shared/components/AddUser';
-import { IUserSteamInfo } from 'shared/types';
+import * as T from 'shared/types';
+import { IEditMapContext } from './container';
+import { MapInfoSelections } from '../MapInfoSelections';
 import './styles.scss';
 
 interface IProps {
+    context: IEditMapContext;
 }
 
-interface IState {
+const createContextPlaceholder = () => ({
+    name: '',
+    rowId: '',
+})
+
+export interface IState {
     mapName: string;
-    steamUserList: IUserSteamInfo[];
+    steamUserList: T.IUserSteamInfo[];
+    tier: number;
+    gameMode: T.IGameMode;
+    game: T.IGame;
+    mapType: T.IMapType;
 }
 
 export class EditMapDrawerContent extends React.Component<IProps, IState> {
@@ -18,20 +31,39 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
         this.state = {
             mapName: '',
             steamUserList: [],
+            tier: 3,
+            gameMode: createContextPlaceholder(),
+            game: createContextPlaceholder(),
+            mapType: createContextPlaceholder(),
         }
         this.updateSteamUserList = this.updateSteamUserList.bind(this);
+        this.updateTier = this.updateTier.bind(this);
+        this.updateRootState = this.updateRootState.bind(this);
     }
 
-    public updateMapName = (e: React.FormEvent<HTMLInputElement>) => {
+    public updateRootState = (partialState: Partial<IState>) => {
+        this.setState(() => ({
+            ...this.state,
+            ...partialState
+        }));
+    }
+
+    public updateMapName = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
             mapName: e.currentTarget.value,
         })
     }
 
-    public updateSteamUserList (userList: IUserSteamInfo[]) {
+    public updateSteamUserList (userList: T.IUserSteamInfo[]) {
         this.setState(() => ({
             steamUserList: userList
         }))
+    }
+
+    public updateTier (e: any, tier: number) {
+        this.setState(() => ({
+            tier,
+        }));
     }
 
     public render() {
@@ -44,6 +76,13 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
                         updateSteamUserList={this.updateSteamUserList}
                         descriptor="Authors"
                     />
+                </div>
+                <div className="drawer-card">
+                    <TierPicker
+                        tier={this.state.tier}
+                        updateTier={this.updateTier}
+                    />
+                    <MapInfoSelections context={this.props.context} state={this.state} updateRootState={this.updateRootState} />
                 </div>
             </>
         )

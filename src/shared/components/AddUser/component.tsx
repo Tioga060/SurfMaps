@@ -1,7 +1,4 @@
 import React from 'react';
-import Button from '@material/react-button';
-import TextField, {Input} from '@material/react-text-field';
-
 import { IUserSteamInfo } from 'shared/types';
 import { ClosedState } from './components/ClosedState';
 import { OpenState } from './components/OpenState';
