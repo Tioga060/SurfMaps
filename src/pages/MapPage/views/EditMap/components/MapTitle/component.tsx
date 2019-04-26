@@ -1,6 +1,6 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import './styles.scss';
+import { classNames as cn } from '../../styles';
 
 interface IProps {
     value: string;
@@ -17,13 +17,13 @@ export const MapTitle: React.StatelessComponent<IProps> = (props) => (
             onChange={props.updateMapName}
             InputProps={{
                 classes: {
-                    input: 'add-map-text-field',
-                    notchedOutline: 'text-field-border',
+                    input: cn.textColor,
+                    notchedOutline: cn.themeBorder,
                 }
             }}
             InputLabelProps={{
                 classes: {
-                    root: 'text-color'
+                    root: cn.textColor
                 }
             }}
         />

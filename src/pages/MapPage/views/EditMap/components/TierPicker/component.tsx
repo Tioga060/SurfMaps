@@ -1,7 +1,7 @@
 import React from 'react';
 import Slider from '@material-ui/lab/Slider';
 import { Headline6 } from '@material/react-typography';
-import './styles.scss';
+import { classNames as cn } from '../../styles';
 
 interface IProps {
     tier: number;
@@ -13,7 +13,7 @@ export const TierPicker: React.StatelessComponent<IProps> = (props) => (
         <Headline6>
             {`Tier ${props.tier}`}
         </Headline6>
-        <div className="tier-slider-container">
+        <div className={cn.tierSliderContainer}>
             <Slider
                 value={props.tier}
                 min={1}
@@ -21,9 +21,9 @@ export const TierPicker: React.StatelessComponent<IProps> = (props) => (
                 step={1}
                 onChange={props.updateTier}
                 classes={{
-                    trackBefore: 'theme-background-color',
-                    trackAfter: 'theme-background-color-transparent',
-                    thumb: 'theme-background-color',
+                    trackBefore: cn.themeColorBackground,
+                    trackAfter: cn.themeColorBackgroundSecondary,
+                    thumb: cn.themeColorBackground,
                 }}
             />
         </div>

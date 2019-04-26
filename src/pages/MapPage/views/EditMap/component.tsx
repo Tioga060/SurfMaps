@@ -6,6 +6,7 @@ import Drawer, { DrawerAppContent, DrawerContent, DrawerHeader, DrawerTitle } fr
 import { EditMapDrawerContent } from './components/EditMapDrawerContent';
 import { MapPage } from '../../';
 import { mockMap } from '../../_mocks/_data';
+import { classNames as cn } from './styles';
 
 import './styles.scss';
 
@@ -14,19 +15,19 @@ export class EditMap extends React.Component {
         return (
             <>
                 <Drawer
-                    className="drawer"
+                    className={cn.drawerBackground}
                 >
-                    <DrawerHeader className="drawer-header">
-                            <Headline4 className="drawer-header-text">
+                    <DrawerHeader className="m-0">
+                            <Headline4 className="mt-3">
                                 Add/Edit Map
                             </Headline4>
                     </DrawerHeader>
-                    <DrawerContent className="drawer-content">
+                    <DrawerContent className="p-2">
                         <EditMapDrawerContent/>
                     </DrawerContent>
                 </Drawer>
 
-                <DrawerAppContent className='drawer-app-content'>
+                <DrawerAppContent className={cn.overflowAuto}>
                     <MapPage map={mockMap} />
                 </DrawerAppContent>
             </>

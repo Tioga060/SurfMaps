@@ -3,10 +3,10 @@ import get from 'lodash/get';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import './styles.scss';
 import { IState as IRootState } from '../EditMapDrawerContent/component';
 import { IEditMapContext } from '../EditMapDrawerContent/container';
 import * as T from 'shared/types/descriptors';
+import { classNames as cn } from '../../styles';
 
 type IUnion = T.IMapTypeAsNodes | T.IGameAsNodes | T.IGameModeAsNodes
 
@@ -29,20 +29,20 @@ const updateState = (
 
 export const MapInfoSelections: React.StatelessComponent<IProps> = (props) => (
     <>
-        <div className="margin-bottom">
-            <InputLabel className="text-color" htmlFor="game-input">Primary Game</InputLabel>
+        <div className="mb-3">
+            <InputLabel className={cn.textColor} htmlFor="game-input">Primary Game</InputLabel>
             <Select
                 value={get(props, 'state.game.name', '')}
                 onChange={updateState('game', props.updateRootState, props.context.allGames)}
                 inputProps={{
                     id: 'game-input',
-                    className: 'align-left',
+                    className: 'text-left',
                     classes: {
-                        root: 'text-color',
-                        icon: 'theme-color'
+                        root: cn.textColor,
+                        icon: cn.themeColor
                     }
                 }}
-                className="select-border"
+                className={cn.themeBorder}
                 fullWidth
             >
                 {props.context.allGames.nodes.map((item) => (
@@ -51,20 +51,20 @@ export const MapInfoSelections: React.StatelessComponent<IProps> = (props) => (
             </Select>
         </div>
 
-        <div className="margin-bottom">
-            <InputLabel className="text-color" htmlFor="gameMode-input">Game Mode</InputLabel>
+        <div className="mb-3">
+            <InputLabel className={cn.textColor} htmlFor="gameMode-input">Game Mode</InputLabel>
             <Select
                 value={get(props, 'state.gameMode.name', '')}
                 onChange={updateState('gameMode', props.updateRootState, props.context.allGameModes)}
                 inputProps={{
                     id: 'gameMode-input',
-                    className: 'align-left',
+                    className: 'text-left',
                     classes: {
-                        root: 'text-color',
-                        icon: 'theme-color'
+                        root: cn.textColor,
+                        icon: cn.themeColor
                     },
                 }}
-                className="select-border"
+                className={cn.themeBorder}
                 fullWidth
             >
                 {props.context.allGameModes.nodes.map((item) => (
@@ -73,20 +73,20 @@ export const MapInfoSelections: React.StatelessComponent<IProps> = (props) => (
             </Select>
         </div>
 
-        <div className="margin-bottom">
-            <InputLabel className="text-color" htmlFor="mapType-input">Map Type</InputLabel>
+        <div className="mb-3">
+            <InputLabel className={cn.textColor} htmlFor="mapType-input">Map Type</InputLabel>
             <Select
                 value={get(props, 'state.mapType.name', '')}
                 onChange={updateState('mapType', props.updateRootState, props.context.allMapTypes)}
                 inputProps={{
                     id: 'mapType-input',
-                    className: 'align-left',
+                    className: 'text-left',
                     classes: {
-                        root: 'text-color',
-                        icon: 'theme-color'
+                        root: cn.textColor,
+                        icon: cn.themeColor
                     }
                 }}
-                className="select-border"
+                className={cn.themeBorder}
                 fullWidth
             >
                 {props.context.allMapTypes.nodes.map((item) => (

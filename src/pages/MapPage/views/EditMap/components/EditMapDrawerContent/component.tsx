@@ -5,7 +5,7 @@ import { AddUser } from 'shared/components/AddUser';
 import * as T from 'shared/types';
 import { IEditMapContext } from './container';
 import { MapInfoSelections } from '../MapInfoSelections';
-import './styles.scss';
+import { classNames as cn } from '../../styles';
 
 interface IProps {
     context: IEditMapContext;
@@ -69,7 +69,7 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
     public render() {
         return (
             <>
-                <div className="drawer-card">
+                <div className={cn.drawerCard}>
                     <MapTitle value={this.state.mapName} updateMapName={this.updateMapName}/>
                     <AddUser
                         steamUserList={this.state.steamUserList}
@@ -77,7 +77,7 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
                         descriptor="Authors"
                     />
                 </div>
-                <div className="drawer-card">
+                <div className={cn.drawerCard}>
                     <TierPicker
                         tier={this.state.tier}
                         updateTier={this.updateTier}
