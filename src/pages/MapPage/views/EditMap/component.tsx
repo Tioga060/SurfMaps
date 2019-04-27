@@ -1,33 +1,36 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import Drawer, { DrawerAppContent, DrawerContent, DrawerHeader } from '@material/react-drawer';
+import Drawer from '@material-ui/core/Drawer';
+import Divider from '@material-ui/core/Divider';
 import { EditMapDrawerContent } from './components/EditMapDrawerContent';
 import { MapPage } from '../../';
 import { mockMap } from '../../_mocks/_data';
 import { classNames as cn } from './styles';
-
-import './styles.scss';
 
 export class EditMap extends React.Component {
     public render() {
         return (
             <>
                 <Drawer
-                    className={cn.drawerBackground}
+                    className={cn.drawer}
+                    variant="permanent"
+                    classes={{
+                        paper: cn.drawerPaper
+                    }}
                 >
-                    <DrawerHeader className="m-0">
+                    <div className={cn.drawerHeader}>
                         <Typography variant="h5" className="mt-3" align="center">
                             Add/Edit Map
                         </Typography>
-                    </DrawerHeader>
-                    <DrawerContent className="p-2">
+                    </div>
+                    <Divider />
+                    <div className="p-2">
                         <EditMapDrawerContent/>
-                    </DrawerContent>
+                    </div>
                 </Drawer>
-
-                <DrawerAppContent className={cn.overflowAuto}>
+                <main className={cn.content}>
                     <MapPage map={mockMap} />
-                </DrawerAppContent>
+                </main>
             </>
         )
     }

@@ -1,17 +1,23 @@
 import { style } from 'typestyle';
-import { color } from 'csx';
-
-const THEME_COLOR = color('#5C7293');
-const THEME_SECONDARY = color('rgba(92, 114, 147, 0.54)');
-const CARD_COLOR = color('#373740');
-const DRAWER_COLOR = color('#33333d');
-const TEXT_COLOR = color('#FFFFFF');
-
-console.log(TEXT_COLOR.toString())
+import { globalColors, globalSizes } from 'shared/styles';
 
 export const classNames = {
-    drawerBackground: style({
-        backgroundColor: DRAWER_COLOR.toString(),
+    drawer: style({
+        width: globalSizes.modalWidth,
+        flexShrink: 0,
+    }),
+
+    drawerPaper: style({
+        width: globalSizes.modalWidth,
+    }),
+
+    drawerHeader: style({
+        height: globalSizes.topBarHeight,
+    }),
+
+    content: style({
+        flexGrow: 1,
+        marginLeft: globalSizes.modalWidth,
     }),
 
     overflowAuto: style({
@@ -20,7 +26,7 @@ export const classNames = {
 
     // Drawer Content
     drawerCard: style({
-        backgroundColor: CARD_COLOR.toString(),
+        backgroundColor: globalColors.cardColor.toString(),
         padding: '0.5rem',
         marginBottom: '0.5rem',
         $nest: {
