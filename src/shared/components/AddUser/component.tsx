@@ -1,9 +1,9 @@
 import React from 'react';
 import { IUserSteamInfo } from 'shared/types';
-import { ClosedState } from './components/ClosedState';
-import { OpenState } from './components/OpenState';
-
-import './styles.scss';
+import { AddUserHeader } from './components/AddUserHeader';
+import { UserSearch } from './components/UserSearch';
+import { classNames as cn } from './styles';
+import { UserListDrawer } from './components/UserList';
 
 type IProps = {
     steamUserList: IUserSteamInfo[];
@@ -29,19 +29,24 @@ export class AddUser extends React.Component<IProps, IState> {
 
     public render() {
         return (
-            <>
+            <div className={cn.addUserContainer}>
+                <AddUserHeader isOpen={this.state.isOpen} open={this.toggleOpen} descriptor={this.props.descriptor} />
                 {this.state.isOpen
                     ? (
-                        <OpenState
-                            open={this.toggleOpen}
+                        <UserSearch
+                            updateSteamUserList={this.props.updateSteamUserList}
                             steamUserList={this.props.steamUserList}
                             descriptor={this.props.descriptor}
-                            updateSteamUserList={this.props.updateSteamUserList}
                         />
-                    ) : (
-                        <ClosedState open={this.toggleOpen} descriptor={this.props.descriptor} />
-                    )}
-            </>
+                    ) : null}
+                {!!this.props.steamUserList.length && (
+                    <UserListDrawer
+                        descriptor={this.props.descriptor}
+                        steamUserList={this.props.steamUserList}
+                        updateSteamUserList={this.props.updateSteamUserList}
+                    />
+                )}
+            </div>
         );
     }
 }

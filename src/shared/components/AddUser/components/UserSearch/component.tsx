@@ -1,19 +1,19 @@
 import React from 'react';
 import get from 'lodash/get';
-import { Body1 } from '@material/react-typography';
-import IconButton from '@material/react-icon-button';
-import MaterialIcon from '@material/react-material-icon';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import Search from '@material-ui/icons/Search';
+import AddToPhotos from '@material-ui/icons/AddToPhotos';
 import TextField from '@material-ui/core/TextField';
 import { IUserSteamInfo } from 'shared/types';
 import { fetchSteamUser } from 'shared/resources/fetchSteamUser';
 import { UserBadge } from 'shared/components/UserBadge';
 
-import './styles.scss';
-import '../../styles.scss';
-
 interface IProps {
     updateSteamUserList: (userList: IUserSteamInfo[]) => void;
     steamUserList: IUserSteamInfo[];
+    descriptor: string;
 }
 
 interface IState {
@@ -86,53 +86,47 @@ export class UserSearch extends React.Component<IProps, IState> {
     public render() {
         return (
             <>
-                <div className="search-box-container">
+                <Divider/>
+                <Typography variant="body1" align="center" className="mt-2">
+                    {`Add ${this.props.descriptor}`}
+                </Typography>
+                <div className="d-flex ml-2">
                     <TextField
                         label="SteamID64"
-                        className="user-search-box"
                         margin="dense"
                         variant="outlined"
                         value={this.state.searchText}
                         onChange={this.setSearchText}
-                        InputProps={{
-                            classes: {
-                                input: 'text-field-input',
-                                notchedOutline: 'text-field-border',
-                            }
-                        }}
-                        InputLabelProps={{
-                            classes: {
-                                root: 'text-field-input'
-                            }
-                        }}
                     />
-                    <IconButton className="pull-right search-icon-container" onClick={this.fetchSteamUser}>
-                        <MaterialIcon className="icon-color" icon='search' />
+                    <div className="pt-2">
+                    <IconButton onClick={this.fetchSteamUser}>
+                        <Search/>
                     </IconButton>
+                    </div>
                 </div>
-                <hr className="small-hr"/>
-                <div className="search-box-container">
-                    <div className="user-badge">
+                <Divider/>
+                <div className="d-flex justify-content-left pb-1">
+                    <div className="ml-2 mt-2">
                         {this.state.hasFetched
                             ? (
                                 this.state.fetching
                                     ? (
-                                        <Body1 className="error-text">Fetching...</Body1>
+                                        <Typography variant="body1" align="left" className="mt-1 ml-2">Fetching...</Typography>
                                     ) : (
                                         this.state.result
                                             ? (
                                                 <UserBadge showName steamUser={this.state.result} />
                                             ) : (
-                                                <Body1 className="error-text">No results found</Body1>
+                                                <Typography variant="body1" align="left" className="mt-1 ml-2">No results found</Typography>
                                             )
                                     )
                             ) : (
-                                <Body1 className="error-text">Search Results</Body1>
+                                <Typography variant="body1" align="left" className="mt-1 ml-2">Search Results</Typography>
                             )
                         }
                     </div>
-                    <IconButton className="pull-right search-icon-container" onClick={this.updateSteamUserList}>
-                        <MaterialIcon className="icon-color" icon='library_add'/>
+                    <IconButton className="ml-auto" onClick={this.updateSteamUserList}>
+                        <AddToPhotos/>
                     </IconButton>
                 </div>
             </>

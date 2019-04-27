@@ -1,10 +1,11 @@
 import React from 'react';
-import { Body1 } from '@material/react-typography';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import Delete from '@material-ui/icons/Delete';
 import { IUserSteamInfo } from 'shared/types';
 import { UserBadge } from 'shared/components/UserBadge';
-import MaterialIcon from '@material/react-material-icon';
-import './styles.scss';
-import '../../styles.scss';
+import { classNames as cn } from '../../styles';
 
 interface IProps {
     steamUserList: IUserSteamInfo[];
@@ -20,22 +21,23 @@ const removeUser = (index: number, props: IProps) => () => {
 }
 
 export const UserListDrawer: React.StatelessComponent<IProps> = props => (
-    <div className='user-list-drawer'>
-        <div className="userlist-drawer-header">
-            <Body1 className="text-center">{`${props.descriptor} List`}</Body1>
-            <hr className="small-hr"/>
-        </div>
-        <div className="userlist-drawer-content">
+    <>
+        <Divider/>
+        <div className={cn.userListContainer}>
             {props.steamUserList.map((steamUser, index) => (
-                <div className='badge-container' key={index}>
-                    <MaterialIcon
-                        className="icon-color icon-margin"
-                        icon='close'
+                <div className="d-flex mb-1" key={index}>
+                    <IconButton
                         onClick={removeUser(index, props)}
-                    />
+                        aria-label="Remove User"
+                        classes={{
+                            root: cn.buttonSize,
+                        }}
+                    >
+                        <Delete/>
+                    </IconButton>
                     <UserBadge showName steamUser={steamUser}/>
                 </div>
             ))}
         </div>
-    </div>
+    </>
 );
