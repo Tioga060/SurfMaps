@@ -1,29 +1,32 @@
 import React from 'react';
-import Button from '@material/react-button';
+import Button from '@material-ui/core/Button';
 import classnames from 'classnames';
 import { IUserSteamInfo } from 'shared/types';
 import { IBadgeContainerProps } from './UserBadgeContainer';
-
-import './styles.scss';
+import { classNames as cn } from './styles';
 
 type IProps = IBadgeContainerProps & {
     steamUser: IUserSteamInfo;
 }
 
-export class UserBadge extends React.Component<IProps> {
-    public render() {
-        const steamUser = this.props.steamUser;
-        return steamUser ? (
-            <Button
-                raised
-                icon={<img className={classnames([{'icon-only-icon': !this.props.showName}, this.props.className])} src={steamUser.avatar} />}
-                onClick={this.props.onPressed}
-                className={classnames([{'icon-only-button': !this.props.showName}, this.props.className])}
-            >
-                {this.props.showName && (
-                    `${steamUser.name}`
-                )}
-            </Button>
-        ) : null;
-    }
+export const UserBadge: React.StatelessComponent<IProps> = (props) => {
+    const steamUser = props.steamUser;
+    return steamUser ? (
+        <Button
+            variant="contained"
+            color="primary"
+            onClick={props.onPressed}
+            classes={{
+                root: classnames({'pr-2 pl-2': !props.showName, [cn.noNameWidth]: !props.showName}),
+            }}
+        >
+            <img className={cn.iconImage} src={steamUser.avatar}/>
+            {props.showName && (
+                <div className="pl-2">
+                    {steamUser.name}
+                </div>
+            )}
+            
+        </Button>
+    ) : null;
 }

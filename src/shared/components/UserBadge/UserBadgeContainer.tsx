@@ -4,8 +4,6 @@ import environment from 'environment';
 import { UserBadge } from './component';
 import { IUserSteamInfo } from 'shared/types';
 
-import './styles.scss'
-
 const CurrentUserBadgeContainer = createFragmentContainer(UserBadge, {
     steamUser: graphql`
     fragment UserBadgeContainer_steamUser on UserSteamInfo {
