@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '@material/react-button';
-
+import classnames from 'classnames';
 import { IUserSteamInfo } from 'shared/types';
 import { IBadgeContainerProps } from './UserBadgeContainer';
 
@@ -16,9 +16,9 @@ export class UserBadge extends React.Component<IProps> {
         return steamUser ? (
             <Button
                 raised
-                icon={<img className={this.props.showName ? '' : 'icon-only-icon'} src={steamUser.avatar} />}
+                icon={<img className={classnames([{'icon-only-icon': !this.props.showName}, this.props.className])} src={steamUser.avatar} />}
                 onClick={this.props.onPressed}
-                className={this.props.showName ? '' : 'icon-only-button'}
+                className={classnames([{'icon-only-button': !this.props.showName}, this.props.className])}
             >
                 {this.props.showName && (
                     `${steamUser.name}`

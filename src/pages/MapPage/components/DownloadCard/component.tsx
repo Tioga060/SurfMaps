@@ -1,18 +1,15 @@
 import React from 'react';
-import Tab from '@material/react-tab';
-import TabBar from '@material/react-tab-bar';
-import {
-    Headline4,
-    Body1
-} from '@material/react-typography';
-import Select from '@material/react-select';
-import Button from '@material/react-button';
-
+import get from 'lodash/get';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Button from '@material-ui/core/Button';
+import { classNames as cn } from '../../styles'
 import { UserBadge } from 'shared/components/UserBadge'
-
 import { IMapFile } from 'shared/types';
-import '../../styles.scss';
-import './styles.scss';
 
 interface IProps {
     mapFiles: IMapFile[];
@@ -22,6 +19,7 @@ interface IState {
     currentTab: number;
     mapFiles: IMapFile[];
     activeMap: IMapFile;
+    selectedMapIndex: number;
 }
 
 export class DownloadCard extends React.Component<IProps, IState> {
@@ -42,6 +40,7 @@ export class DownloadCard extends React.Component<IProps, IState> {
             currentTab: 0,
             activeMap,
             mapFiles,
+            selectedMapIndex: 0,
         };
     }
 
@@ -53,51 +52,73 @@ export class DownloadCard extends React.Component<IProps, IState> {
             this.setState({
                 mapFiles,
                 activeMap,
+                selectedMapIndex: 0,
             });
         }
     }
 
-    public setTab = (tab: number) => () => {
-        this.setState({currentTab: tab});
+    public setTab = (event: any, currentTab: number) => {
+        this.setState({currentTab});
+    }
+
+    public setFile = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const index = parseInt(e.target.value);
+        const nextMap = get(this.state.mapFiles, index, null);
+        if (nextMap) {
+            this.setState(() => ({
+                activeMap: nextMap,
+                selectedMapIndex: index,
+            }));
+        }
     }
 
     public render() {
         return (
-            <div className="map-card" >
-                <Headline4>
+            <div className={cn.mapCard} >
+                <Typography variant="h4">
                     Download
-                </Headline4>
-                <TabBar>
+                </Typography>
+                <Tabs
+                    variant="fullWidth"
+                    value={this.state.currentTab}
+                    onChange={this.setTab}
+                    indicatorColor="primary"
+                    textColor="primary"
+                >
                     {this.gameModes.map((gameMode, index) => (
                         <Tab
                             key={gameMode}
-                            onClick={this.setTab(index)}
-                            active={this.state.currentTab === index}
-                            className="download-tab"
-                        >
-                            {gameMode}
-                        </Tab>
+                            value={index}
+                            label={gameMode}
+                        />
                     ))}
-                </TabBar>
-                <div className="download-body">
-                    <Select
-                        outlined
-                        className="select-color vertical-center"
-                    >
-                        {this.state.mapFiles.map((mapFile, index) => (
-                            <option key={index} value={mapFile.fileByFileId.rowId}>{mapFile.label}</option>
-                        ))}
-                    </Select>
-                    <div className="vertical-center">
-                        <Body1>Uploader</Body1>
+                </Tabs>
+                <div className="d-flex mt-3">
+                    <div className='d-flex flex-column'>
+                        <InputLabel htmlFor="map-version-input">Map Version</InputLabel>
+                        <Select
+                            value={this.state.selectedMapIndex}
+                            onChange={this.setFile}
+                            inputProps={{
+                                id: 'map-version-input',
+                                className: 'text-left',
+                            }}
+                        >
+                            {this.state.mapFiles.map((mapFile, index) => (
+                                <MenuItem key={index} value={index}>{mapFile.label}</MenuItem>
+                            ))}
+                        </Select>
+                    </div>
+                    <div className="d-flex flex-column">
+                        <Typography variant="body1">Uploader</Typography>
                         <UserBadge
                             steamUser={this.state.activeMap.fileByFileId.userByUploaderId.userSteamInfosByUserId.nodes[0]}
                             showName
                         />
                     </div>
-                    <div className="vertical-center pull-right">
-                        <Body1>Link</Body1>
-                        <Button raised>
+                    <div className="d-flex flex-column ml-auto">
+                        <Typography variant="body1">Link</Typography>
+                        <Button variant="contained" color="primary">
                             Download
                         </Button>
                     </div>

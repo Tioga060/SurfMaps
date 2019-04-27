@@ -1,13 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Card, {
-    CardPrimaryContent,
-    CardMedia,
-  } from "@material/react-card";
-
+import Card from '@material-ui/core/Card';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardActionArea from '@material-ui/core/CardActionArea';
 import { IImage } from 'shared/types';
-import '../../styles.scss';
-import './styles.scss';
+import { classNames as cn } from '../../styles';
 
 interface IProps {
     setHeaderImage: (image: IImage) => void;
@@ -52,7 +49,7 @@ export class ImageList extends React.Component<IProps, IState> {
     }
 
     public onMouseMove = (event: any) => {
-        // check for zero to prevent dragging fro resetting it
+        // check for zero to prevent dragging from resetting it
         if (this.state.isScrolling && event.clientX !== 0) {
             const {clientX, scrollLeft} = this.state;
             this._scroller.scrollLeft = (scrollLeft + clientX - event.clientX);
@@ -82,9 +79,9 @@ export class ImageList extends React.Component<IProps, IState> {
 
     public render() {
         return this.props.images ? (
-            <div className="map-card">
+            <div className={cn.mapCard}>
                 <div
-                    className="scroll-image-container"
+                    className={cn.scrollImageContainer}
                     ref={this.attachScroller}
                     onMouseDown={this.onMouseDown}
                     onMouseUp={this.onMouseUp}
@@ -97,13 +94,13 @@ export class ImageList extends React.Component<IProps, IState> {
                     {this.props.images!.map((image, index) => (
                         <div
                             key={`${image.storeLocation}${index}`}
-                            className="scroll-image"
+                            className={"m-1"}
                             onClick={this.setHeaderImage(image)}
                         >
                             <Card>
-                                <CardPrimaryContent>
-                                    <CardMedia square imageUrl={image.storeLocation} />
-                                </CardPrimaryContent>
+                                <CardActionArea>
+                                    <CardMedia className={cn.scrollImage} image={image.storeLocation} />
+                                </CardActionArea>
                             </Card>
                         </div>
                     ))}
@@ -111,5 +108,5 @@ export class ImageList extends React.Component<IProps, IState> {
             </div> 
         ) : null;
     }
-    
 }
+//http://puu.sh/Dkyaa/6fca85e9ef.jpg ===========================================================================================================

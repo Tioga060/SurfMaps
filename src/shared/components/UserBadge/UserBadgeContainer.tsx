@@ -23,6 +23,7 @@ const CurrentUserBadgeContainer = createFragmentContainer(UserBadge, {
 export interface IBadgeContainerProps {
     showName?: boolean;
     onPressed?: () => void;
+    className?: string;
 }
 
 export class UserBadgeForSignedInUser extends React.Component<IBadgeContainerProps> {
@@ -49,6 +50,7 @@ export class UserBadgeForSignedInUser extends React.Component<IBadgeContainerPro
                                 steamUser={steamUser}
                                 onPressed={this.props.onPressed}
                                 showName={this.props.showName}
+                                className={this.props.className}
                             />;
                 }}
             />

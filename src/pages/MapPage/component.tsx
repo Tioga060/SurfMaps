@@ -1,6 +1,7 @@
 import React, { CSSProperties } from 'react';
 import get from 'lodash/get';
-import { Cell, Row } from '@material/react-layout-grid';
+import Grid from '@material-ui/core/Grid';
+import classnames from 'classnames';
 import { IMap, IImage, IMapDescription } from 'shared/types';
 import { MapBodyHeader } from './components/MapBodyHeader';
 import { StageInfo } from './components/StageInfo';
@@ -9,7 +10,7 @@ import { ImageList } from './components/ImageList';
 import { DownloadCard } from './components/DownloadCard';
 import { MapDescription } from './components/MapDescription';
 import { MapContributors } from './components/MapContributors';
-import './styles.scss';
+import { classNames as cn } from './styles';
 
 interface IProps {
     map: IMap;
@@ -22,9 +23,8 @@ interface IState {
 const backgroundImageStyle = (imageUrl: string): CSSProperties => {
     return imageUrl
     ? { 
-        backgroundImage: `url(https://i.imgur.com/giwpZ86.jpg)`,
-    } // TODO
-    : {};
+        backgroundImage: `url(${imageUrl})`,
+    } : {};
 }
 
 const getDefaultImage = (map: IMap) => {
@@ -76,39 +76,42 @@ export class MapPage extends React.Component<IProps, IState> {
                 'imageByImageId.storeLocation',
                 null)
             : null;
-        const bgClass = backgroundImage
-            ? 'map-background-image'
-            : '';
         return (
-            <div className={`${bgClass} map-page-container`} style={backgroundImageStyle(backgroundImage)}>
-                <div className="map-page-body">
+            <div
+                className={classnames({
+                    [cn.mapPageContainer]: true,
+                    [cn.mapBackgroundImage]: !!backgroundImage
+                })}
+                style={backgroundImageStyle(backgroundImage)}
+            >
+                <div className={cn.mapPageBody}>
                     <MapBodyHeader map={this.props.map}/>
-                    <div>
-                        <Row>
-                            <Cell columns={5}>
+                    <Grid container spacing={0}>
+                        <Grid direction="column" xs={12} sm={5}>
+                            <div className={cn.cardDivider}>
                                 <StageInfo
                                     map={this.props.map}
                                     onStageClick={this.setHeaderImage}
                                 />
                                 {descriptions.map((description, index) => (
-                                    <MapDescription key={index} description={description} />
+                                        <MapDescription key={index} description={description} />
                                 ))}
                                 <MapContributors contributors={this.props.map.mapContributorsByMapId.nodes} />
-                            </Cell>
-                            <Cell columns={7}>
-                                <HeaderImage image={this.state.headerImage} />
-                                <ImageList
-                                    setHeaderImage={this.setHeaderImage}
-                                    images={getAllImages(this.props.map)}
+                            </div>
+                        </Grid>
+                        <Grid direction="column" xs={12} sm={7}>
+                            <HeaderImage image={this.state.headerImage} />
+                            <ImageList
+                                setHeaderImage={this.setHeaderImage}
+                                images={getAllImages(this.props.map)}
+                            />
+                            {this.props.map.mapFilesByMapId.nodes.length && (
+                                <DownloadCard
+                                    mapFiles={this.props.map.mapFilesByMapId.nodes}
                                 />
-                                {this.props.map.mapFilesByMapId.nodes.length && (
-                                    <DownloadCard
-                                        mapFiles={this.props.map.mapFilesByMapId.nodes}
-                                    />
-                                )}
-                            </Cell>
-                        </Row>
-                    </div>
+                            )}
+                        </Grid>
+                    </Grid>
                 </div>
             </div>
         )

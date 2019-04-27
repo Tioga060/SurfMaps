@@ -4,7 +4,7 @@ import { globalSizes } from 'shared/styles';
 //todo update this dynamically
 export const classNames = {
     topBar: style({
-        marginLeft: '260px',
+        marginLeft: globalSizes.modalWidth,
         width: `calc(100% - ${globalSizes.modalWidth})`,
     }),
     menuButton: style({

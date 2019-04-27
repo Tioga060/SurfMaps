@@ -1,15 +1,11 @@
 import React from 'react';
-import {
-    Headline3,
-    Headline6,
-    Body1,
-} from '@material/react-typography';
-
+import Typography from '@material-ui/core/Typography';
+import classnames from 'classnames';
 import { IMap, IStage, IImage } from 'shared/types';
-import '../../styles.scss';
-import './styles.scss';
+import { classNames as cn } from '../../styles'
 
 const BONUS = 'bonus';
+const STAGE = 'stage';
 
 interface IProps {
     map: IMap;
@@ -38,31 +34,43 @@ export class StageInfo extends React.Component<IProps> {
     public render() {
         const stages: IStage[] = sortStages(this.props.map.stagesByMapId.nodes);
         return (
-            <div className="map-card">
-                <Headline3>
+            <div className={cn.mapCard}>
+                <Typography variant="h3">
                     {`${this.props.map.gameModeByGameModeId.name} - Tier ${this.props.map.tier}`}
-                </Headline3>
-                <Headline6 className="info-sub-headers">
+                </Typography>
+                <Typography variant="h6" className={cn.mapInfo}>
                     {this.props.map.gameByGameId.name}
-                </Headline6>
-                <Headline6 className="info-sub-headers">
+                </Typography>
+                <Typography variant="h6" className={cn.mapInfo}>
                     {`${this.props.map.mapTypeByMapTypeId.name} Map`}
-                </Headline6>
-                {stages.map((stage) => (
+                </Typography>
+                {stages.map((stage) => {
+                    const stageType = stage.stageTypeByStageTypeId.name.toLowerCase();
+                    return (
                     <div
-                        className={stage.stageTypeByStageTypeId.name ? `${stage.stageTypeByStageTypeId.name.toLowerCase()}-box` : 'stage-box'}
+                        className={classnames({
+                            [cn.stageBox]: true,
+                            [cn.stageBoxColor]: stageType === STAGE,
+                            [cn.bonusBoxColor]: stageType === BONUS,
+                        })}
                         key={stage.rowId}
                         onClick={this.onStageClick(stage)}
                     >
-                        <div className={stage.stageTypeByStageTypeId.name ? `${stage.stageTypeByStageTypeId.name.toLowerCase()}-triangle` : 'stage-triangle'} />
-                        <Body1 className="stage-text">
-                            {`${stage.stageTypeByStageTypeId.name} ${stage.number}`}
-                        </Body1>
-                        <Body1 className="stage-author">
-                            {stage.userByAuthorId.userSteamInfosByUserId.nodes[0].name}
-                        </Body1>
+                        <div className={classnames({
+                            [cn.stageTriangle]: true,
+                            [cn.stageTriangleColor]: stageType === STAGE,
+                            [cn.bonusTriangleColor]: stageType === BONUS,
+                        })} />
+                        <div className={classnames(['d-flex', cn.stageText])}>
+                            <Typography variant="body1" className="ml-3 position-absolute">
+                                {`${stage.stageTypeByStageTypeId.name} ${stage.number}`}
+                            </Typography>
+                            <Typography variant="body1" align="right" className="ml-auto mr-3">
+                                {stage.userByAuthorId.userSteamInfosByUserId.nodes[0].name}
+                            </Typography>
+                        </div>
                     </div>
-                ))}
+                )})}
             </div> 
         )
     }
