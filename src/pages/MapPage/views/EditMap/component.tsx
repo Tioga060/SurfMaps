@@ -1,8 +1,6 @@
 import React from 'react';
-import {
-    Headline4,
-} from '@material/react-typography';
-import Drawer, { DrawerAppContent, DrawerContent, DrawerHeader, DrawerTitle } from '@material/react-drawer';
+import Typography from '@material-ui/core/Typography';
+import Drawer, { DrawerAppContent, DrawerContent, DrawerHeader } from '@material/react-drawer';
 import { EditMapDrawerContent } from './components/EditMapDrawerContent';
 import { MapPage } from '../../';
 import { mockMap } from '../../_mocks/_data';
@@ -18,9 +16,9 @@ export class EditMap extends React.Component {
                     className={cn.drawerBackground}
                 >
                     <DrawerHeader className="m-0">
-                            <Headline4 className="mt-3">
-                                Add/Edit Map
-                            </Headline4>
+                        <Typography variant="h5" className="mt-3" align="center">
+                            Add/Edit Map
+                        </Typography>
                     </DrawerHeader>
                     <DrawerContent className="p-2">
                         <EditMapDrawerContent/>

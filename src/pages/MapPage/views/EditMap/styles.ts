@@ -36,25 +36,4 @@ export const classNames = {
         padding: '1rem',
         overflowX: 'hidden',
     }),
-
-    textColor: style({
-        color: `${TEXT_COLOR.toString()} !important`,
-    }),
-    themeBorder: style({
-        borderColor: `${THEME_COLOR.toString()} !important`,
-        $nest: {
-            '&:before, &:after': {
-                borderColor: `${THEME_COLOR.toString()} !important`,
-            }
-        }
-    }),
-    themeColor: style({
-        color: `${THEME_COLOR.toString()} !important`,
-    }),
-    themeColorBackground: style({
-        backgroundColor: `${THEME_COLOR.toString()} !important`,
-    }),
-    themeColorBackgroundSecondary: style({
-        backgroundColor: `${THEME_SECONDARY.toString()} !important`,
-    }),
 }

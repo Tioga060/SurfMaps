@@ -1,6 +1,6 @@
 import React from 'react';
 import Slider from '@material-ui/lab/Slider';
-import { Headline6 } from '@material/react-typography';
+import Typography from '@material-ui/core/Typography';
 import { classNames as cn } from '../../styles';
 
 interface IProps {
@@ -10,9 +10,9 @@ interface IProps {
 
 export const TierPicker: React.StatelessComponent<IProps> = (props) => (
     <>
-        <Headline6>
+        <Typography variant="h6">
             {`Tier ${props.tier}`}
-        </Headline6>
+        </Typography>
         <div className={cn.tierSliderContainer}>
             <Slider
                 value={props.tier}
@@ -20,11 +20,6 @@ export const TierPicker: React.StatelessComponent<IProps> = (props) => (
                 max={6}
                 step={1}
                 onChange={props.updateTier}
-                classes={{
-                    trackBefore: cn.themeColorBackground,
-                    trackAfter: cn.themeColorBackgroundSecondary,
-                    thumb: cn.themeColorBackground,
-                }}
             />
         </div>
     </>

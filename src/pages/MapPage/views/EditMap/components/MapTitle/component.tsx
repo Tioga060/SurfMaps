@@ -1,6 +1,5 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import { classNames as cn } from '../../styles';
 
 interface IProps {
     value: string;
@@ -15,17 +14,6 @@ export const MapTitle: React.StatelessComponent<IProps> = (props) => (
             variant="outlined"
             value={props.value}
             onChange={props.updateMapName}
-            InputProps={{
-                classes: {
-                    input: cn.textColor,
-                    notchedOutline: cn.themeBorder,
-                }
-            }}
-            InputLabelProps={{
-                classes: {
-                    root: cn.textColor
-                }
-            }}
         />
     </div>
 )
