@@ -1,14 +1,14 @@
 import React from 'react';
 import get from 'lodash/get';
+import debounce from 'lodash/debounce';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Search from '@material-ui/icons/Search';
-import AddToPhotos from '@material-ui/icons/AddToPhotos';
 import TextField from '@material-ui/core/TextField';
 import { IUserSteamInfo } from 'shared/types';
 import { fetchSteamUser } from 'shared/resources/fetchSteamUser';
-import { UserBadge } from 'shared/components/UserBadge';
+import { UserList, UserListForQuery } from '../UserList';
 
 interface IProps {
     updateSteamUserList: (userList: IUserSteamInfo[]) => void;
@@ -18,6 +18,7 @@ interface IProps {
 
 interface IState {
     searchText: string;
+    gqlText: string;
     fetching: boolean;
     result: IUserSteamInfo | null;
     hasFetched: boolean;
@@ -28,38 +29,35 @@ export class UserSearch extends React.Component<IProps, IState> {
         super(props);
         this.state = {
             searchText: '',
+            gqlText: '',
             fetching: false,
             result: null,
             hasFetched: false,
         }
         this.setSearchText = this.setSearchText.bind(this);
+        this.updateSteamUserList = this.updateSteamUserList.bind(this);
+        this.setGQLText = debounce(this.setGQLText, 250);
+    }
+
+    public setGQLText(gqlText: string) {
+        this.setState(() => ({
+            gqlText
+        }))
     }
 
     public setSearchText(event: React.ChangeEvent<HTMLInputElement>) {
         this.setState({searchText: event.target.value});
+        this.setGQLText(event.target.value);
     }
 
-    public updateSteamUserList = () => {
-        if (this.state.result) {
-            const steamIds = this.props.steamUserList.map(user => (user.numericSteamId));
-            if (steamIds.includes(this.state.result.numericSteamId)) {
-                this.setState(() => ({
-                    result: null,
-                    hasFetched: false,
-                    searchText: ''
-                }));
-                return;
-            }
-            this.props.updateSteamUserList([
-                ...this.props.steamUserList,
-                this.state.result
-            ])
-            this.setState(() => ({
-                result: null,
-                hasFetched: false,
-                searchText: ''
-            }))
-        }
+    public updateSteamUserList = (userList: IUserSteamInfo[]) => {
+        this.props.updateSteamUserList(userList);
+        this.setState(() => ({
+            result: null,
+            hasFetched: false,
+            searchText: '',
+            gqlText: '',
+        }));
     }
 
     public fetchSteamUser = () => {
@@ -104,31 +102,15 @@ export class UserSearch extends React.Component<IProps, IState> {
                     </IconButton>
                     </div>
                 </div>
-                <Divider/>
-                <div className="d-flex justify-content-left pb-1">
-                    <div className="ml-2 mt-2">
-                        {this.state.hasFetched
-                            ? (
-                                this.state.fetching
-                                    ? (
-                                        <Typography variant="body1" align="left" className="mt-1 ml-2">Fetching...</Typography>
-                                    ) : (
-                                        this.state.result
-                                            ? (
-                                                <UserBadge showName steamUser={this.state.result} />
-                                            ) : (
-                                                <Typography variant="body1" align="left" className="mt-1 ml-2">No results found</Typography>
-                                            )
-                                    )
-                            ) : (
-                                <Typography variant="body1" align="left" className="mt-1 ml-2">Search Results</Typography>
-                            )
-                        }
-                    </div>
-                    <IconButton className="ml-auto" onClick={this.updateSteamUserList}>
-                        <AddToPhotos/>
-                    </IconButton>
-                </div>
+                {this.state.gqlText.length > 1 && (
+                    <UserListForQuery
+                        steamUserList={this.state.result ? [this.state.result] : []}
+                        queryText={this.state.gqlText}
+                        updateSteamUserList={this.updateSteamUserList}
+                        add
+                        listToModify={this.props.steamUserList}
+                    />
+                )}
             </>
         )
     }

@@ -3,7 +3,7 @@ import { IUserSteamInfo } from 'shared/types';
 import { AddUserHeader } from './components/AddUserHeader';
 import { UserSearch } from './components/UserSearch';
 import { classNames as cn } from './styles';
-import { UserListDrawer } from './components/UserList';
+import { UserList } from './components/UserList';
 
 type IProps = {
     steamUserList: IUserSteamInfo[];
@@ -40,8 +40,7 @@ export class AddUser extends React.Component<IProps, IState> {
                         />
                     ) : null}
                 {!!this.props.steamUserList.length && (
-                    <UserListDrawer
-                        descriptor={this.props.descriptor}
+                    <UserList
                         steamUserList={this.props.steamUserList}
                         updateSteamUserList={this.props.updateSteamUserList}
                     />
