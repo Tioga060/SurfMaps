@@ -9,6 +9,7 @@ type IProps = {
     steamUserList: IUserSteamInfo[];
     updateSteamUserList: (userList: IUserSteamInfo[]) => void;
     descriptor: string;
+    singleUser?: boolean;
 }
 
 type IState = {
@@ -23,8 +24,16 @@ export class AddUser extends React.Component<IProps, IState> {
         }
     }
 
+    public componentDidUpdate() {
+        const shouldClose = this.props.singleUser && this.props.steamUserList.length > 0;
+        if (this.state.isOpen && shouldClose) {
+            this.toggleOpen();
+        }
+    }
+
     public toggleOpen = () => {
-        this.setState({isOpen: !this.state.isOpen});
+        const canOpen = !this.props.singleUser || this.props.steamUserList.length === 0;
+        this.setState({isOpen: !this.state.isOpen && canOpen});
     }
 
     public render() {

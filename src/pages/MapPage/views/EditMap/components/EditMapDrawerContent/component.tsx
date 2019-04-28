@@ -7,13 +7,14 @@ import { IEditMapContext } from './container';
 import { MapInfoSelections } from '../MapInfoSelections';
 import { MapDescription } from '../MapDescription';
 import { Contributors } from '../Contributors';
+import { Stages } from '../Stages';
 import { classNames as cn } from '../../styles';
 
 interface IProps {
     context: IEditMapContext;
 }
 
-const createContextPlaceholder = () => ({
+export const createContextPlaceholder = () => ({
     name: '',
     rowId: '',
 })
@@ -21,6 +22,12 @@ const createContextPlaceholder = () => ({
 export interface IContributor {
     contribution: string;
     userList: T.IUserSteamInfo[];
+}
+
+export interface IEditStage {
+    name: string;
+    authors: T.IUserSteamInfo[];
+    stageType: T.IStageType;
 }
 
 export interface IState {
@@ -32,6 +39,7 @@ export interface IState {
     mapType: T.IMapType;
     description: string;
     contributors: IContributor[];
+    stages: IEditStage[];
 }
 
 export class EditMapDrawerContent extends React.Component<IProps, IState> {
@@ -46,6 +54,7 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
             mapType: createContextPlaceholder(),
             description: '',
             contributors: [],
+            stages: [],
         }
         this.updateSteamUserList = this.updateSteamUserList.bind(this);
         this.updateTier = this.updateTier.bind(this);
@@ -94,6 +103,9 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
                         updateTier={this.updateTier}
                     />
                     <MapInfoSelections context={this.props.context} state={this.state} updateRootState={this.updateRootState} />
+                </div>
+                <div className={cn.drawerCard}>
+                    <Stages context={this.props.context} updateRootState={this.updateRootState} stages={this.state.stages}/>
                 </div>
                 <div className={cn.drawerCard}>
                     <MapDescription value={this.state.description} updateRootState={this.updateRootState} />

@@ -1,5 +1,6 @@
 import React from 'react';
 import get from 'lodash/get';
+import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -27,56 +28,60 @@ const updateState = (
 }
 
 export const MapInfoSelections: React.StatelessComponent<IProps> = (props) => (
-    <>
-        <div className="mb-3">
-            <InputLabel htmlFor="game-input">Primary Game</InputLabel>
-            <Select
-                value={get(props, 'state.game.name', '')}
-                onChange={updateState('game', props.updateRootState, props.context.allGames)}
-                inputProps={{
-                    id: 'game-input',
-                    className: 'text-left',
-                }}
-                fullWidth
-            >
-                {props.context.allGames.nodes.map((item) => (
-                    <MenuItem key={item.rowId} value={item.name}>{item.name}</MenuItem>
-                ))}
-            </Select>
-        </div>
-
-        <div className="mb-3">
-            <InputLabel htmlFor="gameMode-input">Game Mode</InputLabel>
-            <Select
-                value={get(props, 'state.gameMode.name', '')}
-                onChange={updateState('gameMode', props.updateRootState, props.context.allGameModes)}
-                inputProps={{
-                    id: 'gameMode-input',
-                    className: 'text-left',
-                }}
-                fullWidth
-            >
-                {props.context.allGameModes.nodes.map((item) => (
-                    <MenuItem key={item.rowId} value={item.name}>{item.name}</MenuItem>
-                ))}
-            </Select>
-        </div>
-
-        <div className="mb-3">
-            <InputLabel htmlFor="mapType-input">Map Type</InputLabel>
-            <Select
-                value={get(props, 'state.mapType.name', '')}
-                onChange={updateState('mapType', props.updateRootState, props.context.allMapTypes)}
-                inputProps={{
-                    id: 'mapType-input',
-                    className: 'text-left',
-                }}
-                fullWidth
-            >
-                {props.context.allMapTypes.nodes.map((item) => (
-                    <MenuItem key={item.rowId} value={item.name}>{item.name}</MenuItem>
-                ))}
-            </Select>
-        </div>
-    </>
+    <div>
+        <FormControl fullWidth>
+            <div className="mb-3">
+                <InputLabel htmlFor="game-input">Primary Game</InputLabel>
+                <Select
+                    value={get(props, 'state.game.name', '')}
+                    onChange={updateState('game', props.updateRootState, props.context.allGames)}
+                    inputProps={{
+                        id: 'game-input',
+                        className: 'text-left',
+                    }}
+                    fullWidth
+                >
+                    {props.context.allGames.nodes.map((item) => (
+                        <MenuItem key={item.rowId} value={item.name}>{item.name}</MenuItem>
+                    ))}
+                </Select>
+            </div>
+        </FormControl>
+        <FormControl fullWidth>
+            <div className="mb-3">
+                <InputLabel htmlFor="gameMode-input">Game Mode</InputLabel>
+                <Select
+                    value={get(props, 'state.gameMode.name', '')}
+                    onChange={updateState('gameMode', props.updateRootState, props.context.allGameModes)}
+                    inputProps={{
+                        id: 'gameMode-input',
+                        className: 'text-left',
+                    }}
+                    fullWidth
+                >
+                    {props.context.allGameModes.nodes.map((item) => (
+                        <MenuItem key={item.rowId} value={item.name}>{item.name}</MenuItem>
+                    ))}
+                </Select>
+            </div>
+        </FormControl>
+        <FormControl fullWidth>
+            <div className="mb-3">
+                <InputLabel htmlFor="mapType-input">Map Type</InputLabel>
+                <Select
+                    value={get(props, 'state.mapType.name', '')}
+                    onChange={updateState('mapType', props.updateRootState, props.context.allMapTypes)}
+                    inputProps={{
+                        id: 'mapType-input',
+                        className: 'text-left',
+                    }}
+                    fullWidth
+                >
+                    {props.context.allMapTypes.nodes.map((item) => (
+                        <MenuItem key={item.rowId} value={item.name}>{item.name}</MenuItem>
+                    ))}
+                </Select>
+            </div>
+        </FormControl>
+    </div>
 );

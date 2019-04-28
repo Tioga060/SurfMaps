@@ -25,7 +25,6 @@ export const classNames = {
         overflow: 'auto',
     }),
 
-    // Drawer Content
     drawerCard: style({
         backgroundColor: globalColors.cardColor.toString(),
         padding: '0.5rem',
@@ -39,12 +38,12 @@ export const classNames = {
         }
     }),
 
-    tierSliderContainer: style({
-        padding: '1rem',
-        overflowX: 'hidden',
-    }),
-
     textFieldSmall: style({
         fontSize: globalSizes.smallFont
     }),
+
+    stageNameWidth: style({
+        width: '100px',
+        marginTop: '1.3rem',
+    })
 }

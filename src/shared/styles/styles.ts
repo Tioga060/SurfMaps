@@ -11,7 +11,7 @@ export const globalColors = {
 };
 
 export const globalSizes = {
-    modalWidth: '260px',
+    modalWidth: '280px',
     topBarHeight: '64px',
     smallFont: '14px',
 };

@@ -11,16 +11,21 @@ interface IProps {
 export const TierPicker: React.StatelessComponent<IProps> = (props) => (
     <>
         <Typography variant="h6">
-            {`Tier ${props.tier}`}
+            Map Info
         </Typography>
-        <div className={cn.tierSliderContainer}>
-            <Slider
-                value={props.tier}
-                min={1}
-                max={6}
-                step={1}
-                onChange={props.updateTier}
-            />
+        <div className="d-flex">
+            <Typography variant="h6">
+                {`Tier ${props.tier}`}
+            </Typography>
+            <div className="p-3 flex-grow-1">
+                <Slider
+                    value={props.tier}
+                    min={1}
+                    max={6}
+                    step={1}
+                    onChange={props.updateTier}
+                />
+            </div>
         </div>
     </>
 );

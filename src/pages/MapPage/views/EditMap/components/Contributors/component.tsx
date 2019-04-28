@@ -71,7 +71,7 @@ export class Contributors extends React.Component<IProps> {
                     Contributors
                 </Typography>
                 {this.props.contributors.map((contributor, index) => (
-                    <>
+                    <div key={index}>
                     <div className="d-flex">
                         <div className="pt-2">
                             <IconButton
@@ -94,9 +94,9 @@ export class Contributors extends React.Component<IProps> {
                         updateSteamUserList={this.updateContributionList(index)}
                         descriptor={contributor.contribution}
                     />
-                    </>
+                    </div>
                 ))}
-                <Button variant="contained" color="primary" onClick={this.addContributor} className="my-2">
+                <Button variant="outlined" color="primary" onClick={this.addContributor} className="my-2">
                     Add Contribution
                 </Button>
             </div>
