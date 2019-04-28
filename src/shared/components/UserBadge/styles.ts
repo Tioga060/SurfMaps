@@ -8,4 +8,10 @@ export const classNames = {
     noNameWidth: style({
         minWidth: '20px',
     }),
+    nameOverflow: style({
+        minWidth: 0,
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+    })
 };

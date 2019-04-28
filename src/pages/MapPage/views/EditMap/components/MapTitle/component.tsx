@@ -16,4 +16,4 @@ export const MapTitle: React.StatelessComponent<IProps> = (props) => (
             onChange={props.updateMapName}
         />
     </div>
-)
+);

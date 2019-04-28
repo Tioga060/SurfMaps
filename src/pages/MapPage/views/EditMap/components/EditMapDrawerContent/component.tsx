@@ -5,6 +5,8 @@ import { AddUser } from 'shared/components/AddUser';
 import * as T from 'shared/types';
 import { IEditMapContext } from './container';
 import { MapInfoSelections } from '../MapInfoSelections';
+import { MapDescription } from '../MapDescription';
+import { Contributors } from '../Contributors';
 import { classNames as cn } from '../../styles';
 
 interface IProps {
@@ -16,6 +18,11 @@ const createContextPlaceholder = () => ({
     rowId: '',
 })
 
+export interface IContributor {
+    contribution: string;
+    userList: T.IUserSteamInfo[];
+}
+
 export interface IState {
     mapName: string;
     steamUserList: T.IUserSteamInfo[];
@@ -23,6 +30,8 @@ export interface IState {
     gameMode: T.IGameMode;
     game: T.IGame;
     mapType: T.IMapType;
+    description: string;
+    contributors: IContributor[];
 }
 
 export class EditMapDrawerContent extends React.Component<IProps, IState> {
@@ -35,6 +44,8 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
             gameMode: createContextPlaceholder(),
             game: createContextPlaceholder(),
             mapType: createContextPlaceholder(),
+            description: '',
+            contributors: [],
         }
         this.updateSteamUserList = this.updateSteamUserList.bind(this);
         this.updateTier = this.updateTier.bind(this);
@@ -83,6 +94,12 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
                         updateTier={this.updateTier}
                     />
                     <MapInfoSelections context={this.props.context} state={this.state} updateRootState={this.updateRootState} />
+                </div>
+                <div className={cn.drawerCard}>
+                    <MapDescription value={this.state.description} updateRootState={this.updateRootState} />
+                </div>
+                <div className={cn.drawerCard}>
+                    <Contributors updateRootState={this.updateRootState} contributors={this.state.contributors}/>
                 </div>
             </>
         )

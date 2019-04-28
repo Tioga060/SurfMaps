@@ -20,4 +20,10 @@ export const classNames = {
         width: '36px',
         padding: 0,
     }),
+    headerOverflow: style({
+        minWidth: 0,
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+    })
 };

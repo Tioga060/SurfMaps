@@ -9,6 +9,7 @@ export const classNames = {
 
     drawerPaper: style({
         width: globalSizes.modalWidth,
+        overflowX: 'hidden',
     }),
 
     drawerHeader: style({
@@ -41,5 +42,9 @@ export const classNames = {
     tierSliderContainer: style({
         padding: '1rem',
         overflowX: 'hidden',
+    }),
+
+    textFieldSmall: style({
+        fontSize: globalSizes.smallFont
     }),
 }

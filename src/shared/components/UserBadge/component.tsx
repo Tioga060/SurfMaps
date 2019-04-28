@@ -22,7 +22,7 @@ export const UserBadge: React.StatelessComponent<IProps> = (props) => {
         >
             <img className={cn.iconImage} src={steamUser.avatar}/>
             {props.showName && (
-                <div className="pl-2">
+                <div className={`pl-2 ${cn.nameOverflow}`}>
                     {steamUser.name}
                 </div>
             )}

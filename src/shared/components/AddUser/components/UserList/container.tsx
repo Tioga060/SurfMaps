@@ -38,7 +38,7 @@ export class UserListForQuery extends React.Component<IContainerProps> {
                             />
                             : null
                     }
-                    return (<div>Error rendering user</div>)
+                    return <div>Error rendering user</div>
                 }}
             />
         )
