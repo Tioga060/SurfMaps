@@ -7,6 +7,7 @@ import { IEditMapContext } from './container';
 import { MapInfoSelections } from '../MapInfoSelections';
 import { MapDescription } from '../MapDescription';
 import { Contributors } from '../Contributors';
+import { ImageUpload } from '../ImageUpload';
 import { Stages } from '../Stages';
 import { classNames as cn } from '../../styles';
 
@@ -112,6 +113,9 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
                 </div>
                 <div className={cn.drawerCard}>
                     <Contributors updateRootState={this.updateRootState} contributors={this.state.contributors}/>
+                </div>
+                <div className={cn.drawerCard}>
+                    <ImageUpload/>
                 </div>
             </>
         )
