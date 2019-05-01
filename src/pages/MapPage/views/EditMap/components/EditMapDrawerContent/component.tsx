@@ -1,4 +1,6 @@
 import React from 'react';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import { MapTitle } from '../MapTitle';
 import { TierPicker } from '../TierPicker';
 import { AddUser } from 'shared/components/AddUser';
@@ -29,9 +31,11 @@ export interface IEditStage {
     name: string;
     authors: T.IUserSteamInfo[];
     stageType: T.IStageType;
+    images: File[];
 }
 
 export interface IState {
+    currentTab: number;
     mapName: string;
     steamUserList: T.IUserSteamInfo[];
     tier: number;
@@ -41,12 +45,14 @@ export interface IState {
     description: string;
     contributors: IContributor[];
     stages: IEditStage[];
+    mapImages: File[];
 }
 
 export class EditMapDrawerContent extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
         this.state = {
+            currentTab: 0,
             mapName: '',
             steamUserList: [],
             tier: 3,
@@ -56,9 +62,9 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
             description: '',
             contributors: [],
             stages: [],
+            mapImages: [],
         }
         this.updateSteamUserList = this.updateSteamUserList.bind(this);
-        this.updateTier = this.updateTier.bind(this);
         this.updateRootState = this.updateRootState.bind(this);
     }
 
@@ -69,54 +75,60 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
         }));
     }
 
-    public updateMapName = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({
-            mapName: e.currentTarget.value,
-        })
-    }
-
     public updateSteamUserList (userList: T.IUserSteamInfo[]) {
         this.setState(() => ({
             steamUserList: userList
         }))
     }
 
-    public updateTier (e: any, tier: number) {
+    public setTab = (event: any, currentTab: number) => {
         this.setState(() => ({
-            tier,
+            currentTab,
         }));
     }
 
     public render() {
         return (
             <>
-                <div className={cn.drawerCard}>
-                    <MapTitle value={this.state.mapName} updateMapName={this.updateMapName}/>
-                    <AddUser
-                        steamUserList={this.state.steamUserList}
-                        updateSteamUserList={this.updateSteamUserList}
-                        descriptor="Authors"
-                    />
-                </div>
-                <div className={cn.drawerCard}>
-                    <TierPicker
-                        tier={this.state.tier}
-                        updateTier={this.updateTier}
-                    />
-                    <MapInfoSelections context={this.props.context} state={this.state} updateRootState={this.updateRootState} />
-                </div>
-                <div className={cn.drawerCard}>
-                    <Stages context={this.props.context} updateRootState={this.updateRootState} stages={this.state.stages}/>
-                </div>
-                <div className={cn.drawerCard}>
-                    <MapDescription value={this.state.description} updateRootState={this.updateRootState} />
-                </div>
-                <div className={cn.drawerCard}>
-                    <Contributors updateRootState={this.updateRootState} contributors={this.state.contributors}/>
-                </div>
-                <div className={cn.drawerCard}>
-                    <ImageUpload/>
-                </div>
+                <Tabs
+                    value={this.state.currentTab}
+                    onChange={this.setTab}
+                    indicatorColor="primary"
+                    textColor="primary"
+                    centered
+                >
+                    <Tab value={0} label="Info" classes={{labelContainer: 'px-0', root: cn.tabWidth}}/>
+                    <Tab value={1} label="Images" classes={{labelContainer: 'px-0', root: cn.tabWidth}}/>
+                    <Tab value={2} label="Files" classes={{labelContainer: 'px-0', root: cn.tabWidth}}/>
+                </Tabs>
+                {this.state.currentTab === 0 && (
+                    <>
+                    <div className={cn.drawerCard}>
+                        <MapTitle value={this.state.mapName} updateRootState={this.updateRootState}/>
+                        <AddUser
+                            steamUserList={this.state.steamUserList}
+                            updateSteamUserList={this.updateSteamUserList}
+                            descriptor="Authors"
+                        />
+                    </div>
+                    <div className={cn.drawerCard}>
+                        <TierPicker tier={this.state.tier} updateRootState={this.updateRootState} />
+                        <MapInfoSelections context={this.props.context} state={this.state} updateRootState={this.updateRootState} />
+                    </div>
+                    <div className={cn.drawerCard}>
+                        <Stages context={this.props.context} updateRootState={this.updateRootState} stages={this.state.stages}/>
+                    </div>
+                    <div className={cn.drawerCard}>
+                        <MapDescription value={this.state.description} updateRootState={this.updateRootState} />
+                    </div>
+                    <div className={cn.drawerCard}>
+                        <Contributors updateRootState={this.updateRootState} contributors={this.state.contributors}/>
+                    </div>
+                    </>
+                )}
+                {this.state.currentTab === 1 && (
+                    <ImageUpload mapImages={this.state.mapImages} stages={this.state.stages} updateRootState={this.updateRootState}/>
+                )}
             </>
         )
     }

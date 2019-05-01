@@ -45,5 +45,10 @@ export const classNames = {
     stageNameWidth: style({
         width: '100px',
         marginTop: '1.3rem',
+    }),
+
+    tabWidth: style({
+        minWidth: globalSizes.modalWidth/3.5,
+        maxWidth: globalSizes.modalWidth/3.5,
     })
 }

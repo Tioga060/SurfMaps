@@ -12,7 +12,7 @@ export const globalColors = {
 };
 
 export const globalSizes = {
-    modalWidth: '280px',
+    modalWidth: 280,
     topBarHeight: '64px',
     smallFont: '14px',
 };

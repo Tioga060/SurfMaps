@@ -1,11 +1,17 @@
 import React from 'react';
 import Slider from '@material-ui/lab/Slider';
 import Typography from '@material-ui/core/Typography';
-import { classNames as cn } from '../../styles';
+import { IState as IRootState } from '../EditMapDrawerContent/component';
 
 interface IProps {
     tier: number;
-    updateTier: (e: any, tier: number) => void;
+    updateRootState: (partialState: Partial<IRootState>) => void;
+}
+
+const updateTier = (props: IProps) => (e: any, tier: number) => {
+    props.updateRootState({
+        tier,
+    })
 }
 
 export const TierPicker: React.StatelessComponent<IProps> = (props) => (
@@ -23,7 +29,7 @@ export const TierPicker: React.StatelessComponent<IProps> = (props) => (
                     min={1}
                     max={6}
                     step={1}
-                    onChange={props.updateTier}
+                    onChange={updateTier(props)}
                 />
             </div>
         </div>
