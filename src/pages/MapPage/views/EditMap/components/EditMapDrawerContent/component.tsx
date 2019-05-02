@@ -10,6 +10,7 @@ import { MapInfoSelections } from '../MapInfoSelections';
 import { MapDescription } from '../MapDescription';
 import { Contributors } from '../Contributors';
 import { ImageUpload } from '../ImageUpload';
+import { ReleaseDate } from '../ReleaseDate';
 import { Stages } from '../Stages';
 import { classNames as cn } from '../../styles';
 
@@ -45,7 +46,9 @@ export interface IState {
     description: string;
     contributors: IContributor[];
     stages: IEditStage[];
+    mainImage: File[];
     mapImages: File[];
+    releaseDate: string;
 }
 
 export class EditMapDrawerContent extends React.Component<IProps, IState> {
@@ -62,7 +65,9 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
             description: '',
             contributors: [],
             stages: [],
+            mainImage: [],
             mapImages: [],
+            releaseDate: '',
         }
         this.updateSteamUserList = this.updateSteamUserList.bind(this);
         this.updateRootState = this.updateRootState.bind(this);
@@ -114,6 +119,7 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
                     <div className={cn.drawerCard}>
                         <TierPicker tier={this.state.tier} updateRootState={this.updateRootState} />
                         <MapInfoSelections context={this.props.context} state={this.state} updateRootState={this.updateRootState} />
+                        <ReleaseDate releaseDate={this.state.releaseDate} updateRootState={this.updateRootState}/>
                     </div>
                     <div className={cn.drawerCard}>
                         <Stages context={this.props.context} updateRootState={this.updateRootState} stages={this.state.stages}/>
@@ -127,7 +133,12 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
                     </>
                 )}
                 {this.state.currentTab === 1 && (
-                    <ImageUpload mapImages={this.state.mapImages} stages={this.state.stages} updateRootState={this.updateRootState}/>
+                    <ImageUpload
+                        mapImages={this.state.mapImages}
+                        stages={this.state.stages}
+                        updateRootState={this.updateRootState}
+                        mainImage={this.state.mainImage}
+                    />
                 )}
             </>
         )

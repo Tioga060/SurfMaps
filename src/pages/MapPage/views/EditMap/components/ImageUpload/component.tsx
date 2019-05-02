@@ -10,10 +10,16 @@ interface IProps {
     updateRootState: (partialState: Partial<IRootState>) => void;
     stages: IEditStage[];
     mapImages: File[];
+    mainImage: File[];
 }
 
 const updateMapImages = (props: IProps) => (mapImages: File[]) => {
     props.updateRootState({mapImages})
+}
+
+const updateMainImage = (props: IProps) => (mainImage: File[]) => {
+    console.log(props.mainImage);
+    props.updateRootState({mainImage})
 }
 
 const updateStageImages = (props: IProps, stageNumber: number) => (images: File[]) => {
@@ -33,11 +39,11 @@ export const ImageUpload: React.StatelessComponent<IProps> = (props) => (
     <>
         <div className={cn.drawerCard}>
             <Typography variant="h6" align="center">
-                Map Images
+                Header + Background Image
             </Typography>
-            <Dropzone files={props.mapImages} setFiles={updateMapImages(props)}/>
+            <Dropzone files={props.mainImage} setFiles={updateMainImage(props)} singleImage/>
         </div>
-        <div className={cn.drawerCard}>
+        {!!props.stages.length && <div className={cn.drawerCard}>
             {props.stages.map((stage, index) => {
                 const {stageTypeName, stageNumber} = getStageTypeAndNumber(props.stages, stage, index);
                 return (
@@ -50,6 +56,12 @@ export const ImageUpload: React.StatelessComponent<IProps> = (props) => (
                     </>
                 )
             })}
+        </div>}
+        <div className={cn.drawerCard}>
+            <Typography variant="h6" align="center">
+                Extra Map Images
+            </Typography>
+            <Dropzone files={props.mapImages} setFiles={updateMapImages(props)}/>
         </div>
     </>
 );
