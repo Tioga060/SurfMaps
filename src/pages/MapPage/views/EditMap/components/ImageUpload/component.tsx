@@ -46,13 +46,13 @@ export const ImageUpload: React.StatelessComponent<IProps> = (props) => (
             {props.stages.map((stage, index) => {
                 const {stageTypeName, stageNumber} = getStageTypeAndNumber(props.stages, stage, index);
                 return (
-                    <>
+                    <div key={index}>
                         {index !== 0 && <Divider/>}
                         <Typography variant="h6" align="center">
                             {`${stageTypeName} ${stageNumber}`}
                         </Typography>
                         <ImageDropzone files={stage.images} setFiles={updateStageImages(props, index)} singleImage/>
-                    </>
+                    </div>
                 )
             })}
         </div>}

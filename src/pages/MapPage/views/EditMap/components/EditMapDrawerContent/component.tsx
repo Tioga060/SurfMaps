@@ -14,8 +14,10 @@ import { ReleaseDate } from '../ReleaseDate';
 import { FileUpload } from '../FileUpload';
 import { Stages } from '../Stages';
 import { classNames as cn } from '../../styles';
+import { IProps as IContainerProps } from './container';
+import { convertEditStateToIMap } from '../../helpers';
 
-interface IProps {
+type IProps = IContainerProps & {
     context: IEditMapContext;
 }
 
@@ -80,6 +82,16 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
         }
         this.updateSteamUserList = this.updateSteamUserList.bind(this);
         this.updateRootState = this.updateRootState.bind(this);
+    }
+
+    public setCurrentMap (map: IState) {
+        this.props.setCurrentMap(convertEditStateToIMap(map, this.props.context.currentUserSteamInfo));
+    }
+
+    public componentDidUpdate (prevProps: IProps, prevState: IState) {
+        if (prevState !== this.state) {
+            this.setCurrentMap(this.state)
+        }
     }
 
     public updateRootState = (partialState: Partial<IState>) => {

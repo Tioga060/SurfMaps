@@ -6,8 +6,29 @@ import { EditMapDrawerContent } from './components/EditMapDrawerContent';
 import { MapPage } from '../../';
 import { mockMap } from '../../_mocks/_data';
 import { classNames as cn } from './styles';
+import { IMap } from 'shared/types';
 
-export class EditMap extends React.Component {
+interface IState {
+    currentMap: IMap;
+}
+
+interface IProps {}
+
+export class EditMap extends React.Component<IProps, IState> {
+    public constructor(props: IProps) {
+        super(props);
+        this.state = {
+            currentMap: mockMap,
+        }
+        this.setCurrentMap = this.setCurrentMap.bind(this);
+    }
+
+    public setCurrentMap = (map: IMap) => {
+        this.setState(() => ({
+            currentMap: map,
+        }))
+    }
+
     public render() {
         return (
             <>
@@ -25,11 +46,11 @@ export class EditMap extends React.Component {
                     </div>
                     <Divider />
                     <div className="p-2">
-                        <EditMapDrawerContent/>
+                        <EditMapDrawerContent setCurrentMap={this.setCurrentMap}/>
                     </div>
                 </Drawer>
                 <main className={cn.content}>
-                    <MapPage map={mockMap} />
+                    <MapPage map={this.state.currentMap} />
                 </main>
             </>
         )

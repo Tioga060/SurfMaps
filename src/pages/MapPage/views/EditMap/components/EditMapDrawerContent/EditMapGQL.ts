@@ -26,5 +26,15 @@ query EditMapGQL_contextQuery {
             name
         }
     }
+    currentUserSteamInfo {
+        name,
+        profileUrl,
+        timeCreated,
+        avatar,
+        avatarMedium,
+        avatarFull,
+        numericSteamId,
+        userId
+    }
 }
 `

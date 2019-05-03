@@ -89,7 +89,7 @@ export const FileUpload: React.StatelessComponent<IProps> = (props) => (
             Map Files
         </Typography>
         {props.mapFiles.map((mapFile, index) => (
-            <div className="py-3">
+            <div className="py-3" key={index}>
                 {index !== 0 && <Divider/>}
                 <div className="d-flex">
                     <div className="pt-2">

@@ -13,7 +13,8 @@ const CurrentUserBadgeContainer = createFragmentContainer(UserBadge, {
         avatar,
         avatarMedium,
         avatarFull,
-        numericSteamId
+        numericSteamId,
+        userId
     }
     `
 })
