@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import Typography from '@material-ui/core/Typography';
 import classnames from 'classnames';
 import { useDropzone } from 'react-dropzone';
 import { classNames as cn } from './styles';
@@ -6,16 +7,15 @@ import { classNames as cn } from './styles';
 interface IProps {
     files: File[];
     setFiles: (files: File[]) => void;
-    singleImage?: boolean;
+    singleFile?: boolean;
 }
 
 
-export const ImageDropzone: React.StatelessComponent<IProps> = ({singleImage, files, setFiles}) => {
-    const previews = files.map(file => URL.createObjectURL(file));
+export const FileDropzone: React.StatelessComponent<IProps> = ({singleFile, files, setFiles}) => {
     const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
         accept: 'image/jpeg, image/png',
         onDrop: acceptedFiles => {
-            setFiles(singleImage
+            setFiles(singleFile
                 ? [acceptedFiles[0]]
                 : [
                     ...files,
@@ -23,34 +23,22 @@ export const ImageDropzone: React.StatelessComponent<IProps> = ({singleImage, fi
                 ]);
         }
     });
-    const removeImage = (index: number) => () => {
+    const removeFile = (index: number) => () => {
         setFiles([
             ...files.slice(0, index),
             ...files.slice(index + 1)
         ])
     };
-    const thumbs = previews.map((file, index) => (
-        <div className={cn.thumbnail} key={file} onClick={removeImage(index)}>
-            <div className={cn.thumbInner}>
-                <img
-                    src={file}
-                    className={cn.img}
-                />
-            </div>
+    const thumbs = files.map((file, index) => (
+        <div className={cn.thumbnail} key={index} onClick={removeFile(index)}>
+            <Typography variant="body1">
+                {file.name}
+            </Typography>
         </div>
     ));
 
-    useEffect(() => () => {
-        // Make sure to revoke the data uris to avoid memory leaks
-        previews.forEach(file => URL.revokeObjectURL(file));
-    }, [files]);
-
     return (
-        <div className={classnames({
-            [cn.componentContainer]: true,
-            'd-flex': singleImage,
-            })}
-        >
+        <div>
             <div className={cn.dropZoneContainer}>
                 <div {...getRootProps({
                         className: classnames({
@@ -62,14 +50,10 @@ export const ImageDropzone: React.StatelessComponent<IProps> = ({singleImage, fi
                         })
                     })}>
                     <input {...getInputProps()} />
-                    <p>{`Upload Image${singleImage ? '' : 's'}`}</p>
+                    <p>{`Upload File${singleFile ? '' : 's'}`}</p>
                 </div>
             </div>
-            <div className={classnames({
-                "d-flex flex-wrap justify-content-center": true,
-                [`flex-row ${cn.imageContainer}`]: !singleImage,
-                "flex-column": singleImage})}
-            >
+            <div className={`d-flex flex-wrap justify-content-center flex-row ${cn.fileContainer}`}>
                 {thumbs}
             </div>
         </div>

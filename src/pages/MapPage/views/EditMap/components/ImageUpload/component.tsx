@@ -1,7 +1,7 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import { Dropzone } from 'shared/components/ImageDropzone';
+import { ImageDropzone } from 'shared/components/ImageDropzone';
 import { IState as IRootState, IEditStage } from '../EditMapDrawerContent/component';
 import { classNames as cn } from '../../styles';
 import { getStageTypeAndNumber } from '../Stages';
@@ -18,7 +18,6 @@ const updateMapImages = (props: IProps) => (mapImages: File[]) => {
 }
 
 const updateMainImage = (props: IProps) => (mainImage: File[]) => {
-    console.log(props.mainImage);
     props.updateRootState({mainImage})
 }
 
@@ -41,7 +40,7 @@ export const ImageUpload: React.StatelessComponent<IProps> = (props) => (
             <Typography variant="h6" align="center">
                 Header + Background Image
             </Typography>
-            <Dropzone files={props.mainImage} setFiles={updateMainImage(props)} singleImage/>
+            <ImageDropzone files={props.mainImage} setFiles={updateMainImage(props)} singleImage/>
         </div>
         {!!props.stages.length && <div className={cn.drawerCard}>
             {props.stages.map((stage, index) => {
@@ -52,7 +51,7 @@ export const ImageUpload: React.StatelessComponent<IProps> = (props) => (
                         <Typography variant="h6" align="center">
                             {`${stageTypeName} ${stageNumber}`}
                         </Typography>
-                        <Dropzone files={stage.images} setFiles={updateStageImages(props, index)} singleImage/>
+                        <ImageDropzone files={stage.images} setFiles={updateStageImages(props, index)} singleImage/>
                     </>
                 )
             })}
@@ -61,7 +60,7 @@ export const ImageUpload: React.StatelessComponent<IProps> = (props) => (
             <Typography variant="h6" align="center">
                 Extra Map Images
             </Typography>
-            <Dropzone files={props.mapImages} setFiles={updateMapImages(props)}/>
+            <ImageDropzone files={props.mapImages} setFiles={updateMapImages(props)}/>
         </div>
     </>
 );

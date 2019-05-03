@@ -11,6 +11,7 @@ import { MapDescription } from '../MapDescription';
 import { Contributors } from '../Contributors';
 import { ImageUpload } from '../ImageUpload';
 import { ReleaseDate } from '../ReleaseDate';
+import { FileUpload } from '../FileUpload';
 import { Stages } from '../Stages';
 import { classNames as cn } from '../../styles';
 
@@ -35,6 +36,12 @@ export interface IEditStage {
     images: File[];
 }
 
+export interface IEditMapFile {
+    files: File[];
+    game: T.IGame | null;
+    description: string;
+}
+
 export interface IState {
     currentTab: number;
     mapName: string;
@@ -49,6 +56,7 @@ export interface IState {
     mainImage: File[];
     mapImages: File[];
     releaseDate: string;
+    mapFiles: IEditMapFile[];
 }
 
 export class EditMapDrawerContent extends React.Component<IProps, IState> {
@@ -68,6 +76,7 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
             mainImage: [],
             mapImages: [],
             releaseDate: '',
+            mapFiles: [],
         }
         this.updateSteamUserList = this.updateSteamUserList.bind(this);
         this.updateRootState = this.updateRootState.bind(this);
@@ -138,6 +147,13 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
                         stages={this.state.stages}
                         updateRootState={this.updateRootState}
                         mainImage={this.state.mainImage}
+                    />
+                )}
+                {this.state.currentTab === 2 && (
+                    <FileUpload
+                        updateRootState={this.updateRootState}
+                        context={this.props.context}
+                        mapFiles={this.state.mapFiles}
                     />
                 )}
             </>
