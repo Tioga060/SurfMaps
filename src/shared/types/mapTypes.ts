@@ -5,7 +5,7 @@ import { ITextMarkdown } from './text';
 import { IGame, IGameMode, IMapType, IStageType} from './descriptors';
 
 export interface IMap {
-    rowId: string;
+    rowId?: string;
     name: string;
     public?: boolean;
     createdAt: string;
@@ -14,7 +14,7 @@ export interface IMap {
     mapTypeByMapTypeId: IMapType;
     tier?: number;
     mapAuthorsByMapId: IMapAuthorAsNodes;
-    userByUploaderId: IUser;
+    userByUploaderId?: IUser;
     stagesByMapId: IStageAsNodes;
     mapImagesByMapId: IMapImageAsNodes;
     mapFilesByMapId: IMapFileAsNodes;
@@ -27,7 +27,7 @@ export interface IMapAuthorAsNodes {
 }
 
 export interface IMapAuthor {
-    contribution: string;
+    contribution?: string;
     userByAuthorId: IUser;
 }
 
@@ -36,7 +36,7 @@ export interface IStageAsNodes {
 }
 
 export interface IStage {
-    rowId: string;
+    rowId?: string;
     name?: string;
     number: number;
     stageTypeByStageTypeId: IStageType;
@@ -61,10 +61,6 @@ export interface IMapImage {
     primaryImage?: boolean;
     order: number;
     imageByImageId: IImage;
-}
-
-export interface IMapFileAsNodes {
-    nodes: IMapFile[];
 }
 
 export interface IMapFileAsNodes {

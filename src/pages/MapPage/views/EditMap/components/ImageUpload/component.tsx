@@ -4,7 +4,7 @@ import Divider from '@material-ui/core/Divider';
 import { ImageDropzone } from 'shared/components/ImageDropzone';
 import { IState as IRootState, IEditStage } from '../EditMapDrawerContent/component';
 import { classNames as cn } from '../../styles';
-import { getStageTypeAndNumber } from '../Stages';
+import { getStageTypeAndNumber } from '../../helpers';
 
 interface IProps {
     updateRootState: (partialState: Partial<IRootState>) => void;

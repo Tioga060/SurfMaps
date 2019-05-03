@@ -38,14 +38,14 @@ export interface IEditStage {
 
 export interface IEditMapFile {
     files: File[];
-    game: T.IGame | null;
+    game: T.IGame;
     description: string;
 }
 
 export interface IState {
     currentTab: number;
     mapName: string;
-    steamUserList: T.IUserSteamInfo[];
+    authors: T.IUserSteamInfo[];
     tier: number;
     gameMode: T.IGameMode;
     game: T.IGame;
@@ -65,7 +65,7 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
         this.state = {
             currentTab: 0,
             mapName: '',
-            steamUserList: [],
+            authors: [],
             tier: 3,
             gameMode: createContextPlaceholder(),
             game: createContextPlaceholder(),
@@ -89,9 +89,9 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
         }));
     }
 
-    public updateSteamUserList (userList: T.IUserSteamInfo[]) {
+    public updateSteamUserList (authors: T.IUserSteamInfo[]) {
         this.setState(() => ({
-            steamUserList: userList
+            authors
         }))
     }
 
@@ -120,7 +120,7 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
                     <div className={cn.drawerCard}>
                         <MapTitle value={this.state.mapName} updateRootState={this.updateRootState}/>
                         <AddUser
-                            steamUserList={this.state.steamUserList}
+                            steamUserList={this.state.authors}
                             updateSteamUserList={this.updateSteamUserList}
                             descriptor="Authors"
                         />

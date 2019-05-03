@@ -9,6 +9,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import Divider from '@material-ui/core/Divider';
+import { getStageTypeAndNumber } from '../../helpers';
 import { AddUser } from 'shared/components/AddUser';
 import { IUserSteamInfo } from 'shared/types';
 import { IState as IRootState } from '../EditMapDrawerContent/component';
@@ -32,17 +33,6 @@ const createBlankStage = (): IEditStage => ({
     stageType: createDefaultStageType(),
     images: [],
 });
-
-export const getStageTypeAndNumber = (stages: IEditStage[], stage: IEditStage, index: number) => {
-    const stageTypeName = !!stage.stageType.name.length ? stage.stageType.name : 'Stage';
-    const stageNumber = stages.slice(0, index).reduce((result, thisStage) => {
-        if (stage.stageType.name === thisStage.stageType.name) {
-            result += 1;
-        }
-        return result;
-    }, 1);
-    return {stageTypeName, stageNumber};
-}
 
 export class Stages extends React.Component<IProps> {
     public updateStageName = (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {

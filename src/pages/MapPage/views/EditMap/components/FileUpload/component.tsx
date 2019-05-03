@@ -59,9 +59,9 @@ const updateGame = (props: IProps, index: number) => (e: React.ChangeEvent<HTMLS
     }
 }
 
-const createBlankMapFile = (): IEditMapFile => ({
+const createBlankMapFile = (context: IEditMapContext): IEditMapFile => ({
     files: [],
-    game: null,
+    game: context.allGames.nodes[0],
     description: '',
 })
 
@@ -69,7 +69,7 @@ const addMapFile = (props: IProps) => () => {
     props.updateRootState({
         mapFiles: [
             ...props.mapFiles,
-            createBlankMapFile(),
+            createBlankMapFile(props.context),
         ]
     })
 }

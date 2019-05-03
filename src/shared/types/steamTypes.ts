@@ -3,6 +3,7 @@ export interface IUserSteamInfoAsNodes {
 }
 
 export interface IUserSteamInfo {
+    userId: string,
     name: string,
     profileUrl: string,
     timeCreated: number,

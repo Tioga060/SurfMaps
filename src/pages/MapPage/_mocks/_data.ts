@@ -13,6 +13,7 @@ const mockUser: IUser = {
             avatarMedium: 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/16/16490a67804954212fa98fb5b7f822d6b0e52acb_medium.jpg',
             avatarFull: 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/16/16490a67804954212fa98fb5b7f822d6b0e52acb_full.jpg',
             numericSteamId: '76561197996909346',
+            userId: '321',
         }]
     }
 };
