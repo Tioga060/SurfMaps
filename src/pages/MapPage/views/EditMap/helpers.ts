@@ -2,8 +2,26 @@ import * as T from 'shared/types';
 import get from 'lodash/get';
 import { IState as IEditMapState, IEditStage, IEditMapFile, IContributor } from './components/EditMapDrawerContent/component';
 
+export enum MAP_TYPES {
+    STAGED = 'Staged',
+    LINEAR = 'Linear',
+}
+
+export enum STAGE_TYPES {
+    STAGE = 'Stage',
+    LINEAR = 'Linear',
+    BONUS = 'Bonus',
+}
+
+export const alreadyHasLinearSection = (stages: IEditStage[]): boolean => (
+    stages.some((stage) => stage.stageType.name === STAGE_TYPES.LINEAR)
+)
+
 export const getStageTypeAndNumber = (stages: IEditStage[], stage: IEditStage, index: number) => {
-    const stageTypeName = !!stage.stageType.name.length ? stage.stageType.name : 'Stage';
+    const stageTypeName = !!stage.stageType.name.length ? stage.stageType.name : STAGE_TYPES.STAGE;
+    if (stageTypeName === STAGE_TYPES.LINEAR) {
+        return {stageTypeName, stageNumber: -1};
+    }
     const stageNumber = stages.slice(0, index).reduce((result, thisStage) => {
         if (stage.stageType.name === thisStage.stageType.name) {
             result += 1;
@@ -12,6 +30,10 @@ export const getStageTypeAndNumber = (stages: IEditStage[], stage: IEditStage, i
     }, 1);
     return {stageTypeName, stageNumber};
 }
+
+export const removeAllStages = (stages: IEditStage[], type: string = STAGE_TYPES.STAGE): IEditStage[] => (
+    stages.filter((stage) => stage.stageType.name !== type)
+);
 
 const userSteamInfoToIUser = (user: T.IUserSteamInfo) => ({
     rowId: user.userId,

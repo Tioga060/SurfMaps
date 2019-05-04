@@ -87,25 +87,30 @@ export class MapPage extends React.Component<IProps, IState> {
                 <div className={cn.mapPageBody}>
                     <MapBodyHeader map={this.props.map}/>
                     <Grid container spacing={0}>
-                        <Grid direction="column" xs={12} sm={5}>
+                        <Grid direction="column" container sm={5}>
                             <div className={cn.cardDivider}>
                                 <StageInfo
                                     map={this.props.map}
                                     onStageClick={this.setHeaderImage}
                                 />
-                                {descriptions.map((description, index) => (
-                                        <MapDescription key={index} description={description} />
+                                {!!descriptions.length && descriptions.map((description, index) => (
+                                    !!description.textMarkdownByTextMarkdownId.text.length && 
+                                    <MapDescription key={index} description={description} />
                                 ))}
-                                <MapContributors contributors={this.props.map.mapContributorsByMapId.nodes} />
+                                {!!this.props.map.mapContributorsByMapId.nodes.length &&
+                                    <MapContributors contributors={this.props.map.mapContributorsByMapId.nodes} />
+                                }
                             </div>
                         </Grid>
-                        <Grid direction="column" xs={12} sm={7}>
-                            <HeaderImage image={this.state.headerImage} />
+                        <Grid direction="column" container sm={7}>
+                            <div>
+                                <HeaderImage image={this.state.headerImage} />
+                            </div>
                             <ImageList
                                 setHeaderImage={this.setHeaderImage}
                                 images={getAllImages(this.props.map)}
                             />
-                            {this.props.map.mapFilesByMapId.nodes.length && (
+                            {!!this.props.map.mapFilesByMapId.nodes.length && (
                                 <DownloadCard
                                     mapFiles={this.props.map.mapFilesByMapId.nodes}
                                 />

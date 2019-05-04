@@ -1,6 +1,7 @@
 import React from 'react';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Button from '@material-ui/core/Button';
 import { MapTitle } from '../MapTitle';
 import { TierPicker } from '../TierPicker';
 import { AddUser } from 'shared/components/AddUser';
@@ -113,6 +114,12 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
         }));
     }
 
+    public submitMapInfo = () => {
+        this.setState(() => ({
+            currentTab: 1,
+        }));
+    }
+
     public render() {
         return (
             <>
@@ -139,11 +146,11 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
                     </div>
                     <div className={cn.drawerCard}>
                         <TierPicker tier={this.state.tier} updateRootState={this.updateRootState} />
-                        <MapInfoSelections context={this.props.context} state={this.state} updateRootState={this.updateRootState} />
+                        <MapInfoSelections context={this.props.context} state={this.state} updateRootState={this.updateRootState} stages={this.state.stages}/>
                         <ReleaseDate releaseDate={this.state.releaseDate} updateRootState={this.updateRootState}/>
                     </div>
                     <div className={cn.drawerCard}>
-                        <Stages context={this.props.context} updateRootState={this.updateRootState} stages={this.state.stages}/>
+                        <Stages context={this.props.context} updateRootState={this.updateRootState} stages={this.state.stages} mapType={this.state.mapType}/>
                     </div>
                     <div className={cn.drawerCard}>
                         <MapDescription value={this.state.description} updateRootState={this.updateRootState} />
@@ -151,6 +158,9 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
                     <div className={cn.drawerCard}>
                         <Contributors updateRootState={this.updateRootState} contributors={this.state.contributors}/>
                     </div>
+                    <Button color="secondary" variant="raised" fullWidth onClick={this.submitMapInfo}>
+                        Next: Images
+                    </Button>
                     </>
                 )}
                 {this.state.currentTab === 1 && (

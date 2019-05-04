@@ -3,9 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import classnames from 'classnames';
 import { IMap, IStage, IImage } from 'shared/types';
 import { classNames as cn } from '../../styles'
-
-const BONUS = 'bonus';
-const STAGE = 'stage';
+import { STAGE_TYPES } from '../../views/EditMap/helpers';
 
 interface IProps {
     map: IMap;
@@ -14,7 +12,7 @@ interface IProps {
 
 const sortStages = (stageList: IStage[]) => {
     const [stages, bonuses] = stageList.reduce((result: IStage[][], stage) => {
-        result[stage.stageTypeByStageTypeId.name.toLowerCase() === BONUS ? 1 : 0].push(stage);
+        result[stage.stageTypeByStageTypeId.name === STAGE_TYPES.BONUS ? 1 : 0].push(stage);
         return result;
     }, [[], []]);
 
@@ -44,26 +42,26 @@ export class StageInfo extends React.Component<IProps> {
                 <Typography variant="h6" className={cn.mapInfo}>
                     {`${this.props.map.mapTypeByMapTypeId.name} Map`}
                 </Typography>
-                {stages.map((stage) => {
-                    const stageType = stage.stageTypeByStageTypeId.name.toLowerCase();
+                {stages.map((stage, index) => {
+                    const stageType = stage.stageTypeByStageTypeId.name;
                     return (
                     <div
                         className={classnames({
                             [cn.stageBox]: true,
-                            [cn.stageBoxColor]: stageType === STAGE,
-                            [cn.bonusBoxColor]: stageType === BONUS,
+                            [cn.stageBoxColor]: stageType === STAGE_TYPES.STAGE || stageType === STAGE_TYPES.LINEAR,
+                            [cn.bonusBoxColor]: stageType === STAGE_TYPES.BONUS,
                         })}
-                        key={stage.rowId}
+                        key={index}
                         onClick={this.onStageClick(stage)}
                     >
                         <div className={classnames({
                             [cn.stageTriangle]: true,
-                            [cn.stageTriangleColor]: stageType === STAGE,
-                            [cn.bonusTriangleColor]: stageType === BONUS,
+                            [cn.stageTriangleColor]: stageType === STAGE_TYPES.STAGE || stageType === STAGE_TYPES.LINEAR,
+                            [cn.bonusTriangleColor]: stageType === STAGE_TYPES.BONUS,
                         })} />
                         <div className={classnames(['d-flex', cn.stageText])}>
                             <Typography variant="body1" className="ml-3 position-absolute">
-                                {`${stage.stageTypeByStageTypeId.name} ${stage.number}`}
+                                {`${stage.stageTypeByStageTypeId.name} ${stageType !== STAGE_TYPES.LINEAR ? stage.number : ''}`}
                             </Typography>
                             <Typography variant="body1" align="right" className="ml-auto mr-3">
                                 {stage.userByAuthorId.userSteamInfosByUserId.nodes[0].name}

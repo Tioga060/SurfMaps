@@ -9,13 +9,13 @@ interface IProps {
 
 export class MapDescription extends React.Component<IProps> {
     public render() {
-        console.log(this.props.description.textMarkdownByTextMarkdownId.text)
         return (
             <div className={cn.mapCard}>
                 <ReactMarkdown
                     skipHtml
                     className={cn.textColor}
                     source={this.props.description.textMarkdownByTextMarkdownId.text}
+                    disallowedTypes={['image']}
                 />
             </div> 
         );
