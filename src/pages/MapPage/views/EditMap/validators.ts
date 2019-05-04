@@ -31,8 +31,6 @@ const validateStages = (stages: IEditStage[], mapType: T.IMapType): string[] => 
     if (stages.some((stage) => (get(stages, '[0].authors[0].userId.length', 0) !== 36 || get(stage, 'stageType.rowId.length', 0) !== 36))) {
         errors.push(FORM_ERRORS.STAGE_AUTHORS);
     }
-    console.log((get(stages, '[0].authors[0].userId.length', 0)))
-    console.log(stages)
 
     // verify there is more than 1 stage on a staged map
     if (mapType.name === MAP_TYPES.STAGED) {
@@ -81,6 +79,5 @@ export const validateMapInfo = (editMapState: IEditMapState): string[] => {
         errors.push(FORM_ERRORS.MAP_TYPE);
     }
     errors = [...errors, ...validateStages(editMapState.stages, editMapState.mapType)];
-    console.log(errors);
     return errors;
 };

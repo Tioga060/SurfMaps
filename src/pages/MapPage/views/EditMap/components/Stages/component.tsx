@@ -41,7 +41,7 @@ const getDefaultStageType = (props: IProps) => {
 
 const createBlankStage = (props: IProps): IEditStage => ({
     name: '',
-    authors: [],
+    authors: [props.context.currentUserSteamInfo],
     stageType: getDefaultStageType(props) || {name: 'Select'},
     images: [],
 });

@@ -17,7 +17,7 @@ import { FileUpload } from '../FileUpload';
 import { Stages } from '../Stages';
 import { classNames as cn } from '../../styles';
 import { IProps as IContainerProps } from './container';
-import { convertEditStateToIMap } from '../../helpers';
+import { convertEditStateToIMap, submitMap } from '../../helpers';
 import { validateMapInfo, FORM_ERRORS } from '../../validators';
 
 type IProps = IContainerProps & {
@@ -48,6 +48,7 @@ export interface IEditMapFile {
 }
 
 export interface IState {
+    submitter: T.IUserSteamInfo;
     mapName: string;
     authors: T.IUserSteamInfo[];
     tier: number;
@@ -70,6 +71,7 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
         this.state = {
+            submitter: props.context.currentUserSteamInfo,
             currentTab: 0,
             mapName: '',
             authors: [],
@@ -125,6 +127,7 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
             validationErrors,
         }));
         if (!validationErrors.length) {
+            submitMap(this.state);
             this.setState(() => ({
                 currentTab: 1,
             }));

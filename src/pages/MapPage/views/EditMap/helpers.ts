@@ -1,6 +1,7 @@
 import * as T from 'shared/types';
 import get from 'lodash/get';
 import { IState as IEditMapState, IEditStage, IEditMapFile, IContributor } from './components/EditMapDrawerContent/component';
+import { editMapToMapMutation, createMap } from './services/gqlHelpers';
 
 export enum MAP_TYPES {
     STAGED = 'Staged',
@@ -119,3 +120,7 @@ export const convertEditStateToIMap = (editMapState: IEditMapState, currentUser:
     mapDescriptionsByMapId: editDescriptionToIMapDescription(editMapState.description, currentUser),
     mapContributorsByMapId: convertContributors(editMapState.contributors),
 });
+
+export const submitMap = (editMapState: IEditMapState) => {
+    createMap(editMapToMapMutation(editMapState));
+};
