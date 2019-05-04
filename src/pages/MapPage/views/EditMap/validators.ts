@@ -15,43 +15,53 @@ export enum FORM_ERRORS {
     GAME_MODE = 'gameMode',
     GAME = 'game',
     MAP_TYPE = 'mapType',
-    STAGES = 'stages',
+    STAGE_AUTHORS = 'stageAuthors',
+    STAGE_COUNT = 'stageCount',
+    STAGE_LINEAR_COUNT = 'stageLinearCount',
 };
 
 const validateMapName = (name: string) => !!name && name.length > 3;
 const validateAuthors = (authors: T.IUserSteamInfo[]) => !!authors && authors.length > 0;
 const validateTier = (tier: number) => !!tier && 1 <= tier && tier <= 6;
 const validateSelection = (selection: GenericContext) => !!selection && get(selection, 'rowId.length', 0) === 36;
-const validateStages = (stages: IEditStage[], mapType: T.IMapType) => {
-    let isValid = true;
+const validateStages = (stages: IEditStage[], mapType: T.IMapType): string[] => {
+    const errors: string[] = [];
 
     // check each stage
-    isValid = isValid && !stages.some((stage) => (!stage.authors.length || !(get(stage, 'stageType.rowId.lengt', 0) === 36)));
+    if (stages.some((stage) => (get(stages, '[0].authors[0].userId.length', 0) !== 36 || get(stage, 'stageType.rowId.length', 0) !== 36))) {
+        errors.push(FORM_ERRORS.STAGE_AUTHORS);
+    }
+    console.log((get(stages, '[0].authors[0].userId.length', 0)))
+    console.log(stages)
 
     // verify there is more than 1 stage on a staged map
     if (mapType.name === MAP_TYPES.STAGED) {
-        isValid === isValid && stages.reduce((count, stage) => {
+        if (stages.reduce((count, stage) => {
             if (stage.stageType.name === STAGE_TYPES.STAGE) {
                 count += 1;
             }
             return count;
-        }, 0) > 1;
+        }, 0) <= 1) {
+            errors.push(FORM_ERRORS.STAGE_COUNT);
+        }
     }
 
     // verify that there is exactly one linear section
     else if (mapType.name === MAP_TYPES.LINEAR) {
-        isValid === isValid && stages.reduce((count, stage) => {
+        if(stages.reduce((count, stage) => {
             if (stage.stageType.name === STAGE_TYPES.LINEAR) {
                 count += 1;
             }
             return count;
-        }, 0) === 1;
+        }, 0) !== 1) {
+            errors.push(FORM_ERRORS.STAGE_LINEAR_COUNT)
+        }
     }
-    return isValid;
+    return errors;
 };
 
 export const validateMapInfo = (editMapState: IEditMapState): string[] => {
-    const errors: string[] = [];
+    let errors: string[] = [];
     if (!validateMapName(editMapState.mapName)) { 
         errors.push(FORM_ERRORS.MAP_NAME);
     }
@@ -70,8 +80,7 @@ export const validateMapInfo = (editMapState: IEditMapState): string[] => {
     if (!validateSelection(editMapState.mapType)) { 
         errors.push(FORM_ERRORS.MAP_TYPE);
     }
-    if (!validateStages(editMapState.stages, editMapState.mapType)) {
-        errors.push(FORM_ERRORS.STAGES)
-    }
+    errors = [...errors, ...validateStages(editMapState.stages, editMapState.mapType)];
+    console.log(errors);
     return errors;
-}
+};

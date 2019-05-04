@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { MuiThemeProvider } from '@material-ui/core/styles';
-import { theme } from './MaterialTheme';
+import { theme } from 'shared/styles';
 import { TopBar } from './components/TopBar';
 import { EditMap } from 'pages/MapPage/views/EditMap';
 import { MapPageContainer } from 'pages/MapPage';

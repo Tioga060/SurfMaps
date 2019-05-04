@@ -1,5 +1,5 @@
 import { style } from 'typestyle';
-import { globalColors, globalSizes } from 'shared/styles';
+import { globalColors, globalSizes, theme } from 'shared/styles';
 
 export const classNames = {
     drawer: style({
@@ -36,6 +36,10 @@ export const classNames = {
                 textAlign: 'center',
             }
         }
+    }),
+
+    drawerCardError: style({
+        border: `2px solid ${theme.palette.error.light.toString()}`
     }),
 
     textFieldSmall: style({

@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Button from '@material-ui/core/Button';
@@ -17,6 +18,7 @@ import { Stages } from '../Stages';
 import { classNames as cn } from '../../styles';
 import { IProps as IContainerProps } from './container';
 import { convertEditStateToIMap } from '../../helpers';
+import { validateMapInfo, FORM_ERRORS } from '../../validators';
 
 type IProps = IContainerProps & {
     context: IEditMapContext;
@@ -46,7 +48,6 @@ export interface IEditMapFile {
 }
 
 export interface IState {
-    currentTab: number;
     mapName: string;
     authors: T.IUserSteamInfo[];
     tier: number;
@@ -60,6 +61,9 @@ export interface IState {
     mapImages: File[];
     releaseDate: string;
     mapFiles: IEditMapFile[];
+
+    currentTab: number;
+    validationErrors: string[];
 }
 
 export class EditMapDrawerContent extends React.Component<IProps, IState> {
@@ -80,6 +84,7 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
             mapImages: [],
             releaseDate: '',
             mapFiles: [],
+            validationErrors: [],
         }
         this.updateSteamUserList = this.updateSteamUserList.bind(this);
         this.updateRootState = this.updateRootState.bind(this);
@@ -115,9 +120,15 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
     }
 
     public submitMapInfo = () => {
+        const validationErrors = validateMapInfo(this.state);
         this.setState(() => ({
-            currentTab: 1,
+            validationErrors,
         }));
+        if (!validationErrors.length) {
+            this.setState(() => ({
+                currentTab: 1,
+            }));
+        }
     }
 
     public render() {
@@ -136,7 +147,11 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
                 </Tabs>
                 {this.state.currentTab === 0 && (
                     <>
-                    <div className={cn.drawerCard}>
+                    <div className={classnames({
+                        [cn.drawerCard]: true,
+                        [cn.drawerCardError]: this.state.validationErrors.includes(FORM_ERRORS.MAP_NAME)
+                            || this.state.validationErrors.includes(FORM_ERRORS.AUTHORS),
+                    })}>
                         <MapTitle value={this.state.mapName} updateRootState={this.updateRootState}/>
                         <AddUser
                             steamUserList={this.state.authors}
@@ -144,12 +159,23 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
                             descriptor="Authors"
                         />
                     </div>
-                    <div className={cn.drawerCard}>
+                    <div className={classnames({
+                        [cn.drawerCard]: true,
+                        [cn.drawerCardError]: this.state.validationErrors.includes(FORM_ERRORS.TIER)
+                            || this.state.validationErrors.includes(FORM_ERRORS.GAME_MODE)
+                            || this.state.validationErrors.includes(FORM_ERRORS.MAP_TYPE)
+                            || this.state.validationErrors.includes(FORM_ERRORS.GAME)
+                    })}>
                         <TierPicker tier={this.state.tier} updateRootState={this.updateRootState} />
                         <MapInfoSelections context={this.props.context} state={this.state} updateRootState={this.updateRootState} stages={this.state.stages}/>
                         <ReleaseDate releaseDate={this.state.releaseDate} updateRootState={this.updateRootState}/>
                     </div>
-                    <div className={cn.drawerCard}>
+                    <div className={classnames({
+                        [cn.drawerCard]: true,
+                        [cn.drawerCardError]: this.state.validationErrors.includes(FORM_ERRORS.STAGE_LINEAR_COUNT)
+                            || this.state.validationErrors.includes(FORM_ERRORS.STAGE_AUTHORS)
+                            || this.state.validationErrors.includes(FORM_ERRORS.STAGE_COUNT),
+                    })}>
                         <Stages context={this.props.context} updateRootState={this.updateRootState} stages={this.state.stages} mapType={this.state.mapType}/>
                     </div>
                     <div className={cn.drawerCard}>

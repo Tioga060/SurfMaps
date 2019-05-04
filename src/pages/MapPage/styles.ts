@@ -1,5 +1,5 @@
 import { style, cssRaw  } from 'typestyle';
-import { globalColors } from 'shared/styles';
+import { globalColors, theme } from 'shared/styles';
 
 const stageBoxHeight = '40px';
 const mapImageWH = '150px';
@@ -65,7 +65,7 @@ export const classNames = {
         borderTopColor: globalColors.themeSecondary.toString(),
     }),
     textColor: style({
-        color: globalColors.textColor.toString(),
+        color: theme.palette.text.primary.toString(),
     }),
     contributorBadgeContainer: style({
         marginBottom: '1rem',
