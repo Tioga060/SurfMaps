@@ -1,7 +1,7 @@
 import * as T from 'shared/types';
 import get from 'lodash/get';
 import { IState as IEditMapState, IEditStage, IEditMapFile, IContributor } from './components/EditMapDrawerContent/component';
-import { editMapToMapMutation, createMap } from './services/gqlHelpers';
+import * as GQL from './services/gqlHelpers';
 
 export enum MAP_TYPES {
     STAGED = 'Staged',
@@ -121,6 +121,27 @@ export const convertEditStateToIMap = (editMapState: IEditMapState, currentUser:
     mapContributorsByMapId: convertContributors(editMapState.contributors),
 });
 
+const createStageCallback = (stages: GQL.IEditStageMutation[], index: number, stageList: string[] = []) => (response: GQL.ICreateStageResponse) => {
+    submitStages(stages, index + 1, [...stageList, response.createStage.stage.rowId])
+}
+
+const submitStages = (stages: GQL.IEditStageMutation[], index: number = 0, stageList: string[] = []) => {
+    if (index >= stages.length) {
+        console.log(stageList);
+    } else {
+        GQL.createStage(stages[index], createStageCallback(stages, index, stageList));
+    }
+}
+
+const submitDescription = (editMapState: IEditMapState, mapId: string) => {
+    GQL.createDescription(GQL.editMapToDescription(editMapState), mapId);
+}
+
+const createMapSubmitCallback = (editMapState: IEditMapState) => (response: GQL.ICreateMapResponse) => {
+    submitStages(GQL.editMapToStageMutation(editMapState, response.createMap.map.rowId));
+    submitDescription(editMapState, response.createMap.map.rowId);
+}
+
 export const submitMap = (editMapState: IEditMapState) => {
-    createMap(editMapToMapMutation(editMapState));
+    GQL.createMap(GQL.editMapToMapMutation(editMapState), createMapSubmitCallback(editMapState));
 };
