@@ -1,7 +1,7 @@
 import { commitMutation } from 'react-relay';
 import { IState as IEditMapState } from '../components/EditMapDrawerContent/component';
-import { getStageTypeAndNumber } from '../helpers';
-import { submitMap, submitStage, submitDescription, submitMapDescription } from './SubmitMapGQL';
+import { getStageTypeAndNumber, convertContributors } from '../helpers';
+import { submitMap, submitStage, submitDescription, submitMapDescription, submitContribution } from './SubmitMapGQL';
 import environment from 'shared/resources/graphql';
 // map
 // stage
@@ -161,7 +161,7 @@ export interface ICreateDescriptionResponse {
     }
 }
 
-export const createDescription = (description: IEditDescriptionMutation, mapId: string) => {
+export const createDescription = (description: IEditDescriptionMutation, mapId: string, callBack: (mapId: string) => void) => {
     commitMutation(
         environment,
         {
@@ -177,7 +177,7 @@ export const createDescription = (description: IEditDescriptionMutation, mapId: 
                             order: 0,
                         }
                     }
-                });
+                }, callBack);
             },
             onError: (error) => {
                 console.log(error); // TODO, error handling for all of these
@@ -197,14 +197,55 @@ interface IEditMapDescriptionMutation {
     }
 }
 
-const createMapDescription = (description: IEditMapDescriptionMutation) => {
+const createMapDescription = (description: IEditMapDescriptionMutation, callBack: (mapId: string) => void) => {
     commitMutation(
         environment,
         {
             mutation: submitMapDescription,
             variables: description,
             onCompleted: (response, errors) => {
-                console.log(response);
+                callBack(description.description.mapDescription.mapId);
+            },
+            onError: (error) => {
+                console.log(error);
+            },
+        } 
+    )
+}
+
+interface IEditMapContributionMutation {
+    contribution: {
+        clientMutationId: string;
+        mapContributor: {
+            mapId: string;
+            userId: string;
+            contribution: string;
+        }
+    }
+}
+
+export const editMapToContributors = (editMapState: IEditMapState, mapId: string): IEditMapContributionMutation[] => {
+    const contributors = convertContributors(editMapState.contributors);
+    return contributors.nodes.map((contribution) => ({
+        contribution: {
+            clientMutationId: editMapState.submitter.userId,
+            mapContributor: {
+                mapId,
+                userId: contribution.userByUserId.rowId,
+                contribution: contribution.contribution,
+            }
+        }
+    }))
+};
+
+export const createMapContribution = (contribution: IEditMapContributionMutation, callBack: (mapId: string) => void) => {
+    commitMutation(
+        environment,
+        {
+            mutation: submitContribution,
+            variables: contribution,
+            onCompleted: (response, errors) => {
+                callBack(contribution.contribution.mapContributor.mapId);
             },
             onError: (error) => {
                 console.log(error);

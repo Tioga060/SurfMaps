@@ -1,6 +1,9 @@
 import * as T from 'shared/types';
 import get from 'lodash/get';
 import { IState as IEditMapState, IEditStage, IEditMapFile, IContributor } from './components/EditMapDrawerContent/component';
+import { fetchQuery } from 'react-relay';
+import environment from 'shared/resources/graphql';
+import { validMapNameQuery } from './ValidatorGQL';
 import { STAGE_TYPES, MAP_TYPES } from './helpers';
 
 interface GenericContext {
@@ -10,6 +13,7 @@ interface GenericContext {
 
 export enum FORM_ERRORS {
     MAP_NAME = 'mapName',
+    MAP_NAME_EXISTS = 'mapNameExists',
     AUTHORS = 'authors',
     TIER = 'tier',
     GAME_MODE = 'gameMode',
@@ -20,7 +24,23 @@ export enum FORM_ERRORS {
     STAGE_LINEAR_COUNT = 'stageLinearCount',
 };
 
-const validateMapName = (name: string) => !!name && name.length > 3;
+interface IMapNameResponse {
+    allMaps: {
+        nodes: {name: string}[];
+    }
+}
+
+const validateMapName = async (name: string) => {
+    const errors: string[] = [];
+    const regexp = /^[a-zA-Z0-9-_]+$/;
+    if (!name || name.length < 6 || name.search(regexp) === -1) {
+        errors.push(FORM_ERRORS.MAP_NAME);
+    }
+    if ((await fetchQuery(environment, validMapNameQuery, {condition: {name}}).then((data: IMapNameResponse) => (data))).allMaps.nodes.length > 0) {
+        errors.push(FORM_ERRORS.MAP_NAME_EXISTS);
+    }
+    return errors;
+};
 const validateAuthors = (authors: T.IUserSteamInfo[]) => !!authors && authors.length > 0;
 const validateTier = (tier: number) => !!tier && 1 <= tier && tier <= 6;
 const validateSelection = (selection: GenericContext) => !!selection && get(selection, 'rowId.length', 0) === 36;
@@ -58,11 +78,9 @@ const validateStages = (stages: IEditStage[], mapType: T.IMapType): string[] => 
     return errors;
 };
 
-export const validateMapInfo = (editMapState: IEditMapState): string[] => {
+export const validateMapInfo = async (editMapState: IEditMapState): Promise<string[]> => {
     let errors: string[] = [];
-    if (!validateMapName(editMapState.mapName)) { 
-        errors.push(FORM_ERRORS.MAP_NAME);
-    }
+    errors = [...errors, ...await validateMapName(editMapState.mapName)]
     if (!validateAuthors(editMapState.authors)) { 
         errors.push(FORM_ERRORS.AUTHORS);
     }

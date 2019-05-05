@@ -51,7 +51,7 @@ const convertAuthors = (authors: T.IUserSteamInfo[]): T.IMapAuthorAsNodes => ({
     }))
 });
 
-const convertContributors = (contributors: IContributor[]): T.IMapContributorAsNodes => {
+export const convertContributors = (contributors: IContributor[]): T.IMapContributorAsNodes => {
     const contributorList: T.IMapContributor[] = [];
     contributors.map((contribution) => {
         contribution.userList.map((user) => {
@@ -121,27 +121,38 @@ export const convertEditStateToIMap = (editMapState: IEditMapState, currentUser:
     mapContributorsByMapId: convertContributors(editMapState.contributors),
 });
 
-const createStageCallback = (stages: GQL.IEditStageMutation[], index: number, stageList: string[] = []) => (response: GQL.ICreateStageResponse) => {
-    submitStages(stages, index + 1, [...stageList, response.createStage.stage.rowId])
+const createStageCallback = (refreshCallback: (mapId: string) => void, stages: GQL.IEditStageMutation[], index: number, stageList: string[] = []) => (response: GQL.ICreateStageResponse) => {
+    submitStages(refreshCallback, stages, index + 1, [...stageList, response.createStage.stage.rowId])
 }
 
-const submitStages = (stages: GQL.IEditStageMutation[], index: number = 0, stageList: string[] = []) => {
+const submitStages = (refreshCallback: (mapId: string) => void, stages: GQL.IEditStageMutation[], index: number = 0, stageList: string[] = []) => {
+    refreshCallback(stages[0].stage.stage.mapId);
     if (index >= stages.length) {
         console.log(stageList);
     } else {
-        GQL.createStage(stages[index], createStageCallback(stages, index, stageList));
+        GQL.createStage(stages[index], createStageCallback(refreshCallback, stages, index, stageList));
     }
 }
 
-const submitDescription = (editMapState: IEditMapState, mapId: string) => {
-    GQL.createDescription(GQL.editMapToDescription(editMapState), mapId);
+const submitDescription = (editMapState: IEditMapState, mapId: string, refreshCallback: (mapId: string) => void) => {
+    GQL.createDescription(GQL.editMapToDescription(editMapState), mapId, refreshCallback);
 }
 
-const createMapSubmitCallback = (editMapState: IEditMapState) => (response: GQL.ICreateMapResponse) => {
-    submitStages(GQL.editMapToStageMutation(editMapState, response.createMap.map.rowId));
-    submitDescription(editMapState, response.createMap.map.rowId);
+const submitContributors = (editMapState: IEditMapState, mapId: string, refreshCallback: (mapId: string) => void) => {
+    const contributions = GQL.editMapToContributors(editMapState, mapId);
+    contributions.forEach((contribution) => {
+        GQL.createMapContribution(contribution, refreshCallback);
+    })
 }
 
-export const submitMap = (editMapState: IEditMapState) => {
-    GQL.createMap(GQL.editMapToMapMutation(editMapState), createMapSubmitCallback(editMapState));
+const createMapSubmitCallback = (editMapState: IEditMapState, refreshCallback: (mapId: string) => void) => (response: GQL.ICreateMapResponse) => {
+    submitStages(refreshCallback, GQL.editMapToStageMutation(editMapState, response.createMap.map.rowId));
+    submitDescription(editMapState, response.createMap.map.rowId, refreshCallback);
+    submitContributors(editMapState, response.createMap.map.rowId, refreshCallback);
+    refreshCallback(response.createMap.map.rowId);
+}
+
+export const submitMap = (editMapState: IEditMapState, refreshCallback: (mapId: string) => void) => {
+    // TODO - add debounced callback to each one of these functions so it updates the page
+    GQL.createMap(GQL.editMapToMapMutation(editMapState), createMapSubmitCallback(editMapState, refreshCallback));
 };

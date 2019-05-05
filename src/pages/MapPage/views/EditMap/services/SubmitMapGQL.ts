@@ -40,3 +40,15 @@ mutation SubmitMapGQL_mapDescriptionMutation($description: CreateMapDescriptionI
   }
 }
 `
+
+export const submitContribution = graphql`
+mutation SubmitMapGQL_mapContributionMutation($contribution: CreateMapContributorInput!) {
+  createMapContributor(input: $contribution) {
+    mapContributor {
+      mapId,
+      userId,
+      contribution,
+    }
+  }
+}
+`

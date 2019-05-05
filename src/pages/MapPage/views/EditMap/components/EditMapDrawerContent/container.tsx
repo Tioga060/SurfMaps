@@ -15,6 +15,8 @@ export interface IEditMapContext {
 
 export interface IProps {
     setCurrentMap: (map: T.IMap) => void;
+    mode: number;
+    refreshMap: (mapId: string) => void;
 }
 
 export class EditMapDrawerContainer extends React.Component<IProps> {
@@ -32,7 +34,12 @@ export class EditMapDrawerContainer extends React.Component<IProps> {
                         return <div>Missing props</div>
                     }
                     return props
-                        ? <EditMapDrawerContent context={props as IEditMapContext} setCurrentMap={this.props.setCurrentMap}/>
+                        ? <EditMapDrawerContent
+                            context={props as IEditMapContext}
+                            setCurrentMap={this.props.setCurrentMap}
+                            mode={this.props.mode}
+                            refreshMap={this.props.refreshMap}
+                        />
                         : <div>Error rendering sidebar</div>
                 }}
             />

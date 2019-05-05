@@ -23,6 +23,7 @@ interface IProps {
     stages: IEditStage[];
     context: IEditMapContext;
     mapType: IMapType;
+    primaryAuthor: IUserSteamInfo;
 }
 
 const getDefaultStageType = (props: IProps) => {
@@ -41,7 +42,7 @@ const getDefaultStageType = (props: IProps) => {
 
 const createBlankStage = (props: IProps): IEditStage => ({
     name: '',
-    authors: [props.context.currentUserSteamInfo],
+    authors: [props.primaryAuthor],
     stageType: getDefaultStageType(props) || {name: 'Select'},
     images: [],
 });

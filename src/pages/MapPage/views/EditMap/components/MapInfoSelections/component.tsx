@@ -8,14 +8,16 @@ import { IState as IRootState, IEditStage } from '../EditMapDrawerContent/compon
 import { IEditMapContext } from '../EditMapDrawerContent/container';
 import { removeAllStages, MAP_TYPES, STAGE_TYPES, alreadyHasLinearSection } from '../../helpers';
 import * as T from 'shared/types/descriptors';
+import { IUserSteamInfo } from 'shared/types';
 
-type IUnion = T.IMapTypeAsNodes | T.IGameAsNodes | T.IGameModeAsNodes
+type IUnion = T.IMapTypeAsNodes | T.IGameAsNodes | T.IGameModeAsNodes;
 
 interface IProps {
     state: Partial<IRootState>;
     updateRootState: (partialState: Partial<IRootState>) => void;
     context: IEditMapContext;
     stages: IEditStage[];
+    primaryAuthor: IUserSteamInfo;
 }
 
 enum FIELDS {
@@ -37,11 +39,10 @@ const updateState = (
             if (selectedItem.name === MAP_TYPES.LINEAR) {
                 stages = removeAllStages(props.stages, STAGE_TYPES.STAGE);
                 if (!alreadyHasLinearSection(stages)) {
-                    console.log('reached')
                     stages.push({
                         name: '',
-                        authors: [],
-                        stageType: props.context.allStageTypes.nodes.find((stageType) => stageType.name === STAGE_TYPES.LINEAR) || {name: 'Linear'},
+                        authors: [props.primaryAuthor],
+                        stageType: props.context.allStageTypes.nodes.find((stageType) => stageType.name === STAGE_TYPES.LINEAR) || {name: STAGE_TYPES.LINEAR},
                         images: [],
                     })
                 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import get from 'lodash/get';
 import classnames from 'classnames';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -19,6 +20,7 @@ import { classNames as cn } from '../../styles';
 import { IProps as IContainerProps } from './container';
 import { convertEditStateToIMap, submitMap } from '../../helpers';
 import { validateMapInfo, FORM_ERRORS } from '../../validators';
+import { MODES } from '../../component';
 
 type IProps = IContainerProps & {
     context: IEditMapContext;
@@ -63,30 +65,36 @@ export interface IState {
     releaseDate: string;
     mapFiles: IEditMapFile[];
 
+    canPressAdd: boolean;
     currentTab: number;
     validationErrors: string[];
 }
+
+const getDefaultAddState = (props: IProps): IState => ({
+    submitter: props.context.currentUserSteamInfo,
+    currentTab: 0,
+    mapName: '',
+    authors: [],
+    tier: 3,
+    gameMode: createContextPlaceholder(),
+    game: createContextPlaceholder(),
+    mapType: createContextPlaceholder(),
+    description: '',
+    contributors: [],
+    stages: [],
+    mainImage: [],
+    mapImages: [],
+    releaseDate: '',
+    mapFiles: [],
+    validationErrors: [],
+    canPressAdd: props.mode === MODES.ADD,
+})
 
 export class EditMapDrawerContent extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
         this.state = {
-            submitter: props.context.currentUserSteamInfo,
-            currentTab: 0,
-            mapName: '',
-            authors: [],
-            tier: 3,
-            gameMode: createContextPlaceholder(),
-            game: createContextPlaceholder(),
-            mapType: createContextPlaceholder(),
-            description: '',
-            contributors: [],
-            stages: [],
-            mainImage: [],
-            mapImages: [],
-            releaseDate: '',
-            mapFiles: [],
-            validationErrors: [],
+            ...getDefaultAddState(props),
         }
         this.updateSteamUserList = this.updateSteamUserList.bind(this);
         this.updateRootState = this.updateRootState.bind(this);
@@ -121,39 +129,44 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
         }));
     }
 
-    public submitMapInfo = () => {
-        const validationErrors = validateMapInfo(this.state);
+    public submitMapInfo = async () => {
+        const validationErrors = await validateMapInfo(this.state);
         this.setState(() => ({
             validationErrors,
         }));
-        if (!validationErrors.length) {
-            submitMap(this.state);
+        if (!validationErrors.length && this.state.canPressAdd) {
             this.setState(() => ({
-                currentTab: 1,
+                canPressAdd: false,
             }));
+            if (this.props.mode === MODES.ADD) {
+                submitMap(this.state, this.props.refreshMap);
+            }
         }
     }
 
     public render() {
         return (
             <>
-                <Tabs
-                    value={this.state.currentTab}
-                    onChange={this.setTab}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    centered
-                >
-                    <Tab value={0} label="Info" classes={{labelContainer: 'px-0', root: cn.tabWidth}}/>
-                    <Tab value={1} label="Images" classes={{labelContainer: 'px-0', root: cn.tabWidth}}/>
-                    <Tab value={2} label="Files" classes={{labelContainer: 'px-0', root: cn.tabWidth}}/>
-                </Tabs>
+                {this.props.mode === MODES.EDIT && 
+                    <Tabs
+                        value={this.state.currentTab}
+                        onChange={this.setTab}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        centered
+                    >
+                        <Tab value={0} label="Info" classes={{labelContainer: 'px-0', root: cn.tabWidth}}/>
+                        <Tab value={1} label="Images" classes={{labelContainer: 'px-0', root: cn.tabWidth}}/>
+                        <Tab value={2} label="Files" classes={{labelContainer: 'px-0', root: cn.tabWidth}}/>
+                    </Tabs>
+                }
                 {this.state.currentTab === 0 && (
                     <>
                     <div className={classnames({
                         [cn.drawerCard]: true,
                         [cn.drawerCardError]: this.state.validationErrors.includes(FORM_ERRORS.MAP_NAME)
-                            || this.state.validationErrors.includes(FORM_ERRORS.AUTHORS),
+                            || this.state.validationErrors.includes(FORM_ERRORS.AUTHORS)
+                            || this.state.validationErrors.includes(FORM_ERRORS.MAP_NAME_EXISTS),
                     })}>
                         <MapTitle value={this.state.mapName} updateRootState={this.updateRootState}/>
                         <AddUser
@@ -170,7 +183,13 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
                             || this.state.validationErrors.includes(FORM_ERRORS.GAME)
                     })}>
                         <TierPicker tier={this.state.tier} updateRootState={this.updateRootState} />
-                        <MapInfoSelections context={this.props.context} state={this.state} updateRootState={this.updateRootState} stages={this.state.stages}/>
+                        <MapInfoSelections
+                            context={this.props.context}
+                            state={this.state}
+                            updateRootState={this.updateRootState}
+                            stages={this.state.stages}
+                            primaryAuthor={get(this.state.authors, '[0]', this.props.context.currentUserSteamInfo)}
+                        />
                         <ReleaseDate releaseDate={this.state.releaseDate} updateRootState={this.updateRootState}/>
                     </div>
                     <div className={classnames({
@@ -179,7 +198,13 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
                             || this.state.validationErrors.includes(FORM_ERRORS.STAGE_AUTHORS)
                             || this.state.validationErrors.includes(FORM_ERRORS.STAGE_COUNT),
                     })}>
-                        <Stages context={this.props.context} updateRootState={this.updateRootState} stages={this.state.stages} mapType={this.state.mapType}/>
+                        <Stages
+                            context={this.props.context}
+                            updateRootState={this.updateRootState}
+                            stages={this.state.stages}
+                            mapType={this.state.mapType}
+                            primaryAuthor={get(this.state.authors, '[0]', this.props.context.currentUserSteamInfo)}
+                        />
                     </div>
                     <div className={cn.drawerCard}>
                         <MapDescription value={this.state.description} updateRootState={this.updateRootState} />
@@ -187,7 +212,7 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
                     <div className={cn.drawerCard}>
                         <Contributors updateRootState={this.updateRootState} contributors={this.state.contributors}/>
                     </div>
-                    <Button color="secondary" variant="raised" fullWidth onClick={this.submitMapInfo}>
+                    <Button color="secondary" variant="raised" fullWidth onClick={this.submitMapInfo} disabled={!this.state.canPressAdd}>
                         Next: Images
                     </Button>
                     </>
