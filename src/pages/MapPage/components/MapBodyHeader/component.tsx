@@ -10,6 +10,7 @@ interface IProps {
 
 export class MapBodyHeader extends React.Component<IProps> {
     public render() {
+        console.log(this.props.map.mapAuthorsByMapId.nodes)
         return (
             <div className={cn.mapCard}>
                 <Typography variant="h2">

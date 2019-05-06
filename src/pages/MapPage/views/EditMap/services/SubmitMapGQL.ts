@@ -10,6 +10,17 @@ mutation SubmitMapGQL_mapMutation($map: CreateMapInput!) {
 }
 `
 
+export const submitAuthor = graphql`
+mutation SubmitMapGQL_authorMutation($author: CreateMapAuthorInput!) {
+  createMapAuthor(input: $author) {
+    mapAuthor {
+      authorId,
+      mapId
+    }
+  }
+}
+`
+
 export const submitStage = graphql`
 mutation SubmitMapGQL_stageMutation($stage: CreateStageInput!) {
   createStage(input: $stage) {

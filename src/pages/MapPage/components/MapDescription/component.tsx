@@ -7,6 +7,7 @@ interface IProps {
     description: IMapDescription;
 }
 
+// TODO: fix this from expanding when text is super wide
 export class MapDescription extends React.Component<IProps> {
     public render() {
         return (

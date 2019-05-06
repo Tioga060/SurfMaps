@@ -10,7 +10,7 @@ interface IProps {
     onStageClick: (image: IImage) => void;
 }
 
-const sortStages = (stageList: IStage[]) => {
+export const sortStages = (stageList: IStage[]) => {
     const [stages, bonuses] = stageList.reduce((result: IStage[][], stage) => {
         result[stage.stageTypeByStageTypeId.name === STAGE_TYPES.BONUS ? 1 : 0].push(stage);
         return result;

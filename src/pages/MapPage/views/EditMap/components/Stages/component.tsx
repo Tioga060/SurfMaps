@@ -133,7 +133,7 @@ export class Stages extends React.Component<IProps> {
                         <Divider/>
                         <div>
                             <div className="d-flex">
-                                <Typography variant="subheading" align="center" className={cn.stageNameWidth}>
+                                <Typography variant="subtitle1" align="center" className={cn.stageNameWidth}>
                                     {`${stageTypeName} ${stageNumber > 0 ? stageNumber : ''}`}
                                 </Typography>
                                 {stageTypeName !== STAGE_TYPES.LINEAR && (

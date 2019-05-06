@@ -1,1 +1,1 @@
-export * from './component';
+export { EditMapContainer as EditMap } from './container';

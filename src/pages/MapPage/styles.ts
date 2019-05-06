@@ -33,9 +33,6 @@ export const classNames = {
         padding: '1rem',
         marginBottom: '1rem',
     }),
-    cardDivider: style({
-        paddingRight: '1rem',
-    }),
     stageText: style({
         paddingTop: '0.60rem',
     }),
@@ -81,7 +78,7 @@ export const classNames = {
     scrollImage: style({
         width: mapImageWH,
         height: mapImageWH,
-    })
+    }),
 };
 
 cssRaw(`

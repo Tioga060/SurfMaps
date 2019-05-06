@@ -8,14 +8,18 @@ query MapPageGQL_getMapByIdQuery($mapId: UUID!) {
         name
         public
         createdAt
+        releasedAt
         gameModeByGameModeId {
+            rowId
             name
         }
         gameByGameId {
+            rowId
             name
         }
         tier
         mapTypeByMapTypeId {
+            rowId
             name
         }
         mapAuthorsByMapId {
@@ -27,6 +31,7 @@ query MapPageGQL_getMapByIdQuery($mapId: UUID!) {
                     createdAt
                     userSteamInfosByUserId {
                         nodes {
+                        userId
                         name
                         profileUrl
                         timeCreated
@@ -45,6 +50,7 @@ query MapPageGQL_getMapByIdQuery($mapId: UUID!) {
             createdAt
             userSteamInfosByUserId {
                 nodes {
+                    userId
                     name
                     profileUrl
                     timeCreated
@@ -68,6 +74,7 @@ query MapPageGQL_getMapByIdQuery($mapId: UUID!) {
                         createdAt
                         userSteamInfosByUserId {
                             nodes {
+                                userId
                                 name
                                 profileUrl
                                 timeCreated
@@ -87,6 +94,7 @@ query MapPageGQL_getMapByIdQuery($mapId: UUID!) {
                 name
                 number
                 stageTypeByStageTypeId {
+                    rowId
                     name
                 }
                 userByAuthorId {
@@ -95,6 +103,7 @@ query MapPageGQL_getMapByIdQuery($mapId: UUID!) {
                     createdAt
                     userSteamInfosByUserId {
                         nodes {
+                            userId
                             name
                             profileUrl
                             timeCreated
@@ -115,6 +124,7 @@ query MapPageGQL_getMapByIdQuery($mapId: UUID!) {
                                 createdAt
                                 userSteamInfosByUserId {
                                     nodes {
+                                        userId
                                         name
                                         profileUrl
                                         timeCreated
@@ -139,6 +149,7 @@ query MapPageGQL_getMapByIdQuery($mapId: UUID!) {
                 isPrimary
                 fileByFileId {
                     fileTypeByFileTypeId {
+                        rowId
                         type
                     }
                     rowId
@@ -151,6 +162,7 @@ query MapPageGQL_getMapByIdQuery($mapId: UUID!) {
                         createdAt
                         userSteamInfosByUserId {
                             nodes {
+                                userId
                                 name
                                 profileUrl
                                 timeCreated
@@ -178,6 +190,7 @@ query MapPageGQL_getMapByIdQuery($mapId: UUID!) {
                         createdAt
                         userSteamInfosByUserId {
                             nodes {
+                                userId
                                 name
                                 profileUrl
                                 timeCreated
@@ -200,6 +213,7 @@ query MapPageGQL_getMapByIdQuery($mapId: UUID!) {
                     createdAt
                     userSteamInfosByUserId {
                         nodes {
+                            userId
                             name
                             profileUrl
                             timeCreated

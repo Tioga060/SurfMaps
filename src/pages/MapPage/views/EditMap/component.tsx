@@ -1,13 +1,13 @@
 import React from 'react';
-import debounce from 'lodash/debounce';
 import Typography from '@material-ui/core/Typography';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import { EditMapDrawerContent } from './components/EditMapDrawerContent';
-import { MapPage, MapPageContainer } from '../../';
+import { MapPage } from '../../';
 import { mockMap } from '../../_mocks/_data';
 import { classNames as cn } from './styles';
 import { IMap } from 'shared/types';
+import { convertIMapToEditState } from './helpers';
 
 export enum MODES {
     ADD,
@@ -16,39 +16,36 @@ export enum MODES {
 
 interface IState {
     currentMap: IMap;
-    currentMapId: string;
     mode: MODES;
 }
 
-interface IProps {}
+interface IProps {
+    map?: IMap;
+    refreshMap: (mapId: string) => void;
+}
 
 export class EditMap extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
         this.state = {
-            currentMap: mockMap,
-            currentMapId: '',
-            mode: MODES.ADD,
+            currentMap: props.map || mockMap,
+            mode: props.map ? MODES.EDIT : MODES.ADD,
         }
         this.setCurrentMap = this.setCurrentMap.bind(this);
-        this.refreshMap = debounce(this.refreshMap.bind(this), 250);
     }
 
-    public componentDidUpdate() {
-        console.log(this.state.currentMapId);
+    public componentDidUpdate (prevProps: IProps) {
+        if (prevProps.map !== this.props.map) {
+            this.setState(() => ({
+                mode: MODES.EDIT,
+            }));
+        }
     }
 
     public setCurrentMap = (map: IMap) => {
         this.setState(() => ({
             currentMap: map,
         }))
-    }
-
-    public refreshMap = (mapId: string) => {
-        this.setState(() => ({
-            currentMapId: mapId,
-            mode: MODES.EDIT,
-        }));
     }
 
     public render() {
@@ -68,14 +65,16 @@ export class EditMap extends React.Component<IProps, IState> {
                     </div>
                     <Divider />
                     <div className="p-2">
-                        <EditMapDrawerContent setCurrentMap={this.setCurrentMap} mode={this.state.mode} refreshMap={this.refreshMap}/>
+                        <EditMapDrawerContent
+                            setCurrentMap={this.setCurrentMap}
+                            mode={this.state.mode}
+                            refreshMap={this.props.refreshMap}
+                            mapState={this.props.map ? convertIMapToEditState(this.props.map) : undefined}
+                        />
                     </div>
                 </Drawer>
                 <main className={cn.content}>
-                    {!this.state.currentMapId.length
-                        ? <MapPage map={this.state.currentMap} />
-                        : <MapPageContainer mapId={this.state.currentMapId} />
-                    }
+                    <MapPage map={this.state.currentMap} />
                 </main>
             </>
         )

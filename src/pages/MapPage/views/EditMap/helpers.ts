@@ -2,6 +2,8 @@ import * as T from 'shared/types';
 import get from 'lodash/get';
 import { IState as IEditMapState, IEditStage, IEditMapFile, IContributor } from './components/EditMapDrawerContent/component';
 import * as GQL from './services/gqlHelpers';
+import { groupContributors } from '../../components/MapContributors';
+import { sortStages } from '../../components/StageInfo';
 
 export enum MAP_TYPES {
     STAGED = 'Staged',
@@ -35,6 +37,8 @@ export const getStageTypeAndNumber = (stages: IEditStage[], stage: IEditStage, i
 export const removeAllStages = (stages: IEditStage[], type: string = STAGE_TYPES.STAGE): IEditStage[] => (
     stages.filter((stage) => stage.stageType.name !== type)
 );
+
+// editMap => IMap
 
 const userSteamInfoToIUser = (user: T.IUserSteamInfo) => ({
     rowId: user.userId,
@@ -121,6 +125,48 @@ export const convertEditStateToIMap = (editMapState: IEditMapState, currentUser:
     mapContributorsByMapId: convertContributors(editMapState.contributors),
 });
 
+// IMap => editMap
+
+const convertIMapContributorsToEditMap = (contributors: T.IMapContributor[]): IContributor[] => {
+    const groups = groupContributors(contributors);
+    const contributions: IContributor[] = [];
+    for (const contribution of Object.keys(groups)) {
+        contributions.push({
+            contribution,
+            userList: groups[contribution].map((cont) => cont.userByUserId.userSteamInfosByUserId.nodes[0]),
+        });
+    }
+    return contributions;
+}
+
+const convertIMapStagesToEditMap = (stages: T.IStage[]): IEditStage[] => {
+    const sortedStages = sortStages(stages);
+    return sortedStages.map((stage): IEditStage => ({
+        name: stage.name || '',
+        authors: [stage.userByAuthorId.userSteamInfosByUserId.nodes[0]],
+        stageType: stage.stageTypeByStageTypeId,
+        images: [], // TODO
+    }));
+}
+
+export const convertIMapToEditState = (map: T.IMap): Partial<IEditMapState> => ({
+    mapName: map.name,
+    authors: map.mapAuthorsByMapId.nodes.map((author) => author.userByAuthorId.userSteamInfosByUserId.nodes[0]),
+    tier: map.tier,
+    gameMode: map.gameModeByGameModeId,
+    game: map.gameByGameId,
+    mapType: map.mapTypeByMapTypeId,
+    description: get(map.mapDescriptionsByMapId.nodes, '[0].textMarkdownByTextMarkdownId.text', ''),
+    contributors: convertIMapContributorsToEditMap(map.mapContributorsByMapId.nodes),
+    stages: convertIMapStagesToEditMap(map.stagesByMapId.nodes),
+    mainImage: [], // TODO
+    mapImages: [], // TODO
+    releaseDate: map.releasedAt || map.createdAt,
+    mapFiles: [], // TODO
+});
+
+// Submission helpers
+
 const createStageCallback = (refreshCallback: (mapId: string) => void, stages: GQL.IEditStageMutation[], index: number, stageList: string[] = []) => (response: GQL.ICreateStageResponse) => {
     submitStages(refreshCallback, stages, index + 1, [...stageList, response.createStage.stage.rowId])
 }
@@ -134,8 +180,17 @@ const submitStages = (refreshCallback: (mapId: string) => void, stages: GQL.IEdi
     }
 }
 
+const submitAuthors = (editMapState: IEditMapState, mapId: string, refreshCallback: (mapId: string) => void) => {
+    const authors = GQL.editMapToAuthorMutation(editMapState, mapId);
+    authors.forEach((author) => {
+        GQL.createAuthor(author, mapId, refreshCallback);
+    });
+}
+
 const submitDescription = (editMapState: IEditMapState, mapId: string, refreshCallback: (mapId: string) => void) => {
-    GQL.createDescription(GQL.editMapToDescription(editMapState), mapId, refreshCallback);
+    if (editMapState.description.length > 0) {
+        GQL.createDescription(GQL.editMapToDescription(editMapState), mapId, refreshCallback);
+    }
 }
 
 const submitContributors = (editMapState: IEditMapState, mapId: string, refreshCallback: (mapId: string) => void) => {
@@ -146,6 +201,7 @@ const submitContributors = (editMapState: IEditMapState, mapId: string, refreshC
 }
 
 const createMapSubmitCallback = (editMapState: IEditMapState, refreshCallback: (mapId: string) => void) => (response: GQL.ICreateMapResponse) => {
+    submitAuthors(editMapState, response.createMap.map.rowId, refreshCallback);
     submitStages(refreshCallback, GQL.editMapToStageMutation(editMapState, response.createMap.map.rowId));
     submitDescription(editMapState, response.createMap.map.rowId, refreshCallback);
     submitContributors(editMapState, response.createMap.map.rowId, refreshCallback);

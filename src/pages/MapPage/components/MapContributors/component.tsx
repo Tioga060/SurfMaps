@@ -12,7 +12,7 @@ interface IContributorMap {
     [id: string]: IMapContributor[];
 }
 
-const groupContributors = (contributors: IMapContributor[]): IContributorMap => {
+export const groupContributors = (contributors: IMapContributor[]): IContributorMap => {
     return contributors.reduce((result: IContributorMap, contributor) => {
         (result[contributor.contribution] = result[contributor.contribution] || []).push(contributor);
         return result;

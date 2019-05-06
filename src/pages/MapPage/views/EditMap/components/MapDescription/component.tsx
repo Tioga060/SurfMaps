@@ -4,6 +4,8 @@ import Typography from '@material-ui/core/Typography';
 import { IState as IRootState } from '../EditMapDrawerContent/component';
 import { classNames as cn } from '../../styles';
 
+export const MAX_CHARS = 1500;
+
 interface IProps {
     value: string;
     updateRootState: (partialState: Partial<IRootState>) => void;
@@ -25,7 +27,6 @@ export const MapDescription: React.StatelessComponent<IProps> = (props) => (
             margin="dense"
             multiline
             fullWidth
-            rows={2}
             rowsMax={10}
             value={props.value}
             onChange={editDescription(props)}
@@ -33,6 +34,9 @@ export const MapDescription: React.StatelessComponent<IProps> = (props) => (
                 classes: {
                     input: cn.textFieldSmall
                 }
+            }}
+            inputProps={{
+                maxLength: MAX_CHARS,
             }}
         />
     </div>

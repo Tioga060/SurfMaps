@@ -1,10 +1,11 @@
 import * as T from 'shared/types';
 import get from 'lodash/get';
-import { IState as IEditMapState, IEditStage, IEditMapFile, IContributor } from './components/EditMapDrawerContent/component';
+import { IState as IEditMapState, IEditStage, IEditMapFile, IContributor } from '../components/EditMapDrawerContent/component';
 import { fetchQuery } from 'react-relay';
 import environment from 'shared/resources/graphql';
 import { validMapNameQuery } from './ValidatorGQL';
-import { STAGE_TYPES, MAP_TYPES } from './helpers';
+import { STAGE_TYPES, MAP_TYPES } from '../helpers';
+import { MAX_CHARS } from '../components/MapDescription';
 
 interface GenericContext {
     rowId?: string;
@@ -22,6 +23,8 @@ export enum FORM_ERRORS {
     STAGE_AUTHORS = 'stageAuthors',
     STAGE_COUNT = 'stageCount',
     STAGE_LINEAR_COUNT = 'stageLinearCount',
+    DESCRIPTION = 'description',
+    CONTRIBUTORS = 'contributors',
 };
 
 interface IMapNameResponse {
@@ -78,6 +81,12 @@ const validateStages = (stages: IEditStage[], mapType: T.IMapType): string[] => 
     return errors;
 };
 
+const validateDescription = (description: string) => description.length < MAX_CHARS;
+
+const validateContributors = (contributors: IContributor[]) => (
+    !contributors.some((contributor) => contributor.contribution.length < 1)
+)
+
 export const validateMapInfo = async (editMapState: IEditMapState): Promise<string[]> => {
     let errors: string[] = [];
     errors = [...errors, ...await validateMapName(editMapState.mapName)]
@@ -97,5 +106,11 @@ export const validateMapInfo = async (editMapState: IEditMapState): Promise<stri
         errors.push(FORM_ERRORS.MAP_TYPE);
     }
     errors = [...errors, ...validateStages(editMapState.stages, editMapState.mapType)];
+    if (!validateDescription(editMapState.description)) {
+        errors.push(FORM_ERRORS.DESCRIPTION);
+    }
+    if (!validateContributors(editMapState.contributors)) {
+        errors.push(FORM_ERRORS.CONTRIBUTORS);
+    }
     return errors;
 };

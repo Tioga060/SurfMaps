@@ -12,7 +12,7 @@ export interface IMap {
     gameModeByGameModeId: IGameMode;
     gameByGameId: IGame;
     mapTypeByMapTypeId: IMapType;
-    tier?: number;
+    tier: number;
     mapAuthorsByMapId: IMapAuthorAsNodes;
     userByUploaderId?: IUser;
     stagesByMapId: IStageAsNodes;
@@ -20,6 +20,7 @@ export interface IMap {
     mapFilesByMapId: IMapFileAsNodes;
     mapDescriptionsByMapId: IMapDescrtionAsNodes;
     mapContributorsByMapId: IMapContributorAsNodes;
+    releasedAt? : string;
 }
 
 export interface IMapAuthorAsNodes {

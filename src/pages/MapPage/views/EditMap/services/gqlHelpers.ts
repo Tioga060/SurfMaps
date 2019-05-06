@@ -1,7 +1,7 @@
 import { commitMutation } from 'react-relay';
 import { IState as IEditMapState } from '../components/EditMapDrawerContent/component';
 import { getStageTypeAndNumber, convertContributors } from '../helpers';
-import { submitMap, submitStage, submitDescription, submitMapDescription, submitContribution } from './SubmitMapGQL';
+import { submitMap, submitAuthor, submitStage, submitDescription, submitMapDescription, submitContribution } from './SubmitMapGQL';
 import environment from 'shared/resources/graphql';
 // map
 // stage
@@ -63,6 +63,44 @@ export const createMap = (mapData: IEditMapMutation, callBack: (response: ICreat
             },
             onError: (error) => {
                 console.log(error)
+            },
+        } 
+    )
+};
+
+export interface IEditAuthorMutation {
+    author: {
+        clientMutationId: string;
+        mapAuthor: {
+            authorId: string;
+            mapId: string;
+        }
+    }
+}
+
+export const editMapToAuthorMutation = (editMapState: IEditMapState, mapId: string): IEditAuthorMutation[] => (
+    editMapState.authors.map((author): IEditAuthorMutation => ({
+        author: {
+            clientMutationId: editMapState.submitter.userId,
+            mapAuthor: {
+                authorId: author.userId,
+                mapId,
+            }
+        }
+    }))
+);
+
+export const createAuthor = (authorData: IEditAuthorMutation, mapId: string, callBack: (mapId: string) => void) => {
+    commitMutation(
+        environment,
+        {
+            mutation: submitAuthor,
+            variables: authorData,
+            onCompleted: (response: ICreateMapResponse, errors) => {
+                callBack(mapId);
+            },
+            onError: (error) => {
+                console.log(error) // TODO
             },
         } 
     )

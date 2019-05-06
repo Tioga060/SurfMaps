@@ -19,7 +19,7 @@ import { Stages } from '../Stages';
 import { classNames as cn } from '../../styles';
 import { IProps as IContainerProps } from './container';
 import { convertEditStateToIMap, submitMap } from '../../helpers';
-import { validateMapInfo, FORM_ERRORS } from '../../validators';
+import { validateMapInfo, FORM_ERRORS } from '../../validators/validators';
 import { MODES } from '../../component';
 
 type IProps = IContainerProps & {
@@ -95,6 +95,7 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
         super(props);
         this.state = {
             ...getDefaultAddState(props),
+            ...props.mapState,
         }
         this.updateSteamUserList = this.updateSteamUserList.bind(this);
         this.updateRootState = this.updateRootState.bind(this);
@@ -107,6 +108,12 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
     public componentDidUpdate (prevProps: IProps, prevState: IState) {
         if (prevState !== this.state) {
             this.setCurrentMap(this.state)
+        }
+        if (JSON.stringify(prevProps.mapState) !== JSON.stringify(this.props.mapState)) { // TODO - better solution for equality checking
+            this.setState(() => ({
+                ...this.props.mapState,
+            }));
+            console.log(this.props.mapState)
         }
     }
 
@@ -206,13 +213,19 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
                             primaryAuthor={get(this.state.authors, '[0]', this.props.context.currentUserSteamInfo)}
                         />
                     </div>
-                    <div className={cn.drawerCard}>
+                    <div className={classnames({
+                        [cn.drawerCard]: true,
+                        [cn.drawerCardError]: this.state.validationErrors.includes(FORM_ERRORS.DESCRIPTION),
+                    })}>
                         <MapDescription value={this.state.description} updateRootState={this.updateRootState} />
                     </div>
-                    <div className={cn.drawerCard}>
+                    <div className={classnames({
+                        [cn.drawerCard]: true,
+                        [cn.drawerCardError]: this.state.validationErrors.includes(FORM_ERRORS.CONTRIBUTORS),
+                    })}>
                         <Contributors updateRootState={this.updateRootState} contributors={this.state.contributors}/>
                     </div>
-                    <Button color="secondary" variant="raised" fullWidth onClick={this.submitMapInfo} disabled={!this.state.canPressAdd}>
+                    <Button color="secondary" variant="contained" fullWidth onClick={this.submitMapInfo} disabled={!this.state.canPressAdd}>
                         Next: Images
                     </Button>
                     </>

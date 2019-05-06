@@ -86,9 +86,9 @@ export class MapPage extends React.Component<IProps, IState> {
             >
                 <div className={cn.mapPageBody}>
                     <MapBodyHeader map={this.props.map}/>
-                    <Grid container spacing={0}>
-                        <Grid direction="column" container sm={5}>
-                            <div className={cn.cardDivider}>
+                    <Grid container spacing={16}>
+                        <Grid item sm={5} xs={12}>
+                            <Grid direction="column" container>
                                 <StageInfo
                                     map={this.props.map}
                                     onStageClick={this.setHeaderImage}
@@ -100,21 +100,23 @@ export class MapPage extends React.Component<IProps, IState> {
                                 {!!this.props.map.mapContributorsByMapId.nodes.length &&
                                     <MapContributors contributors={this.props.map.mapContributorsByMapId.nodes} />
                                 }
-                            </div>
+                            </Grid>
                         </Grid>
-                        <Grid direction="column" container sm={7}>
-                            <div>
-                                <HeaderImage image={this.state.headerImage} />
-                            </div>
-                            <ImageList
-                                setHeaderImage={this.setHeaderImage}
-                                images={getAllImages(this.props.map)}
-                            />
-                            {!!this.props.map.mapFilesByMapId.nodes.length && (
-                                <DownloadCard
-                                    mapFiles={this.props.map.mapFilesByMapId.nodes}
+                        <Grid item sm={7} xs={12}>
+                            <Grid direction="column" container>
+                                <div>
+                                    <HeaderImage image={this.state.headerImage} />
+                                </div>
+                                <ImageList
+                                    setHeaderImage={this.setHeaderImage}
+                                    images={getAllImages(this.props.map)}
                                 />
-                            )}
+                                {!!this.props.map.mapFilesByMapId.nodes.length && (
+                                    <DownloadCard
+                                        mapFiles={this.props.map.mapFilesByMapId.nodes}
+                                    />
+                                )}
+                            </Grid>
                         </Grid>
                     </Grid>
                 </div>
