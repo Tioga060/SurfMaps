@@ -206,6 +206,7 @@ query MapPageGQL_getMapByIdQuery($mapId: UUID!) {
         }
         mapContributorsByMapId {
             nodes {
+                rowId
                 contribution
                 userByUserId {
                     rowId

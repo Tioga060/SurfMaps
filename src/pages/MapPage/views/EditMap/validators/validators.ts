@@ -6,6 +6,7 @@ import environment from 'shared/resources/graphql';
 import { validMapNameQuery } from './ValidatorGQL';
 import { STAGE_TYPES, MAP_TYPES } from '../helpers';
 import { MAX_CHARS } from '../components/MapDescription';
+import { getNextStageNumber } from '../components/Stages';
 
 interface GenericContext {
     rowId?: string;
@@ -21,6 +22,7 @@ export enum FORM_ERRORS {
     GAME = 'game',
     MAP_TYPE = 'mapType',
     STAGE_AUTHORS = 'stageAuthors',
+    STAGE_CONTINUITY = 'stageContinuity',
     STAGE_COUNT = 'stageCount',
     STAGE_LINEAR_COUNT = 'stageLinearCount',
     DESCRIPTION = 'description',
@@ -78,6 +80,22 @@ const validateStages = (stages: IEditStage[], mapType: T.IMapType): string[] => 
             errors.push(FORM_ERRORS.STAGE_LINEAR_COUNT)
         }
     }
+
+    // Stage Continuity
+    const numberOfBonuses = stages.reduce((number, stage) => {
+        return number + (stage.stageType.name === STAGE_TYPES.BONUS ? 1 : 0);
+    }, 0);
+    if (numberOfBonuses > 0 && getNextStageNumber(stages, STAGE_TYPES.BONUS) !== numberOfBonuses + 1) {
+        errors.push(FORM_ERRORS.STAGE_CONTINUITY);
+    } else {
+        const numberOfStages = stages.reduce((number, stage) => {
+            return number + (stage.stageType.name === STAGE_TYPES.STAGE ? 1 : 0);
+        }, 0);
+        if ( numberOfStages > 0 && getNextStageNumber(stages, STAGE_TYPES.STAGE) !== numberOfStages + 1) {
+            errors.push(FORM_ERRORS.STAGE_CONTINUITY);
+        }
+    }
+
     return errors;
 };
 

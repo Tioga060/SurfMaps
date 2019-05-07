@@ -31,13 +31,20 @@ export const createContextPlaceholder = () => ({
     rowId: '',
 })
 
+export interface IEditContribution {
+    user: T.IUserSteamInfo;
+    rowId?: string;
+}
+
 export interface IContributor {
     contribution: string;
-    userList: T.IUserSteamInfo[];
+    contributionList: IEditContribution[];
 }
 
 export interface IEditStage {
+    rowId?: string;
     name: string;
+    number: number;
     authors: T.IUserSteamInfo[];
     stageType: T.IStageType;
     images: File[];
@@ -58,12 +65,14 @@ export interface IState {
     game: T.IGame;
     mapType: T.IMapType;
     description: string;
+    descriptionId: string;
     contributors: IContributor[];
     stages: IEditStage[];
     mainImage: File[];
     mapImages: File[];
     releaseDate: string;
     mapFiles: IEditMapFile[];
+    mapId: string;
 
     canPressAdd: boolean;
     currentTab: number;
@@ -80,12 +89,14 @@ const getDefaultAddState = (props: IProps): IState => ({
     game: createContextPlaceholder(),
     mapType: createContextPlaceholder(),
     description: '',
+    descriptionId: '',
     contributors: [],
     stages: [],
     mainImage: [],
     mapImages: [],
     releaseDate: '',
     mapFiles: [],
+    mapId: '',
     validationErrors: [],
     canPressAdd: props.mode === MODES.ADD,
 })
@@ -203,6 +214,7 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
                         [cn.drawerCard]: true,
                         [cn.drawerCardError]: this.state.validationErrors.includes(FORM_ERRORS.STAGE_LINEAR_COUNT)
                             || this.state.validationErrors.includes(FORM_ERRORS.STAGE_AUTHORS)
+                            || this.state.validationErrors.includes(FORM_ERRORS.STAGE_CONTINUITY)
                             || this.state.validationErrors.includes(FORM_ERRORS.STAGE_COUNT),
                     })}>
                         <Stages

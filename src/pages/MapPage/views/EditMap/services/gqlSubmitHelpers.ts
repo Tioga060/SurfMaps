@@ -1,6 +1,6 @@
 import { commitMutation } from 'react-relay';
 import { IState as IEditMapState } from '../components/EditMapDrawerContent/component';
-import { getStageTypeAndNumber, convertContributors } from '../helpers';
+import { convertContributors } from '../helpers';
 import { submitMap, submitAuthor, submitStage, submitDescription, submitMapDescription, submitContribution } from './SubmitMapGQL';
 import environment from 'shared/resources/graphql';
 // map
@@ -120,13 +120,12 @@ export interface IEditStageMutation {
 }
 
 export const editMapToStageMutation = (editMapState: IEditMapState, mapId: string): IEditStageMutation[] => (
-    editMapState.stages.map((stage, index): IEditStageMutation => {
-        const { stageNumber } = getStageTypeAndNumber(editMapState.stages, stage, index);
+    editMapState.stages.map((stage): IEditStageMutation => {
         const newStage: IEditStageMutation = {
             stage: {
                 clientMutationId: editMapState.submitter.userId,
                 stage: {
-                    number: stageNumber,
+                    number: stage.number,
                     mapId,
                     stageTypeId: stage.stageType.rowId!,
                     authorId: stage.authors[0].userId,

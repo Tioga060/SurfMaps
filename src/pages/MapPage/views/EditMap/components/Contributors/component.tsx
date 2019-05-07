@@ -16,7 +16,7 @@ interface IProps {
 
 const createBlankContributor = (): IContributor => ({
     contribution: '',
-    userList: [],
+    contributionList: [],
 });
 
 export class Contributors extends React.Component<IProps> {
@@ -26,7 +26,7 @@ export class Contributors extends React.Component<IProps> {
                 ...this.props.contributors.slice(0, index),
                 {
                     contribution: e.target.value,
-                    userList: this.props.contributors[index].userList,
+                    contributionList: this.props.contributors[index].contributionList,
                 },
                 ...this.props.contributors.slice(index +1),
             ]
@@ -39,7 +39,7 @@ export class Contributors extends React.Component<IProps> {
                 ...this.props.contributors.slice(0, index),
                 {
                     contribution: this.props.contributors[index].contribution,
-                    userList,
+                    contributionList: userList.map((user) => ({user})),
                 },
                 ...this.props.contributors.slice(index +1),
             ]
@@ -90,7 +90,7 @@ export class Contributors extends React.Component<IProps> {
                         />
                     </div>
                     <AddUser
-                        steamUserList={contributor.userList}
+                        steamUserList={contributor.contributionList.map((cont) => cont.user)}
                         updateSteamUserList={this.updateContributionList(index)}
                         descriptor={contributor.contribution}
                     />

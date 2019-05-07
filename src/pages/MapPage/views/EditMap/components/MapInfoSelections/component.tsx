@@ -41,6 +41,7 @@ const updateState = (
                 if (!alreadyHasLinearSection(stages)) {
                     stages.push({
                         name: '',
+                        number: -1,
                         authors: [props.primaryAuthor],
                         stageType: props.context.allStageTypes.nodes.find((stageType) => stageType.name === STAGE_TYPES.LINEAR) || {name: STAGE_TYPES.LINEAR},
                         images: [],

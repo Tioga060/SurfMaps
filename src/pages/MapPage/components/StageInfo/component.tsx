@@ -20,7 +20,7 @@ export const sortStages = (stageList: IStage[]) => {
         ...stages.sort((a: IStage, b: IStage) => a.number - b.number),
         ...bonuses.sort((a: IStage, b: IStage) => a.number - b.number)
     ] as IStage[];
-}
+};
 
 export class StageInfo extends React.Component<IProps> {
     public onStageClick = (stage: IStage) => () => {

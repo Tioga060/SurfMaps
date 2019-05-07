@@ -36,6 +36,7 @@ export class EditMap extends React.Component<IProps, IState> {
 
     public componentDidUpdate (prevProps: IProps) {
         if (prevProps.map !== this.props.map) {
+            console.log(this.props.map)
             this.setState(() => ({
                 mode: MODES.EDIT,
             }));

@@ -89,6 +89,7 @@ export interface IMapContributorAsNodes {
 }
 
 export interface IMapContributor {
+    rowId?: string;
     contribution: string;
     userByUserId: IUser;
 }

@@ -9,9 +9,8 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import Divider from '@material-ui/core/Divider';
-import { getStageTypeAndNumber } from '../../helpers';
 import { AddUser } from 'shared/components/AddUser';
-import { IUserSteamInfo, IMapType } from 'shared/types';
+import { IUserSteamInfo, IMapType, IStageType } from 'shared/types';
 import { IState as IRootState } from '../EditMapDrawerContent/component';
 import { IEditStage } from '../EditMapDrawerContent/component';
 import { IEditMapContext } from '../EditMapDrawerContent/container';
@@ -40,12 +39,42 @@ const getDefaultStageType = (props: IProps) => {
     return props.context.allStageTypes.nodes.find((stageType) => stageType.name === defaultName);
 };
 
-const createBlankStage = (props: IProps): IEditStage => ({
-    name: '',
-    authors: [props.primaryAuthor],
-    stageType: getDefaultStageType(props) || {name: 'Select'},
-    images: [],
-});
+export const getNextStageNumber = (stages: IEditStage[], stageTypeName: string) => {
+    const stageNumbers = stages.filter((stage) => (
+        stage.stageType.name === stageTypeName
+    )).map((stage) => (
+        stage.number
+    ));
+    for (let i = 1; i < stageNumbers.length + 1; i += 1) {
+        if (!stageNumbers.includes(i)) {
+            return i;
+        }
+    }
+    return stageNumbers.length + 1;
+}
+
+const createBlankStage = (props: IProps): IEditStage => {
+    const stageType = getDefaultStageType(props) || {name: 'Select'};
+    return {
+        name: '',
+        number: getNextStageNumber(props.stages, stageType.name),
+        authors: [props.primaryAuthor],
+        stageType,
+        images: [],
+    }
+};
+
+const sortStages = (stageList: IEditStage[]): IEditStage[] => {
+    const [stages, bonuses] = stageList.reduce((result: IEditStage[][], stage) => {
+        result[stage.stageType.name === STAGE_TYPES.BONUS ? 1 : 0].push(stage);
+        return result;
+    }, [[], []]);
+
+    return [
+        ...stages.sort((a: IEditStage, b: IEditStage) => a.number - b.number),
+        ...bonuses.sort((a: IEditStage, b: IEditStage) => a.number - b.number)
+    ] as IEditStage[];
+};
 
 const getAllowedStageTypes = (props: IProps) => {
     const disallowedTypes = props.mapType.name === MAP_TYPES.STAGED
@@ -90,24 +119,25 @@ export class Stages extends React.Component<IProps> {
         ));
         if (stageType) {
             this.props.updateRootState({
-                stages: [
+                stages: sortStages([
                     ...this.props.stages.slice(0, index),
                     {
                         ...this.props.stages[index],
-                        stageType
+                        stageType,
+                        number: getNextStageNumber(this.props.stages, stageType.name),
                     },
                     ...this.props.stages.slice(index +1),
-                ]
+                ])
             });
         }
     }
 
     public addStage = () => {
         this.props.updateRootState({
-            stages: [
+            stages: sortStages([
                 ...this.props.stages,
                 createBlankStage(this.props),
-            ]
+            ])
         })
     }
 
@@ -127,16 +157,15 @@ export class Stages extends React.Component<IProps> {
                     Stages
                 </Typography>
                 {this.props.stages.map((stage, index) => {
-                    const {stageTypeName, stageNumber} = getStageTypeAndNumber(this.props.stages, stage, index);
                     return (
-                    <div key={index} className="mt-3">
+                    <div key={`${stage.stageType.name}${stage.number}`} className="mt-3">
                         <Divider/>
                         <div>
                             <div className="d-flex">
                                 <Typography variant="subtitle1" align="center" className={cn.stageNameWidth}>
-                                    {`${stageTypeName} ${stageNumber > 0 ? stageNumber : ''}`}
+                                    {`${stage.stageType.name} ${stage.number > 0 ? stage.number : ''}`}
                                 </Typography>
-                                {stageTypeName !== STAGE_TYPES.LINEAR && (
+                                {stage.stageType.name !== STAGE_TYPES.LINEAR && (
                                     <div className="pt-2">
                                         <IconButton
                                             onClick={this.deleteStage(index)}
@@ -154,7 +183,7 @@ export class Stages extends React.Component<IProps> {
                                     onChange={this.updateStageName(index)}
                                 />
                             </div>
-                            {stageTypeName !== STAGE_TYPES.LINEAR && (
+                            {stage.stageType.name !== STAGE_TYPES.LINEAR && (
                                 <FormControl fullWidth className="mb-1">
                                     <InputLabel htmlFor="stage-input">
                                         Stage Type

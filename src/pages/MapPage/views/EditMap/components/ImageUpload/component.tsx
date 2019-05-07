@@ -4,7 +4,6 @@ import Divider from '@material-ui/core/Divider';
 import { ImageDropzone } from 'shared/components/ImageDropzone';
 import { IState as IRootState, IEditStage } from '../EditMapDrawerContent/component';
 import { classNames as cn } from '../../styles';
-import { getStageTypeAndNumber } from '../../helpers';
 
 interface IProps {
     updateRootState: (partialState: Partial<IRootState>) => void;
@@ -44,12 +43,11 @@ export const ImageUpload: React.StatelessComponent<IProps> = (props) => (
         </div>
         {!!props.stages.length && <div className={cn.drawerCard}>
             {props.stages.map((stage, index) => {
-                const {stageTypeName, stageNumber} = getStageTypeAndNumber(props.stages, stage, index);
                 return (
                     <div key={index}>
                         {index !== 0 && <Divider/>}
                         <Typography variant="h6" align="center">
-                            {`${stageTypeName} ${stageNumber}`}
+                            {`${stage.stageType.name} ${stage.number > 0 ? stage.number : ''}`}
                         </Typography>
                         <ImageDropzone files={stage.images} setFiles={updateStageImages(props, index)} singleImage/>
                     </div>

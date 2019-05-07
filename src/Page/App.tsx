@@ -11,7 +11,7 @@ class App extends Component {
     return (
       <MuiThemeProvider theme={theme}>
         <TopBar/>
-        <EditMap />
+        <EditMap mapId="0b9be36f-7fe1-4974-ae5f-19f775bec982"/> 
       </MuiThemeProvider>
     );
   }
