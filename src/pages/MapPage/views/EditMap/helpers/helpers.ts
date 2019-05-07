@@ -2,6 +2,8 @@ import * as T from 'shared/types';
 import get from 'lodash/get';
 import { IState as IEditMapState, IEditStage, IEditMapFile, IContributor } from '../components/EditMapDrawerContent/component';
 import * as GQLSubmit from '../services/gqlSubmitHelpers';
+import * as GQLUpdate from '../services/gqlUpdateHelpers';
+import * as UpdateHelpers from './updates';
 import { groupContributors } from '../../../components/MapContributors';
 import { sortStages } from '../../../components/StageInfo';
 
@@ -202,6 +204,71 @@ const createMapSubmitCallback = (editMapState: IEditMapState, refreshCallback: (
 }
 
 export const submitMap = (editMapState: IEditMapState, refreshCallback: (mapId: string) => void) => {
-    // TODO - add debounced callback to each one of these functions so it updates the page
     GQLSubmit.createMap(GQLSubmit.editMapToMapMutation(editMapState), createMapSubmitCallback(editMapState, refreshCallback));
 };
+
+// Modifiy map
+
+export const modifyMap = (originalMap: IEditMapState, modifiedMap: IEditMapState, refreshCallback: (mapId: string) => void) => {
+    const callBack = () => { refreshCallback(modifiedMap.mapId) };
+    if (UpdateHelpers.shouldUpdateMap(originalMap, modifiedMap)) {
+        GQLUpdate.modifyMap(GQLUpdate.editMapToUpdateMapMutation(modifiedMap), callBack);
+    }
+
+    const {createdAuthors, deletedAuthors} = UpdateHelpers.getCreatedAndDeletedAuthors(originalMap, modifiedMap);
+    createdAuthors.forEach((author) => {
+        GQLSubmit.createAuthor(
+            GQLSubmit.authorToAuthorMutation(author, modifiedMap.mapId, modifiedMap.submitter.userId),
+            modifiedMap.mapId,
+            refreshCallback,
+        );
+    });
+    deletedAuthors.forEach((author) => {
+        GQLUpdate.deleteAuthor(
+            GQLUpdate.authorToDeleteAuthorMutation(author, modifiedMap.mapId, modifiedMap.submitter.userId),
+            callBack,
+        );
+    });
+
+    const {createdStages, modifiedStages, deletedStages} = UpdateHelpers.getCreatedModifiedAndDeletedStages(originalMap, modifiedMap);
+    createdStages.forEach((stage) => {
+        GQLSubmit.createStage(
+            GQLSubmit.stageToStageMutation(stage, modifiedMap.mapId, modifiedMap.submitter.userId),
+            callBack
+        )
+    });
+    modifiedStages.forEach((stage) => {
+        GQLUpdate.modifyStage(
+            GQLUpdate.stageToUpdateStageMutation(stage, modifiedMap.submitter.userId),
+            callBack
+        )
+    });
+    deletedStages.forEach((stage) => {
+        GQLUpdate.deleteStage(
+            GQLUpdate.stageToDeleteStageMutation(stage, modifiedMap.submitter.userId),
+            callBack
+        )
+    });
+
+    if (UpdateHelpers.shouldUpdateDescription(originalMap, modifiedMap)) {
+        if (modifiedMap.descriptionId.length < 36) {
+            GQLSubmit.createDescription(GQLSubmit.editMapToDescription(modifiedMap), modifiedMap.mapId, refreshCallback);
+        } else {
+            GQLUpdate.updateDescription(
+                GQLUpdate.descriptionToDescriptionMutation(modifiedMap.description, modifiedMap.descriptionId, modifiedMap.submitter.userId),
+                callBack
+            )
+        }
+    }
+
+    const { createdContributions, deletedContributions } = UpdateHelpers.getCreatedAndDeletedContributions(originalMap, modifiedMap);
+    createdContributions.forEach((contribution) => {
+        GQLSubmit.createMapContribution(
+            GQLSubmit.contributionToCreateMutation(contribution.userId, contribution.contribution, modifiedMap.mapId, modifiedMap.submitter.userId),
+            refreshCallback
+        );
+    });
+    deletedContributions.forEach((contribution) => {
+        GQLUpdate.deleteContribution(GQLUpdate.contributionToDeleteMutation(contribution.rowId!, modifiedMap.submitter.userId), callBack)
+    })
+}

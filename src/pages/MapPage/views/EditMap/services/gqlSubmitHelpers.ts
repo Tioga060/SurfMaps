@@ -1,8 +1,9 @@
 import { commitMutation } from 'react-relay';
-import { IState as IEditMapState } from '../components/EditMapDrawerContent/component';
+import { IState as IEditMapState, IEditStage, IEditContribution } from '../components/EditMapDrawerContent/component';
 import { convertContributors } from '../helpers';
 import { submitMap, submitAuthor, submitStage, submitDescription, submitMapDescription, submitContribution } from './SubmitMapGQL';
 import environment from 'shared/resources/graphql';
+import { IUserSteamInfo } from 'shared/types';
 // map
 // stage
 // description
@@ -90,6 +91,16 @@ export const editMapToAuthorMutation = (editMapState: IEditMapState, mapId: stri
     }))
 );
 
+export const authorToAuthorMutation = (author: IUserSteamInfo, mapId: string, uploaderId: string): IEditAuthorMutation => ({
+    author: {
+        clientMutationId: uploaderId,
+        mapAuthor: {
+            authorId: author.userId,
+            mapId,
+        }
+    }
+});
+
 export const createAuthor = (authorData: IEditAuthorMutation, mapId: string, callBack: (mapId: string) => void) => {
     commitMutation(
         environment,
@@ -140,6 +151,25 @@ export const editMapToStageMutation = (editMapState: IEditMapState, mapId: strin
     })
 );
 
+export const stageToStageMutation = (stage: IEditStage, mapId: string, uploaderId: string): IEditStageMutation => {
+    const newStage: IEditStageMutation = {
+        stage: {
+            clientMutationId: uploaderId,
+            stage: {
+                number: stage.number,
+                mapId,
+                stageTypeId: stage.stageType.rowId!,
+                authorId: stage.authors[0].userId,
+            }
+        }
+    }
+    if (stage.name.length > 0) {
+        newStage.stage.stage.name = stage.name;
+    }
+
+    return newStage;
+};
+
 export interface ICreateStageResponse {
     createStage: {
         stage: {
@@ -165,6 +195,22 @@ export const createStage = (stageData: IEditStageMutation, callBack: (response: 
                         }
                     }
                 });
+            },
+        } 
+    )
+};
+
+export const createStageNoLoop = (stageData: IEditStageMutation, callBack: () => void) => {
+    commitMutation(
+        environment,
+        {
+            mutation: submitStage,
+            variables: stageData,
+            onCompleted: (response: ICreateStageResponse, errors) => {
+                callBack();
+            },
+            onError: (error) => {
+                console.log(error);
             },
         } 
     )
@@ -274,6 +320,17 @@ export const editMapToContributors = (editMapState: IEditMapState, mapId: string
         }
     }))
 };
+
+export const contributionToCreateMutation = (userId: string, text: string, mapId: string, uploaderId: string): IEditMapContributionMutation => ({
+    contribution: {
+        clientMutationId: uploaderId,
+        mapContributor: {
+            mapId,
+            userId,
+            contribution: text,
+        }
+    }
+});
 
 export const createMapContribution = (contribution: IEditMapContributionMutation, callBack: (mapId: string) => void) => {
     commitMutation(

@@ -7,6 +7,7 @@ import { validMapNameQuery } from './ValidatorGQL';
 import { STAGE_TYPES, MAP_TYPES } from '../helpers';
 import { MAX_CHARS } from '../components/MapDescription';
 import { getNextStageNumber } from '../components/Stages';
+import { MODES } from '../component';
 
 interface GenericContext {
     rowId?: string;
@@ -35,14 +36,16 @@ interface IMapNameResponse {
     }
 }
 
-const validateMapName = async (name: string) => {
+const validateMapName = async (name: string, mode: MODES) => {
     const errors: string[] = [];
     const regexp = /^[a-zA-Z0-9-_]+$/;
     if (!name || name.length < 6 || name.search(regexp) === -1) {
         errors.push(FORM_ERRORS.MAP_NAME);
     }
-    if ((await fetchQuery(environment, validMapNameQuery, {condition: {name}}).then((data: IMapNameResponse) => (data))).allMaps.nodes.length > 0) {
-        errors.push(FORM_ERRORS.MAP_NAME_EXISTS);
+    if (mode === MODES.ADD) {
+        if ((await fetchQuery(environment, validMapNameQuery, {condition: {name}}).then((data: IMapNameResponse) => (data))).allMaps.nodes.length > 0) {
+            errors.push(FORM_ERRORS.MAP_NAME_EXISTS);
+        }
     }
     return errors;
 };
@@ -105,9 +108,10 @@ const validateContributors = (contributors: IContributor[]) => (
     !contributors.some((contributor) => contributor.contribution.length < 1)
 )
 
-export const validateMapInfo = async (editMapState: IEditMapState): Promise<string[]> => {
+export const validateMapInfo = async (editMapState: IEditMapState, mode: MODES): Promise<string[]> => {
     let errors: string[] = [];
-    errors = [...errors, ...await validateMapName(editMapState.mapName)]
+
+    errors = [...errors, ...await validateMapName(editMapState.mapName, mode)]
     if (!validateAuthors(editMapState.authors)) { 
         errors.push(FORM_ERRORS.AUTHORS);
     }

@@ -47,13 +47,29 @@ export const getCreatedModifiedAndDeletedStages = (originalMap: IEditMapState, m
     return {createdStages, modifiedStages, deletedStages};
 };
 
+interface ITemporaryContribution {
+    rowId?: string;
+    userId: string;
+    contribution: string;
+}
+
 export const getCreatedAndDeletedContributions = (originalMap: IEditMapState, modifiedMap: IEditMapState) => {
-    const originalContributions = originalMap.contributors.reduce((conts: IEditContribution[], contribution) => {
-        conts = [...conts, ...contribution.contributionList]
+    const originalContributions = originalMap.contributors.reduce((conts: ITemporaryContribution[], contribution) => {
+        const tempConts: ITemporaryContribution[] = contribution.contributionList.map((cont) => ({
+            rowId: cont.rowId,
+            userId: cont.user.userId,
+            contribution: contribution.contribution,
+        }))
+        conts = [...conts, ...tempConts]
         return conts;
     }, []);
-    const modifiedContributions = modifiedMap.contributors.reduce((conts: IEditContribution[], contribution) => {
-        conts = [...conts, ...contribution.contributionList]
+    const modifiedContributions = modifiedMap.contributors.reduce((conts: ITemporaryContribution[], contribution) => {
+        const tempConts: ITemporaryContribution[] = contribution.contributionList.map((cont) => ({
+            rowId: cont.rowId,
+            userId: cont.user.userId,
+            contribution: contribution.contribution,
+        }))
+        conts = [...conts, ...tempConts]
         return conts;
     }, []);
     const modifiedContributionIds = modifiedContributions.filter((cont) => !!cont.rowId).map((cont) => cont.rowId || '');

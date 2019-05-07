@@ -71,6 +71,7 @@ export class EditMap extends React.Component<IProps, IState> {
                             mode={this.state.mode}
                             refreshMap={this.props.refreshMap}
                             mapState={this.props.map ? convertIMapToEditState(this.props.map) : undefined}
+                            originalMap={this.props.map}
                         />
                     </div>
                 </Drawer>

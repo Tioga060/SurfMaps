@@ -18,7 +18,7 @@ import { FileUpload } from '../FileUpload';
 import { Stages } from '../Stages';
 import { classNames as cn } from '../../styles';
 import { IProps as IContainerProps } from './container';
-import { convertEditStateToIMap, submitMap } from '../../helpers';
+import { convertEditStateToIMap, submitMap, modifyMap, convertIMapToEditState } from '../../helpers';
 import { validateMapInfo, FORM_ERRORS } from '../../validators/validators';
 import { MODES } from '../../component';
 
@@ -148,7 +148,7 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
     }
 
     public submitMapInfo = async () => {
-        const validationErrors = await validateMapInfo(this.state);
+        const validationErrors = await validateMapInfo(this.state, this.props.mode);
         this.setState(() => ({
             validationErrors,
         }));
@@ -158,6 +158,8 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
             }));
             if (this.props.mode === MODES.ADD) {
                 submitMap(this.state, this.props.refreshMap);
+            } else if (this.props.mode === MODES.EDIT) {
+                modifyMap(convertIMapToEditState(this.props.originalMap!) as IState, this.state, this.props.refreshMap);
             }
         }
     }

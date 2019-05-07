@@ -18,6 +18,7 @@ export interface IProps {
     mode: number;
     refreshMap: (mapId: string) => void;
     mapState?: Partial<IEditMapState>;
+    originalMap?: T.IMap;
 }
 
 export class EditMapDrawerContainer extends React.Component<IProps> {
@@ -41,6 +42,7 @@ export class EditMapDrawerContainer extends React.Component<IProps> {
                             mode={this.props.mode}
                             refreshMap={this.props.refreshMap}
                             mapState={this.props.mapState}
+                            originalMap={this.props.originalMap}
                         />
                         : <div>Error rendering sidebar</div>
                 }}
