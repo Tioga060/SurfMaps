@@ -10,7 +10,6 @@ interface IProps {
 
 export class MapBodyHeader extends React.Component<IProps> {
     public render() {
-        console.log(this.props.map.mapAuthorsByMapId.nodes)
         return (
             <div className={cn.mapCard}>
                 <Typography variant="h2">
@@ -20,7 +19,7 @@ export class MapBodyHeader extends React.Component<IProps> {
                     {this.props.map.mapAuthorsByMapId.nodes.map((author) => (
                         <UserBadge
                             key={author.userByAuthorId.rowId}
-                            steamUser={author.userByAuthorId.userSteamInfosByUserId.nodes[0]}
+                            steamUser={author.userByAuthorId.userSteamInfoByUserId}
                             showName
                         />
                     ))}

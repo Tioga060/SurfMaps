@@ -53,3 +53,19 @@ mutation UpdateMapGQL_deleteContributionMutation($contribution: DeleteMapContrib
   }
 }
 `
+
+export const deleteMapImage = graphql`
+mutation UpdateMapGQL_deleteMapImageMutation($image: DeleteMapImageByMapIdAndImageIdInput!) {
+  deleteMapImageByMapIdAndImageId(input: $image) {
+    deletedMapImageId
+  }
+}
+`
+
+export const deleteStageImage = graphql`
+mutation UpdateMapGQL_deleteStageImageMutation($image: DeleteStageImageByStageIdAndImageIdInput!) {
+  deleteStageImageByStageIdAndImageId(input: $image) {
+    deletedStageImageId
+  }
+}
+`

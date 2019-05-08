@@ -4,17 +4,15 @@ const mockUser: IUser = {
     rowId: '321',
     role: 'superuser',
     createdAt: '2018-01-08 04:05:06 -8:00',
-    userSteamInfosByUserId: {
-        nodes: [{
-            name: 'Tioga060',
-            profileUrl: 'https://steamcommunity.com/id/tioga060/',
-            timeCreated: 1204086519,
-            avatar: 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/16/16490a67804954212fa98fb5b7f822d6b0e52acb.jpg',
-            avatarMedium: 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/16/16490a67804954212fa98fb5b7f822d6b0e52acb_medium.jpg',
-            avatarFull: 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/16/16490a67804954212fa98fb5b7f822d6b0e52acb_full.jpg',
-            numericSteamId: '76561197996909346',
-            userId: '321',
-        }]
+    userSteamInfoByUserId: {
+        name: 'Tioga060',
+        profileUrl: 'https://steamcommunity.com/id/tioga060/',
+        timeCreated: 1204086519,
+        avatar: 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/16/16490a67804954212fa98fb5b7f822d6b0e52acb.jpg',
+        avatarMedium: 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/16/16490a67804954212fa98fb5b7f822d6b0e52acb_medium.jpg',
+        avatarFull: 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/16/16490a67804954212fa98fb5b7f822d6b0e52acb_full.jpg',
+        numericSteamId: '76561197996909346',
+        userId: '321',
     }
 };
 

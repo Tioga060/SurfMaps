@@ -29,7 +29,7 @@ export class MapContributors extends React.Component<IProps> {
                     <div className={cn.contributorBadgeContainer} key={contributorType}>
                         <Typography variant="h6">{contributorType}</Typography>
                         {contributorMap[contributorType].map((contributor, index) => (
-                            <UserBadge key={index} showName steamUser={contributor.userByUserId.userSteamInfosByUserId.nodes[0]} />
+                            <UserBadge key={index} showName steamUser={contributor.userByUserId.userSteamInfoByUserId} />
                         ))}
                     </div>
                 ))}

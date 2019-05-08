@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import { MapTitle } from '../MapTitle';
 import { TierPicker } from '../TierPicker';
 import { AddUser } from 'shared/components/AddUser';
+import { IEditImage } from 'shared/components/ImageDropzone';
 import * as T from 'shared/types';
 import { IEditMapContext } from './container';
 import { MapInfoSelections } from '../MapInfoSelections';
@@ -47,7 +48,7 @@ export interface IEditStage {
     number: number;
     authors: T.IUserSteamInfo[];
     stageType: T.IStageType;
-    images: File[];
+    images: IEditImage[];
 }
 
 export interface IEditMapFile {
@@ -68,8 +69,8 @@ export interface IState {
     descriptionId: string;
     contributors: IContributor[];
     stages: IEditStage[];
-    mainImage: File[];
-    mapImages: File[];
+    mainImage: IEditImage[];
+    mapImages: IEditImage[];
     releaseDate: string;
     mapFiles: IEditMapFile[];
     mapId: string;

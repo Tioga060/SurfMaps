@@ -223,3 +223,67 @@ export const deleteContribution = (contribution: IDeleteContributionMutation, ca
         } 
     )
 };
+
+interface IDeleteMapImageMutation {
+    image: {
+        clientMutationId: string;
+        imageId: string;
+        mapId: string;
+    }
+}
+
+export const mapImageToDeleteMapImageMutation = (imageId: string, mapId: string, uploaderId: string): IDeleteMapImageMutation => ({
+    image: {
+        clientMutationId: uploaderId,
+        imageId,
+        mapId,
+    }
+});
+
+export const deleteMapImage = (image: IDeleteMapImageMutation, callBack: () => void) => {
+    commitMutation(
+        environment,
+        {
+            mutation: GQLUpdate.deleteMapImage,
+            variables: image,
+            onCompleted: (response) => {
+                callBack();
+            },
+            onError: (error) => {
+                console.log(error)
+            },
+        } 
+    )
+};
+
+interface IDeleteStageImageMutation {
+    image: {
+        clientMutationId: string;
+        imageId: string;
+        stageId: string;
+    }
+}
+
+export const stageImageToDeleteStageImageMutation = (imageId: string, stageId: string, uploaderId: string): IDeleteStageImageMutation => ({
+    image: {
+        clientMutationId: uploaderId,
+        imageId,
+        stageId,
+    }
+});
+
+export const deleteStageImage = (image: IDeleteStageImageMutation, callBack: () => void) => {
+    commitMutation(
+        environment,
+        {
+            mutation: GQLUpdate.deleteStageImage,
+            variables: image,
+            onCompleted: (response) => {
+                callBack();
+            },
+            onError: (error) => {
+                console.log(error)
+            },
+        } 
+    )
+};

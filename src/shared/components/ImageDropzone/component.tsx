@@ -3,23 +3,34 @@ import classnames from 'classnames';
 import { useDropzone } from 'react-dropzone';
 import { classNames as cn } from './styles';
 
+export interface IEditImage {
+    storeLocation?: string;
+    file?: File;
+    rowId?: string;
+}
+
 interface IProps {
-    files: File[];
-    setFiles: (files: File[]) => void;
+    files: IEditImage[];
+    setFiles: (files: IEditImage[]) => void;
     singleImage?: boolean;
 }
 
-
 export const ImageDropzone: React.StatelessComponent<IProps> = ({singleImage, files, setFiles}) => {
-    const previews = files.map(file => URL.createObjectURL(file));
+    const previews = files.map((file) => (
+        file.file
+            ? { url: URL.createObjectURL(file.file), isFile: true }
+            : { url: file.storeLocation || '', isFile: false }
+    ));
     const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
         accept: 'image/jpeg, image/png',
         onDrop: acceptedFiles => {
             setFiles(singleImage
-                ? [acceptedFiles[0]]
+                ? [{file: acceptedFiles[0]}]
                 : [
                     ...files,
-                    ...acceptedFiles
+                    ...acceptedFiles.map((file) => ({
+                        file,
+                    }))
                 ]);
         }
     });
@@ -30,10 +41,10 @@ export const ImageDropzone: React.StatelessComponent<IProps> = ({singleImage, fi
         ])
     };
     const thumbs = previews.map((file, index) => (
-        <div className={cn.thumbnail} key={file} onClick={removeImage(index)}>
+        <div className={cn.thumbnail} key={index} onClick={removeImage(index)}>
             <div className={cn.thumbInner}>
                 <img
-                    src={file}
+                    src={file.url}
                     className={cn.img}
                 />
             </div>
@@ -42,7 +53,11 @@ export const ImageDropzone: React.StatelessComponent<IProps> = ({singleImage, fi
 
     useEffect(() => () => {
         // Make sure to revoke the data uris to avoid memory leaks
-        previews.forEach(file => URL.revokeObjectURL(file));
+        previews.forEach(file => {
+            if (file.isFile) {
+                URL.revokeObjectURL(file.url);
+            }
+        });
     }, [files]);
 
     return (

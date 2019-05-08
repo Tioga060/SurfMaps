@@ -1,26 +1,26 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import { ImageDropzone } from 'shared/components/ImageDropzone';
+import { ImageDropzone, IEditImage } from 'shared/components/ImageDropzone';
 import { IState as IRootState, IEditStage } from '../EditMapDrawerContent/component';
 import { classNames as cn } from '../../styles';
 
 interface IProps {
     updateRootState: (partialState: Partial<IRootState>) => void;
     stages: IEditStage[];
-    mapImages: File[];
-    mainImage: File[];
+    mapImages: IEditImage[];
+    mainImage: IEditImage[];
 }
 
-const updateMapImages = (props: IProps) => (mapImages: File[]) => {
+const updateMapImages = (props: IProps) => (mapImages: IEditImage[]) => {
     props.updateRootState({mapImages})
 }
 
-const updateMainImage = (props: IProps) => (mainImage: File[]) => {
+const updateMainImage = (props: IProps) => (mainImage: IEditImage[]) => {
     props.updateRootState({mainImage})
 }
 
-const updateStageImages = (props: IProps, stageNumber: number) => (images: File[]) => {
+const updateStageImages = (props: IProps, stageNumber: number) => (images: IEditImage[]) => {
     props.updateRootState({
         stages: [
             ...props.stages.slice(0, stageNumber),

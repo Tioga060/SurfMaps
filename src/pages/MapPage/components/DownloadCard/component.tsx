@@ -112,7 +112,7 @@ export class DownloadCard extends React.Component<IProps, IState> {
                     <div className="d-flex flex-column">
                         <Typography variant="body1">Uploader</Typography>
                         <UserBadge
-                            steamUser={this.state.activeMap.fileByFileId.userByUploaderId.userSteamInfosByUserId.nodes[0]}
+                            steamUser={this.state.activeMap.fileByFileId.userByUploaderId.userSteamInfoByUserId}
                             showName
                         />
                     </div>

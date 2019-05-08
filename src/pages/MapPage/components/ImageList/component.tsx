@@ -94,7 +94,7 @@ export class ImageList extends React.Component<IProps, IState> {
                     {this.props.images!.map((image, index) => (
                         <div
                             key={`${image.storeLocation}${index}`}
-                            className={"m-1"}
+                            className={`m-1 ${cn.scrollImage}`}
                             onClick={this.setHeaderImage(image)}
                         >
                             <Card>

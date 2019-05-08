@@ -39,6 +39,7 @@ export class EditMap extends React.Component<IProps, IState> {
             console.log(this.props.map)
             this.setState(() => ({
                 mode: MODES.EDIT,
+                currentMap: this.props.map!,
             }));
         }
     }

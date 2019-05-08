@@ -1,4 +1,6 @@
 import { IState as IEditMapState, IEditStage, IEditContribution } from '../components/EditMapDrawerContent/component';
+import { IImageOption } from 'shared/resources/uploadImage';
+import { IEditImage } from 'shared/components/ImageDropzone';
 
 export const shouldUpdateMap = (originalMap: IEditMapState, modifiedMap: IEditMapState): boolean => (
     originalMap.mapName !== modifiedMap.mapName
@@ -72,8 +74,59 @@ export const getCreatedAndDeletedContributions = (originalMap: IEditMapState, mo
         conts = [...conts, ...tempConts]
         return conts;
     }, []);
-    const modifiedContributionIds = modifiedContributions.filter((cont) => !!cont.rowId).map((cont) => cont.rowId || '');
+    const modifiedContributionIds = modifiedContributions.filter((cont) => !!cont.rowId).map((cont) => cont.rowId!);
     const createdContributions = modifiedContributions.filter((cont) => !cont.rowId);
     const deletedContributions = originalContributions.filter((cont) => !modifiedContributionIds.includes(cont.rowId!));
     return { createdContributions, deletedContributions };
+};
+
+type IEditImageWithType = IEditImage & {
+    stageId?: string;
+}
+
+const getAllImages = (map: IEditMapState): IEditImageWithType[] => {
+    const stageImages = map.stages.map((stage) => stage.images).flat().map((stage) => ({stageId: stage.rowId!, ...stage}));
+    return [...map.mainImage, ...map.mapImages, ...stageImages];
+};
+
+interface IOptionWithFile {
+    options: IImageOption;
+    file: File;
+}
+
+// TODO - you can only upload images on existing stages
+const getImagesWithTypeInfo = (map: IEditMapState) => {
+    const stageImages: IOptionWithFile[] = map.stages.filter((stage) => !!stage.rowId && stage.images.length).map((stage) => ({
+        file: stage.images[0].file!,
+        options: {stageId: stage.rowId},
+    }));
+    const headerImages: IOptionWithFile[] = map.mainImage.filter((image) => !!image.file).map((image) => ({
+        file: image.file!,
+        options: {
+            mapId: map.mapId,
+            order: -1,
+            primaryImage: true,
+            backgroundImage: true,
+        }
+    }));
+    const mapImages: IOptionWithFile[] = map.mapImages.filter((image) => !!image.file).map((image, index) => ({
+        file: image.file!!,
+        options: {
+            mapId: map.mapId,
+            order: index,
+        }
+    }));
+    return [...stageImages, ...headerImages, ...mapImages];
+}
+
+export const getCreatedAndDeletedImages = (originalMap: IEditMapState, modifiedMap: IEditMapState) => {
+    const allOriginalImages = getAllImages(originalMap);
+    const originalRemainingImages = allOriginalImages.filter((image) => !!image.storeLocation);
+    const allModifiedImages = getAllImages(modifiedMap);
+    const modifiedRemainingImageLocations = allModifiedImages.filter((image) => !!image.storeLocation).map((image) => image.storeLocation!);
+
+    const deletedImages = originalRemainingImages.filter((image) => !modifiedRemainingImageLocations.includes(image.storeLocation!));
+    const createdImages = getImagesWithTypeInfo(modifiedMap);
+
+    return { createdImages, deletedImages };
 };

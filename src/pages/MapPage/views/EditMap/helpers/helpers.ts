@@ -6,6 +6,8 @@ import * as GQLUpdate from '../services/gqlUpdateHelpers';
 import * as UpdateHelpers from './updates';
 import { groupContributors } from '../../../components/MapContributors';
 import { sortStages } from '../../../components/StageInfo';
+import { IEditImage } from 'shared/components/ImageDropzone';
+import { uploadImage } from 'shared/resources/uploadImage';
 
 export enum MAP_TYPES {
     STAGED = 'Staged',
@@ -32,9 +34,7 @@ const userSteamInfoToIUser = (user: T.IUserSteamInfo) => ({
     rowId: user.userId,
     role: '',
     createdAt: '',
-    userSteamInfosByUserId: {
-        nodes: [user],
-    },
+    userSteamInfoByUserId: user,
 });
 
 const convertAuthors = (authors: T.IUserSteamInfo[]): T.IMapAuthorAsNodes => ({
@@ -57,14 +57,28 @@ export const convertContributors = (contributors: IContributor[]): T.IMapContrib
     return {nodes: contributorList};
 };
 
+const storeLocationToIImage = (storeLocation: string, userByUploaderId: T.IUser): T.IImage => ({
+    storeLocation,
+    userByUploaderId,
+    uploadedAt: '',
+});
+
+const stageToIStageImage = (stage: IEditStage, currentUser: T.IUserSteamInfo): T.IStageImage[] => {
+    const storeLocation = get(stage, 'images[0].storeLocation');
+    if (storeLocation) {
+        return [{imageByImageId: storeLocationToIImage(storeLocation, userSteamInfoToIUser(currentUser))}];
+    }
+    return [];
+}
+
 const convertStages = (stages: IEditStage[], currentUser: T.IUserSteamInfo): T.IStageAsNodes => ({
     nodes: stages.map((stage) => ({
-            rowId: stage.rowId,
-            name: stage.name,
-            number: stage.number,
-            stageTypeByStageTypeId: stage.stageType,
-            userByAuthorId: userSteamInfoToIUser(get(stage, 'authors[0]', currentUser)),
-            stageImagesByStageId: {nodes: []}, //TODO
+        rowId: stage.rowId,
+        name: stage.name,
+        number: stage.number,
+        stageTypeByStageTypeId: stage.stageType,
+        userByAuthorId: userSteamInfoToIUser(get(stage, 'authors[0]', currentUser)),
+        stageImagesByStageId: {nodes: stageToIStageImage(stage, currentUser)},
     }))
 });
 
@@ -98,6 +112,27 @@ const editDescriptionToIMapDescription = (description: string, descriptionId: st
     }]
 });
 
+const convertMapImagesToIMapImages = (editMapState: IEditMapState): T.IMapImage[] => {
+    const uploader = userSteamInfoToIUser(editMapState.submitter);
+
+    const storeImages = editMapState.mapImages.filter((image) => !!image.storeLocation).map((image, index): T.IMapImage => ({
+        order: index,
+        imageByImageId: storeLocationToIImage(image.storeLocation!, uploader)
+    }));
+
+    const headerImageLocation = get(editMapState.mainImage, '[0].storeLocation');
+    if (headerImageLocation) {
+        const headerImage: T.IMapImage = {
+            order: -1,
+            imageByImageId: storeLocationToIImage(headerImageLocation, uploader),
+            primaryImage: true,
+            backgroundImage: true,
+        }
+        return [headerImage, ...storeImages];
+    }
+    return storeImages;
+}
+
 export const convertEditStateToIMap = (editMapState: IEditMapState, currentUser: T.IUserSteamInfo): T.IMap => ({
     name: editMapState.mapName,
     createdAt: editMapState.releaseDate,
@@ -107,7 +142,7 @@ export const convertEditStateToIMap = (editMapState: IEditMapState, currentUser:
     tier: editMapState.tier,
     mapAuthorsByMapId: convertAuthors(editMapState.authors),
     stagesByMapId: convertStages(editMapState.stages, currentUser),
-    mapImagesByMapId: {nodes: []}, //TODO
+    mapImagesByMapId: {nodes: convertMapImagesToIMapImages(editMapState)}, //TODO
     mapFilesByMapId: editMapFilesToIMapFile(editMapState.mapFiles, currentUser),
     mapDescriptionsByMapId: editDescriptionToIMapDescription(editMapState.description, editMapState.descriptionId, currentUser),
     mapContributorsByMapId: convertContributors(editMapState.contributors),
@@ -122,7 +157,7 @@ const convertIMapContributorsToEditMap = (contributors: T.IMapContributor[]): IC
         contributions.push({
             contribution,
             contributionList: groups[contribution].map((cont) => ({
-                user: cont.userByUserId.userSteamInfosByUserId.nodes[0],
+                user: cont.userByUserId.userSteamInfoByUserId,
                 rowId: cont.rowId,
             })),
         });
@@ -130,22 +165,37 @@ const convertIMapContributorsToEditMap = (contributors: T.IMapContributor[]): IC
     return contributions;
 }
 
+interface IGenericImage {
+    imageByImageId: {
+        storeLocation: string;
+        rowId?: string;
+    }
+    primaryImage?: boolean;
+}
+
+const convertIMapImagesToEditImage = (images: IGenericImage[], headerOnly: boolean = false): IEditImage[] => {
+    return images.filter(image => image.primaryImage === undefined || image.primaryImage === headerOnly).map((image) => ({
+        storeLocation: image.imageByImageId.storeLocation,
+        rowId: image.imageByImageId.rowId,
+    }));
+};
+
 const convertIMapStagesToEditMap = (stages: T.IStage[]): IEditStage[] => {
     const sortedStages = sortStages(stages);
     return sortedStages.map((stage): IEditStage => ({
         rowId: stage.rowId,
-        name: stage.name || '',
+        name: stage.name!,
         number: stage.number,
-        authors: [stage.userByAuthorId.userSteamInfosByUserId.nodes[0]],
+        authors: [stage.userByAuthorId.userSteamInfoByUserId],
         stageType: stage.stageTypeByStageTypeId,
-        images: [], // TODO
+        images: convertIMapImagesToEditImage(stage.stageImagesByStageId.nodes),
     }));
 }
 
 export const convertIMapToEditState = (map: T.IMap): Partial<IEditMapState> => ({
     mapId: map.rowId,
     mapName: map.name,
-    authors: map.mapAuthorsByMapId.nodes.map((author) => author.userByAuthorId.userSteamInfosByUserId.nodes[0]),
+    authors: map.mapAuthorsByMapId.nodes.map((author) => author.userByAuthorId.userSteamInfoByUserId),
     tier: map.tier,
     gameMode: map.gameModeByGameModeId,
     game: map.gameByGameId,
@@ -154,8 +204,8 @@ export const convertIMapToEditState = (map: T.IMap): Partial<IEditMapState> => (
     descriptionId: get(map.mapDescriptionsByMapId.nodes, '[0].textMarkdownByTextMarkdownId.rowId', ''),
     contributors: convertIMapContributorsToEditMap(map.mapContributorsByMapId.nodes),
     stages: convertIMapStagesToEditMap(map.stagesByMapId.nodes),
-    mainImage: [], // TODO
-    mapImages: [], // TODO
+    mainImage: convertIMapImagesToEditImage(map.mapImagesByMapId.nodes, true),
+    mapImages: convertIMapImagesToEditImage(map.mapImagesByMapId.nodes),
     releaseDate: map.releasedAt || map.createdAt,
     mapFiles: [], // TODO
 });
@@ -270,5 +320,21 @@ export const modifyMap = (originalMap: IEditMapState, modifiedMap: IEditMapState
     });
     deletedContributions.forEach((contribution) => {
         GQLUpdate.deleteContribution(GQLUpdate.contributionToDeleteMutation(contribution.rowId!, modifiedMap.submitter.userId), callBack)
+    })
+
+    const { createdImages, deletedImages } = UpdateHelpers.getCreatedAndDeletedImages(originalMap, modifiedMap);
+    createdImages.forEach((image) => {
+        uploadImage(image.file, image.options, (response) => {
+            callBack();
+        })
+    });
+    deletedImages.forEach((image) => {
+        if (image.stageId) {
+            GQLUpdate.deleteStageImage(GQLUpdate.stageImageToDeleteStageImageMutation(image.rowId!, image.stageId!, modifiedMap.submitter.userId),
+            callBack);
+        } else {
+            GQLUpdate.deleteMapImage(GQLUpdate.mapImageToDeleteMapImageMutation(image.rowId!, modifiedMap.mapId, modifiedMap.submitter.userId),
+            callBack);
+        }
     })
 }

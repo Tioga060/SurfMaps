@@ -64,7 +64,7 @@ export class StageInfo extends React.Component<IProps> {
                                 {`${stage.stageTypeByStageTypeId.name} ${stageType !== STAGE_TYPES.LINEAR ? stage.number : ''}`}
                             </Typography>
                             <Typography variant="body1" align="right" className="ml-auto mr-3">
-                                {stage.userByAuthorId.userSteamInfosByUserId.nodes[0].name}
+                                {stage.userByAuthorId.userSteamInfoByUserId.name}
                             </Typography>
                         </div>
                     </div>

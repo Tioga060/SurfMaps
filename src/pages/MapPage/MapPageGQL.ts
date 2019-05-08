@@ -29,8 +29,7 @@ query MapPageGQL_getMapByIdQuery($mapId: UUID!) {
                     rowId
                     role
                     createdAt
-                    userSteamInfosByUserId {
-                        nodes {
+                    userSteamInfoByUserId {
                         userId
                         name
                         profileUrl
@@ -39,7 +38,6 @@ query MapPageGQL_getMapByIdQuery($mapId: UUID!) {
                         avatarMedium
                         avatarFull
                         numericSteamId
-                        }
                     }
                 }
             }
@@ -48,41 +46,38 @@ query MapPageGQL_getMapByIdQuery($mapId: UUID!) {
             rowId
             role
             createdAt
-            userSteamInfosByUserId {
-                nodes {
-                    userId
-                    name
-                    profileUrl
-                    timeCreated
-                    avatar
-                    avatarMedium
-                    avatarFull
-                    numericSteamId
-                }
+            userSteamInfoByUserId {
+                userId
+                name
+                profileUrl
+                timeCreated
+                avatar
+                avatarMedium
+                avatarFull
+                numericSteamId
             }
         }
-        mapImagesByMapId {
+        mapImagesByMapId(orderBy: ORDER_ASC) {
             nodes {
                 primaryImage
                 backgroundImage
                 order
                 imageByImageId {
+                    rowId
                     storeLocation
                     userByUploaderId {
                         rowId
                         role
                         createdAt
-                        userSteamInfosByUserId {
-                            nodes {
-                                userId
-                                name
-                                profileUrl
-                                timeCreated
-                                avatar
-                                avatarMedium
-                                avatarFull
-                                numericSteamId
-                            }
+                        userSteamInfoByUserId {
+                            userId
+                            name
+                            profileUrl
+                            timeCreated
+                            avatar
+                            avatarMedium
+                            avatarFull
+                            numericSteamId
                         }
                     }
                 }   
@@ -101,38 +96,35 @@ query MapPageGQL_getMapByIdQuery($mapId: UUID!) {
                     rowId
                     role
                     createdAt
-                    userSteamInfosByUserId {
-                        nodes {
-                            userId
-                            name
-                            profileUrl
-                            timeCreated
-                            avatar
-                            avatarMedium
-                            avatarFull
-                            numericSteamId
-                        }
+                    userSteamInfoByUserId {
+                        userId
+                        name
+                        profileUrl
+                        timeCreated
+                        avatar
+                        avatarMedium
+                        avatarFull
+                        numericSteamId
                     }
                 }
                 stageImagesByStageId {
                     nodes {
                         imageByImageId {
+                            rowId
                             storeLocation
                             userByUploaderId {
                                 rowId
                                 role
                                 createdAt
-                                userSteamInfosByUserId {
-                                    nodes {
-                                        userId
-                                        name
-                                        profileUrl
-                                        timeCreated
-                                        avatar
-                                        avatarMedium
-                                        avatarFull
-                                        numericSteamId
-                                    }
+                                userSteamInfoByUserId {
+                                    userId
+                                    name
+                                    profileUrl
+                                    timeCreated
+                                    avatar
+                                    avatarMedium
+                                    avatarFull
+                                    numericSteamId
                                 }
                             }
                         }
@@ -160,17 +152,15 @@ query MapPageGQL_getMapByIdQuery($mapId: UUID!) {
                         rowId
                         role
                         createdAt
-                        userSteamInfosByUserId {
-                            nodes {
-                                userId
-                                name
-                                profileUrl
-                                timeCreated
-                                avatar
-                                avatarMedium
-                                avatarFull
-                                numericSteamId
-                            }
+                        userSteamInfoByUserId {
+                            userId
+                            name
+                            profileUrl
+                            timeCreated
+                            avatar
+                            avatarMedium
+                            avatarFull
+                            numericSteamId
                         }
                     }
                 }
@@ -188,17 +178,15 @@ query MapPageGQL_getMapByIdQuery($mapId: UUID!) {
                         rowId
                         role
                         createdAt
-                        userSteamInfosByUserId {
-                            nodes {
-                                userId
-                                name
-                                profileUrl
-                                timeCreated
-                                avatar
-                                avatarMedium
-                                avatarFull
-                                numericSteamId
-                            }
+                        userSteamInfoByUserId {
+                            userId
+                            name
+                            profileUrl
+                            timeCreated
+                            avatar
+                            avatarMedium
+                            avatarFull
+                            numericSteamId
                         }
                     }
                 }
@@ -212,17 +200,15 @@ query MapPageGQL_getMapByIdQuery($mapId: UUID!) {
                     rowId
                     role
                     createdAt
-                    userSteamInfosByUserId {
-                        nodes {
-                            userId
-                            name
-                            profileUrl
-                            timeCreated
-                            avatar
-                            avatarMedium
-                            avatarFull
-                            numericSteamId
-                        }
+                    userSteamInfoByUserId {
+                        userId
+                        name
+                        profileUrl
+                        timeCreated
+                        avatar
+                        avatarMedium
+                        avatarFull
+                        numericSteamId
                     }
                 }
             }

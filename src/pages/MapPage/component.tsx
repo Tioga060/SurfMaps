@@ -47,7 +47,7 @@ const getAllImages = (map: IMap): IImage[] => {
             images.push(image.imageByImageId)
         })
     });
-    return images.concat(images);
+    return images;
 }
 
 export class MapPage extends React.Component<IProps, IState> {
@@ -64,6 +64,14 @@ export class MapPage extends React.Component<IProps, IState> {
         this.setState({
             headerImage: image,
         })
+    }
+
+    public componentDidUpdate(prevProps: IProps) {
+        if (prevProps.map !== this.props.map) {
+            this.setState(() => ({
+                headerImage: getDefaultImage(this.props.map),
+            }));
+        }
     }
 
     public render() {
