@@ -1,7 +1,7 @@
 import { commitMutation } from 'react-relay';
 import { IState as IEditMapState, IEditStage, IEditContribution } from '../components/EditMapDrawerContent/component';
 import * as GQLUpdate from './UpdateMapGQL';
-import environment from 'shared/resources/graphql';
+import { batchEnvironment } from 'shared/resources/graphql';
 import { IUserSteamInfo } from 'shared/types';
 // map
 // stage
@@ -40,7 +40,7 @@ export const editMapToUpdateMapMutation = (editMapState: IEditMapState): IUpdate
 
 export const modifyMap = (mapData: IUpdateMapMutation, callBack: (mapId: string) => void) => {
     commitMutation(
-        environment,
+        batchEnvironment,
         {
             mutation: GQLUpdate.updateMap,
             variables: mapData,
@@ -72,7 +72,7 @@ export const authorToDeleteAuthorMutation = (author: IUserSteamInfo, mapId: stri
 
 export const deleteAuthor = (author: IDeleteAuthorMutation, callBack: () => void) => {
     commitMutation(
-        environment,
+        batchEnvironment,
         {
             mutation: GQLUpdate.deleteAuthor,
             variables: author,
@@ -114,7 +114,7 @@ export const stageToUpdateStageMutation = (stage: IEditStage, uploaderId: string
 
 export const modifyStage = (stage: IUpdateStageMutation, callBack: () => void) => {
     commitMutation(
-        environment,
+        batchEnvironment,
         {
             mutation: GQLUpdate.updateStage,
             variables: stage,
@@ -144,7 +144,7 @@ export const stageToDeleteStageMutation = (stage: IEditStage, uploaderId: string
 
 export const deleteStage = (stage: IDeleteStageMutation, callBack: () => void) => {
     commitMutation(
-        environment,
+        batchEnvironment,
         {
             mutation: GQLUpdate.deleteStage,
             variables: stage,
@@ -180,7 +180,7 @@ export const descriptionToDescriptionMutation = (description: string, rowId: str
 
 export const updateDescription = (description: IUpdateDescriptionMutation, callBack: () => void) => {
     commitMutation(
-        environment,
+        batchEnvironment,
         {
             mutation: GQLUpdate.updateDescription,
             variables: description,
@@ -210,7 +210,7 @@ export const contributionToDeleteMutation = (rowId: string, uploaderId: string):
 
 export const deleteContribution = (contribution: IDeleteContributionMutation, callBack: () => void) => {
     commitMutation(
-        environment,
+        batchEnvironment,
         {
             mutation: GQLUpdate.deleteContribution,
             variables: contribution,
@@ -242,7 +242,7 @@ export const mapImageToDeleteMapImageMutation = (imageId: string, mapId: string,
 
 export const deleteMapImage = (image: IDeleteMapImageMutation, callBack: () => void) => {
     commitMutation(
-        environment,
+        batchEnvironment,
         {
             mutation: GQLUpdate.deleteMapImage,
             variables: image,
@@ -274,7 +274,7 @@ export const stageImageToDeleteStageImageMutation = (imageId: string, stageId: s
 
 export const deleteStageImage = (image: IDeleteStageImageMutation, callBack: () => void) => {
     commitMutation(
-        environment,
+        batchEnvironment,
         {
             mutation: GQLUpdate.deleteStageImage,
             variables: image,

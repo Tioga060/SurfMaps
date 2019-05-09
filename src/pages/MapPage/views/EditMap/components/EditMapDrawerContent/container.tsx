@@ -1,7 +1,7 @@
 import React from 'react';
 import { QueryRenderer } from 'react-relay';
 import {query} from './EditMapGQL';
-import environment from 'shared/resources/graphql';
+import { environment } from 'shared/resources/graphql';
 import { EditMapDrawerContent, IState as IEditMapState } from './component';
 import * as T from 'shared/types';
 

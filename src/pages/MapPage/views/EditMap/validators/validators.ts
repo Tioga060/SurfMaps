@@ -2,7 +2,7 @@ import * as T from 'shared/types';
 import get from 'lodash/get';
 import { IState as IEditMapState, IEditStage, IEditMapFile, IContributor } from '../components/EditMapDrawerContent/component';
 import { fetchQuery } from 'react-relay';
-import environment from 'shared/resources/graphql';
+import {environment} from 'shared/resources/graphql';
 import { validMapNameQuery } from './ValidatorGQL';
 import { STAGE_TYPES, MAP_TYPES } from '../helpers';
 import { MAX_CHARS } from '../components/MapDescription';

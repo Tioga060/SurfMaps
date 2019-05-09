@@ -2,7 +2,7 @@ import React from 'react';
 import get from 'lodash/get';
 import { QueryRenderer } from 'react-relay';
 import { query } from './UserListGQL';
-import environment from 'shared/resources/graphql';
+import {environment} from 'shared/resources/graphql';
 import { UserList, IProps } from './component';
 
 

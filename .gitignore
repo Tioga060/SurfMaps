@@ -25,3 +25,5 @@ yarn-error.log*
 
 *.code-workspace
 schema.graphql
+
+.env

@@ -20,16 +20,14 @@ function fetchQuery(
             query: operation.text,
             variables,
         }),
-        credentials: 'include',
+        credentials: 'include', // TODO - same origin
         //mode: 'no-cors', // TODO - remove me
     }).then(response => {
         return response.json();
     });
 }
 
-const environment = new Environment({
+export const environment = new Environment({
     network: Network.create(fetchQuery),
     store: new Store(new RecordSource()),
 });
-
-export default environment;

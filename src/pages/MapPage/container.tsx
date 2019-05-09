@@ -1,7 +1,7 @@
 import React from 'react';
 import { QueryRenderer } from 'react-relay';
 import {query} from './MapPageGQL';
-import environment from 'shared/resources/graphql';
+import { environment } from 'shared/resources/graphql';
 import { MapPage } from './component';
 
 interface IProps {

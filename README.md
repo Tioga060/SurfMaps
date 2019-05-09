@@ -62,3 +62,15 @@ Look for babel-plugin-macros typescript support or just native react-relay in cr
 article on how to do roles well in postgres: https://stackoverflow.com/questions/760210/how-do-you-create-a-read-only-user-in-postgresql
 
 https://material.io/design/components/text-fields.html#usage steal this earch bar
+
+in index.d.ts for react-relay-network-modern
+
+export interface BatchMiddlewareOpts {
+  batchUrl?: string | Promise<string> | ((req: RelayRequest) => string | Promise<string>);
+  batchTimeout?: number;
+  maxBatchSize?: string;
+  allowMutations?: boolean;
+  method?: string;
+}
+
+export function batchMiddleware(opts?: BatchMiddlewareOpts): Middleware;

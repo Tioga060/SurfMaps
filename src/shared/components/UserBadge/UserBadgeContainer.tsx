@@ -1,6 +1,6 @@
 import React from 'react';
 import { createFragmentContainer, QueryRenderer, graphql } from 'react-relay';
-import environment from 'shared/resources/graphql';
+import {environment} from 'shared/resources/graphql';
 import { UserBadge } from './component';
 import { IUserSteamInfo } from 'shared/types';
 

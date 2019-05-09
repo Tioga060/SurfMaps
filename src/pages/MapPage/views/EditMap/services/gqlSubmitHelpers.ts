@@ -2,7 +2,7 @@ import { commitMutation } from 'react-relay';
 import { IState as IEditMapState, IEditStage, IEditContribution } from '../components/EditMapDrawerContent/component';
 import { convertContributors } from '../helpers';
 import { submitMap, submitAuthor, submitStage, submitDescription, submitMapDescription, submitContribution } from './SubmitMapGQL';
-import environment from 'shared/resources/graphql';
+import { environment, batchEnvironment } from 'shared/resources/graphql';
 import { IUserSteamInfo } from 'shared/types';
 // map
 // stage
@@ -202,7 +202,7 @@ export const createStage = (stageData: IEditStageMutation, callBack: (response: 
 
 export const createStageNoLoop = (stageData: IEditStageMutation, callBack: () => void) => {
     commitMutation(
-        environment,
+        batchEnvironment,
         {
             mutation: submitStage,
             variables: stageData,
@@ -334,7 +334,7 @@ export const contributionToCreateMutation = (userId: string, text: string, mapId
 
 export const createMapContribution = (contribution: IEditMapContributionMutation, callBack: (mapId: string) => void) => {
     commitMutation(
-        environment,
+        batchEnvironment,
         {
             mutation: submitContribution,
             variables: contribution,

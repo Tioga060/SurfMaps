@@ -24,10 +24,7 @@ export const shouldUpdateDescription = (originalMap: IEditMapState, modifiedMap:
 );
 
 const shouldUpdateStage = (originalStage: IEditStage, modifiedStage: IEditStage): boolean => (
-    originalStage.name !== modifiedStage.name
-        || originalStage.number !== modifiedStage.number
-        || originalStage.stageType !== modifiedStage.stageType
-        || originalStage.authors !== modifiedStage.authors
+    JSON.stringify(originalStage) !== JSON.stringify(modifiedStage)
 );
 
 export const getCreatedModifiedAndDeletedStages = (originalMap: IEditMapState, modifiedMap: IEditMapState) => {
@@ -96,7 +93,7 @@ interface IOptionWithFile {
 
 // TODO - you can only upload images on existing stages
 const getImagesWithTypeInfo = (map: IEditMapState) => {
-    const stageImages: IOptionWithFile[] = map.stages.filter((stage) => !!stage.rowId && stage.images.length).map((stage) => ({
+    const stageImages: IOptionWithFile[] = map.stages.filter((stage) => !!stage.rowId && stage.images.length && !!stage.images[0].file).map((stage) => ({
         file: stage.images[0].file!,
         options: {stageId: stage.rowId},
     }));
@@ -127,6 +124,5 @@ export const getCreatedAndDeletedImages = (originalMap: IEditMapState, modifiedM
 
     const deletedImages = originalRemainingImages.filter((image) => !modifiedRemainingImageLocations.includes(image.storeLocation!));
     const createdImages = getImagesWithTypeInfo(modifiedMap);
-
     return { createdImages, deletedImages };
 };
