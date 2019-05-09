@@ -1,4 +1,4 @@
-import { IState as IEditMapState, IEditStage, IEditContribution } from '../components/EditMapDrawerContent/component';
+import { IState as IEditMapState, IEditStage, IEditContribution, IContributor } from '../components/EditMapDrawerContent/component';
 import { IImageOption } from 'shared/resources/uploadImage';
 import { IEditImage } from 'shared/components/ImageDropzone';
 
@@ -52,8 +52,8 @@ interface ITemporaryContribution {
     contribution: string;
 }
 
-export const getCreatedAndDeletedContributions = (originalMap: IEditMapState, modifiedMap: IEditMapState) => {
-    const originalContributions = originalMap.contributors.reduce((conts: ITemporaryContribution[], contribution) => {
+export const flattenContributionsToTemp = (contributors: IContributor[]) => {
+    return contributors.reduce((conts: ITemporaryContribution[], contribution) => {
         const tempConts: ITemporaryContribution[] = contribution.contributionList.map((cont) => ({
             rowId: cont.rowId,
             userId: cont.user.userId,
@@ -62,19 +62,25 @@ export const getCreatedAndDeletedContributions = (originalMap: IEditMapState, mo
         conts = [...conts, ...tempConts]
         return conts;
     }, []);
-    const modifiedContributions = modifiedMap.contributors.reduce((conts: ITemporaryContribution[], contribution) => {
-        const tempConts: ITemporaryContribution[] = contribution.contributionList.map((cont) => ({
-            rowId: cont.rowId,
-            userId: cont.user.userId,
-            contribution: contribution.contribution,
-        }))
-        conts = [...conts, ...tempConts]
-        return conts;
-    }, []);
-    const modifiedContributionIds = modifiedContributions.filter((cont) => !!cont.rowId).map((cont) => cont.rowId!);
-    const createdContributions = modifiedContributions.filter((cont) => !cont.rowId);
+}
+
+export const getCreatedModifiedAndDeletedContributions = (originalMap: IEditMapState, modifiedMap: IEditMapState) => {
+    const originalContributions = flattenContributionsToTemp(originalMap.contributors);
+    const modifiedMapContributions = flattenContributionsToTemp(modifiedMap.contributors);
+
+    const remainingModifiedContributions = modifiedMapContributions.filter((cont) => !!cont.rowId);
+    const modifiedContributionIds = remainingModifiedContributions.map((cont) => cont.rowId!);
+
+    const createdContributions = modifiedMapContributions.filter((cont) => !cont.rowId);
+    const modifiedContributions = remainingModifiedContributions.filter((cont) => {
+        const originalContribution = originalContributions.find((origCont) => !!origCont.rowId && origCont.rowId === cont.rowId);
+        if (!originalContribution) {
+            return false;
+        }
+        return cont.contribution !== originalContribution.contribution;
+    })
     const deletedContributions = originalContributions.filter((cont) => !modifiedContributionIds.includes(cont.rowId!));
-    return { createdContributions, deletedContributions };
+    return { createdContributions, modifiedContributions, deletedContributions };
 };
 
 type IEditImageWithType = IEditImage & {

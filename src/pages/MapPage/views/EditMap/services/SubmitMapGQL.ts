@@ -1,6 +1,31 @@
 import { graphql } from 'react-relay';
+import { simpleMutationCreator, callbackMutationCreator, batchEnvironment, environment } from 'shared/resources/graphql';
 
-export const submitMap = graphql`
+// ============================================ Create Map ============================================
+export interface ICreateMapMutation {
+  map: {
+      clientMutationId: string;
+      map: {
+          name: string;
+          gameModeId: string;
+          gameId: string;
+          mapTypeId: string;
+          uploaderId: string;
+          tier: number;
+          releasedAt?: string;
+      }
+  }
+}
+
+export interface ICreateMapResponse {
+  createMap: {
+      map: {
+          rowId: string;
+      }
+  }
+}
+
+const createMapQuery = graphql`
 mutation SubmitMapGQL_mapMutation($map: CreateMapInput!) {
   createMap(input: $map) {
     map {
@@ -9,8 +34,19 @@ mutation SubmitMapGQL_mapMutation($map: CreateMapInput!) {
   }
 }
 `
+export const createMap = callbackMutationCreator<ICreateMapMutation, ICreateMapResponse>(environment, createMapQuery);
 
-export const submitAuthor = graphql`
+// ============================================ Create Author ============================================
+interface ICreateAuthorMutation {
+  author: {
+      clientMutationId: string;
+      mapAuthor: {
+          authorId: string;
+          mapId: string;
+      }
+  }
+}
+const createAuthorQuery = graphql`
 mutation SubmitMapGQL_authorMutation($author: CreateMapAuthorInput!) {
   createMapAuthor(input: $author) {
     mapAuthor {
@@ -20,8 +56,22 @@ mutation SubmitMapGQL_authorMutation($author: CreateMapAuthorInput!) {
   }
 }
 `
+export const createAuthor = simpleMutationCreator<ICreateAuthorMutation>(batchEnvironment, createAuthorQuery);
 
-export const submitStage = graphql`
+// ============================================ Create Stage ============================================
+export interface ICreateStageMutation {
+  stage: {
+      clientMutationId: string;
+      stage: {
+          name?: string;
+          number: number;
+          mapId: string;
+          stageTypeId: string;
+          authorId: string;
+      }
+  }
+}
+const createStageQuery = graphql`
 mutation SubmitMapGQL_stageMutation($stage: CreateStageInput!) {
   createStage(input: $stage) {
     stage {
@@ -30,8 +80,28 @@ mutation SubmitMapGQL_stageMutation($stage: CreateStageInput!) {
   }
 }
 `
+export const createStage = simpleMutationCreator<ICreateStageMutation>(batchEnvironment, createStageQuery);
 
-export const submitDescription = graphql`
+
+// ============================================ Create Description ============================================
+interface ICreateDescriptionMutation {
+  description: {
+      clientMutationId: string;
+      textMarkdown: {
+          text: string;
+          authorId: string;
+      }
+  }
+}
+export interface ICreateDescriptionResponse {
+  createTextMarkdown: {
+      textMarkdown: {
+          rowId: string;
+      }
+  }
+}
+
+const createDescriptionQuery = graphql`
 mutation SubmitMapGQL_descriptionMutation($description: CreateTextMarkdownInput!) {
   createTextMarkdown(input: $description) {
     textMarkdown {
@@ -40,8 +110,20 @@ mutation SubmitMapGQL_descriptionMutation($description: CreateTextMarkdownInput!
   }
 }
 `
+export const createDescription = callbackMutationCreator<ICreateDescriptionMutation, ICreateDescriptionResponse>(environment, createDescriptionQuery);
 
-export const submitMapDescription = graphql`
+// ============================================ Create MapDescription ============================================
+interface ICreateMapDescriptionMutation {
+  description: {
+      clientMutationId: string;
+      mapDescription: {
+          mapId: string;
+          textMarkdownId: string;
+          order: number;
+      }
+  }
+}
+const createMapDescriptionQuery = graphql`
 mutation SubmitMapGQL_mapDescriptionMutation($description: CreateMapDescriptionInput!) {
   createMapDescription(input: $description) {
     mapDescription {
@@ -51,8 +133,20 @@ mutation SubmitMapGQL_mapDescriptionMutation($description: CreateMapDescriptionI
   }
 }
 `
+export const createMapDescription = simpleMutationCreator<ICreateMapDescriptionMutation>(batchEnvironment, createMapDescriptionQuery);
 
-export const submitContribution = graphql`
+// ============================================ Create Contribution ============================================
+interface ICreateMapContributionMutation {
+  contribution: {
+      clientMutationId: string;
+      mapContributor: {
+          mapId: string;
+          userId: string;
+          contribution: string;
+      }
+  }
+}
+const createContributionQuery = graphql`
 mutation SubmitMapGQL_mapContributionMutation($contribution: CreateMapContributorInput!) {
   createMapContributor(input: $contribution) {
     mapContributor {
@@ -63,3 +157,4 @@ mutation SubmitMapGQL_mapContributionMutation($contribution: CreateMapContributo
   }
 }
 `
+export const createContribution = simpleMutationCreator<ICreateMapContributionMutation>(batchEnvironment, createContributionQuery); 
