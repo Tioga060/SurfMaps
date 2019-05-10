@@ -4,13 +4,9 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Delete from '@material-ui/icons/Delete';
 import Typography from '@material-ui/core/Typography';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import InputLabel from '@material-ui/core/InputLabel';
 import Divider from '@material-ui/core/Divider';
 import { AddUser } from 'shared/components/AddUser';
-import { IUserSteamInfo, IMapType } from 'shared/types';
+import { IUserSteamInfo, IMapType, IStageType } from 'shared/types';
 import { IDisplayMap, IDisplayStage } from '../../../../types';
 import { IEditMapContext } from '../EditMapDrawerContent/container';
 import { classNames as cn } from '../../styles';
@@ -24,20 +20,6 @@ interface IProps {
     mapType: IMapType;
     primaryAuthor: IUserSteamInfo;
 }
-
-const getDefaultStageType = (props: IProps) => {
-    let defaultName: string = STAGE_TYPES.BONUS;
-    if (props.mapType.name === MAP_TYPES.STAGED) {
-        defaultName = STAGE_TYPES.STAGE;
-    } else if (props.mapType.name === MAP_TYPES.LINEAR) {
-        if (alreadyHasLinearSection(props.stages)) {
-            defaultName = STAGE_TYPES.BONUS;
-        } else {
-            defaultName = STAGE_TYPES.LINEAR
-        }
-    }
-    return props.context.allStageTypes.nodes.find((stageType) => stageType.name === defaultName);
-};
 
 export const getNextStageNumber = (stages: IDisplayStage[], stageTypeName: string) => {
     const stageNumbers = stages.filter((stage) => (
@@ -53,16 +35,13 @@ export const getNextStageNumber = (stages: IDisplayStage[], stageTypeName: strin
     return stageNumbers.length + 1;
 }
 
-const createBlankStage = (props: IProps): IDisplayStage => {
-    const stageType = getDefaultStageType(props) || {name: 'Select'};
-    return {
-        name: '',
-        number: getNextStageNumber(props.stages, stageType.name),
-        authors: [props.primaryAuthor],
-        stageType,
-        images: [],
-    }
-};
+const createBlankStage = (props: IProps, stageType: IStageType): IDisplayStage => ({
+    name: '',
+    number: getNextStageNumber(props.stages, stageType.name),
+    authors: [props.primaryAuthor],
+    stageType,
+    images: [],
+});
 
 const getAllowedStageTypes = (props: IProps) => {
     const disallowedTypes = props.mapType.name === MAP_TYPES.STAGED
@@ -120,13 +99,18 @@ export class Stages extends React.Component<IProps> {
         }
     }
 
-    public addStage = () => {
-        this.props.updateMap({
-            stages: sortStages([
-                ...this.props.stages,
-                createBlankStage(this.props),
-            ])
-        })
+    public addStage = (name: string) => () => {
+        const stageType = this.props.context.allStageTypes.nodes.find((type) => (
+            type.name === name
+        ));
+        if (stageType) {
+            this.props.updateMap({
+                stages: sortStages([
+                    ...this.props.stages,
+                    createBlankStage(this.props, stageType),
+                ])
+            });
+        }
     }
 
     public deleteStage = (index: number) => () => {
@@ -171,26 +155,6 @@ export class Stages extends React.Component<IProps> {
                                     onChange={this.updateStageName(index)}
                                 />
                             </div>
-                            {stage.stageType.name !== STAGE_TYPES.LINEAR && (
-                                <FormControl fullWidth className="mb-1">
-                                    <InputLabel htmlFor="stage-input">
-                                        Stage Type
-                                    </InputLabel>
-                                    <Select
-                                        value={stage.stageType.name}
-                                        onChange={this.updateStageType(index)}
-                                        inputProps={{
-                                            id: 'stage-input',
-                                            className: 'text-left',
-                                        }}
-                                        fullWidth
-                                    >
-                                        {getAllowedStageTypes(this.props).map((item) => (
-                                            <MenuItem key={item.rowId} value={item.name}>{item.name}</MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            )}
                         </div>
                         <AddUser
                             steamUserList={stage.authors}
@@ -200,9 +164,11 @@ export class Stages extends React.Component<IProps> {
                         />
                     </div>)
                 })}
-                <Button variant="outlined" color="primary" onClick={this.addStage} className="my-2">
-                    Add Stage
-                </Button>
+                {getAllowedStageTypes(this.props).map((item) => (
+                    <Button key={item.name} variant="outlined" color="primary" onClick={this.addStage(item.name)} className="my-2">
+                        {`Add ${item.name}`}
+                    </Button>
+                ))}
             </div>
         )
     }
