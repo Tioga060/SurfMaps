@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { AddUser } from 'shared/components/AddUser';
 import { IUserSteamInfo } from 'shared/types';
 import { IDisplayContributionGroup, IDisplayMap } from '../../../../types';
+import { classNames as cn } from '../../styles';
 
 interface IProps {
     updateMap: (partialState: Partial<IDisplayMap>) => void;
@@ -66,9 +67,12 @@ export class Contributors extends React.Component<IProps> {
     public render() {
         return (
             <div>
-                <Typography variant="h6" align="center">
-                    Contributors
-                </Typography>
+                <div className={cn.drawerCardHeader}>
+                    <Typography variant="h6" align="center">
+                        Contributors
+                    </Typography>
+                </div>
+                <div className={cn.drawerCardContent}>
                 {this.props.contributors.map((contributor, index) => (
                     <div key={index}>
                     <div className="d-flex">
@@ -98,6 +102,7 @@ export class Contributors extends React.Component<IProps> {
                 <Button variant="outlined" color="primary" onClick={this.addContributor} className="my-2">
                     Add Contribution
                 </Button>
+                </div>
             </div>
         )
     }

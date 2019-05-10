@@ -10,6 +10,7 @@ import { IEditMapContext } from '../EditMapDrawerContent/container';
 import { removeAllStages, alreadyHasLinearSection } from '../../helpers';
 import * as T from 'shared/types/descriptors';
 import { IUserSteamInfo } from 'shared/types';
+import { classNames as cn } from '../../styles';
 
 type IUnion = T.IMapTypeAsNodes | T.IGameAsNodes | T.IGameModeAsNodes;
 
@@ -56,7 +57,7 @@ const updateState = (
 }
 
 export const MapInfoSelections: React.StatelessComponent<IProps> = (props) => (
-    <div>
+    <div className={cn.drawerCardContent}>
         <FormControl fullWidth>
             <div className="mb-3">
                 <InputLabel htmlFor="game-input">Primary Game</InputLabel>

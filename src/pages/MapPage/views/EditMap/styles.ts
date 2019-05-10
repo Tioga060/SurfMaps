@@ -27,8 +27,8 @@ export const classNames = {
 
     drawerCard: style({
         backgroundColor: globalColors.cardColor.toString(),
-        padding: '0.5rem',
-        marginBottom: '0.5rem',
+        outline: '2px solid transparent',
+        marginTop: '0.5rem',
         $nest: {
             '& > *': {
                 marginLeft: 'auto',
@@ -38,8 +38,19 @@ export const classNames = {
         }
     }),
 
+    drawerCardContent: style({
+        padding: '0.5rem'
+    }),
+
+    drawerCardHeader: style({
+        backgroundColor: theme.palette.secondary.main.toString(),
+        padding: '0.5rem 0',
+        position: 'sticky',
+        top: 0,
+    }),
+
     drawerCardError: style({
-        border: `2px solid ${theme.palette.error.light.toString()}`
+        outline: `2px solid ${theme.palette.error.light.toString()}`
     }),
 
     textFieldSmall: style({

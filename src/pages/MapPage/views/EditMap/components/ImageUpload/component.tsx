@@ -35,13 +35,13 @@ const updateStageImages = (props: IProps, stageNumber: number) => (images: IEdit
 
 export const ImageUpload: React.StatelessComponent<IProps> = (props) => (
     <>
-        <div className={cn.drawerCard}>
+        <div className={`${cn.drawerCard} p-2`}>
             <Typography variant="h6" align="center">
                 Header + Background Image
             </Typography>
             <ImageDropzone files={props.mainImage} setFiles={updateMainImage(props)} singleImage/>
         </div>
-        {!!props.stages.length && <div className={cn.drawerCard}>
+        {!!props.stages.length && <div className={`${cn.drawerCard} p-2`}>
             {props.stages.map((stage, index) => {
                 return (
                     <div key={index}>
@@ -54,7 +54,7 @@ export const ImageUpload: React.StatelessComponent<IProps> = (props) => (
                 )
             })}
         </div>}
-        <div className={cn.drawerCard}>
+        <div className={`${cn.drawerCard} p-2`}>
             <Typography variant="h6" align="center">
                 Extra Map Images
             </Typography>

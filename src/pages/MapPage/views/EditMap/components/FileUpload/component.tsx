@@ -85,7 +85,7 @@ const deleteFile = (props: IProps, index: number) => () => {
 }
 
 export const FileUpload: React.StatelessComponent<IProps> = (props) => (
-    <div className={cn.drawerCard}>
+    <div className={`${cn.drawerCard} p-2`}>
         <Typography variant="h6" align="center">
             Map Files
         </Typography>

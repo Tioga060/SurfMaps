@@ -125,9 +125,12 @@ export class Stages extends React.Component<IProps> {
     public render() {
         return (
             <div>
-                <Typography variant="h6" align="center">
-                    Stages
-                </Typography>
+                <div className={cn.drawerCardHeader}>
+                    <Typography variant="h6" align="center">
+                        Stages
+                    </Typography>
+                </div>
+                <div className={cn.drawerCardContent}>
                 {this.props.stages.map((stage, index) => {
                     return (
                     <div key={`${stage.stageType.name}${stage.number}`} className="mt-3">
@@ -169,6 +172,7 @@ export class Stages extends React.Component<IProps> {
                         {`Add ${item.name}`}
                     </Button>
                 ))}
+                </div>
             </div>
         )
     }

@@ -22,25 +22,29 @@ const editDescription = (props: IProps) => (e: React.ChangeEvent<HTMLInputElemen
 
 export const MapDescription: React.StatelessComponent<IProps> = (props) => (
     <div>
-        <Typography variant="h6" align="center">
-            Map Description
-        </Typography>
-        <TextField
-            label="Map Description (Markdown)"
-            margin="dense"
-            multiline
-            fullWidth
-            rowsMax={10}
-            value={props.description.text}
-            onChange={editDescription(props)}
-            InputProps={{
-                classes: {
-                    input: cn.textFieldSmall
-                }
-            }}
-            inputProps={{
-                maxLength: MAX_CHARS,
-            }}
-        />
+        <div className={cn.drawerCardHeader}>
+            <Typography variant="h6" align="center">
+                Map Description
+            </Typography>
+        </div>
+        <div className={cn.drawerCardContent}>
+            <TextField
+                label="Map Description (Markdown)"
+                margin="dense"
+                multiline
+                fullWidth
+                rowsMax={10}
+                value={props.description.text}
+                onChange={editDescription(props)}
+                InputProps={{
+                    classes: {
+                        input: cn.textFieldSmall
+                    }
+                }}
+                inputProps={{
+                    maxLength: MAX_CHARS,
+                }}
+            />
+        </div>
     </div>
 );
