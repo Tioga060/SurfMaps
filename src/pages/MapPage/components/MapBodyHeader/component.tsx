@@ -1,11 +1,11 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { UserBadge } from 'shared/components/UserBadge';
-import { IMap } from 'shared/types';
+import { IDisplayMap } from '../../types';
 import { classNames as cn } from '../../styles';
 
 interface IProps {
-    map: IMap;
+    map: IDisplayMap;
 }
 
 export class MapBodyHeader extends React.Component<IProps> {
@@ -13,13 +13,13 @@ export class MapBodyHeader extends React.Component<IProps> {
         return (
             <div className={cn.mapCard}>
                 <Typography variant="h2">
-                    {this.props.map.name}
+                    {this.props.map.mapName}
                 </Typography>
                 <div className="mt-2">
-                    {this.props.map.mapAuthorsByMapId.nodes.map((author) => (
+                    {this.props.map.authors.map((author) => (
                         <UserBadge
-                            key={author.userByAuthorId.rowId}
-                            steamUser={author.userByAuthorId.userSteamInfoByUserId}
+                            key={author.userId}
+                            steamUser={author}
                             showName
                         />
                     ))}

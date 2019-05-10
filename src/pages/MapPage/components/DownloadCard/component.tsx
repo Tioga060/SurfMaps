@@ -9,16 +9,16 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import { classNames as cn } from '../../styles'
 import { UserBadge } from 'shared/components/UserBadge'
-import { IMapFile } from 'shared/types';
+import { IDisplayMapFile } from '../../types';
 
 interface IProps {
-    mapFiles: IMapFile[];
+    mapFiles: IDisplayMapFile[];
 }
 
 interface IState {
     currentTab: number;
-    mapFiles: IMapFile[];
-    activeMap: IMapFile;
+    mapFiles: IDisplayMapFile[];
+    activeMap: IDisplayMapFile;
     selectedMapIndex: number;
 }
 
@@ -28,13 +28,13 @@ export class DownloadCard extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
         this.gameModes = props.mapFiles.reduce((result: string[], mapfile) => {
-            if (!(mapfile.gameByGameId.name in result)) {
-                result.push(mapfile.gameByGameId.name);
+            if (!(mapfile.game.name in result)) {
+                result.push(mapfile.game.name);
             }
             return result;
         }, []);
         const mapFiles = this.props.mapFiles.filter((mapFile) =>
-                (mapFile.gameByGameId.name === this.gameModes[0]));
+                (mapFile.game.name === this.gameModes[0]));
         const activeMap = mapFiles[0];
         this.state = {
             currentTab: 0,
@@ -47,7 +47,7 @@ export class DownloadCard extends React.Component<IProps, IState> {
     public componentDidUpdate(prevProps: IProps, prevState: IState) {
         if (prevState.currentTab !== this.state.currentTab) {
             const mapFiles = this.props.mapFiles.filter((mapFile) =>
-                (mapFile.gameByGameId.name === this.gameModes[this.state.currentTab]));
+                (mapFile.game.name === this.gameModes[this.state.currentTab]));
             const activeMap = mapFiles[0];
             this.setState({
                 mapFiles,
@@ -105,14 +105,14 @@ export class DownloadCard extends React.Component<IProps, IState> {
                             }}
                         >
                             {this.state.mapFiles.map((mapFile, index) => (
-                                <MenuItem key={index} value={index}>{mapFile.label}</MenuItem>
+                                <MenuItem key={index} value={index}>{mapFile.description}</MenuItem>
                             ))}
                         </Select>
                     </div>
                     <div className="d-flex flex-column">
                         <Typography variant="body1">Uploader</Typography>
                         <UserBadge
-                            steamUser={this.state.activeMap.fileByFileId.userByUploaderId.userSteamInfoByUserId}
+                            steamUser={this.state.activeMap.uploader}
                             showName
                         />
                     </div>

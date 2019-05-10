@@ -2,7 +2,8 @@ import React, { CSSProperties } from 'react';
 import get from 'lodash/get';
 import Grid from '@material-ui/core/Grid';
 import classnames from 'classnames';
-import { IMap, IImage, IMapDescription } from 'shared/types';
+import { IDisplayMap } from './types';
+import { IEditImage } from 'shared/components/ImageDropzone';
 import { MapBodyHeader } from './components/MapBodyHeader';
 import { StageInfo } from './components/StageInfo';
 import { HeaderImage } from './components/HeaderImage';
@@ -11,56 +12,75 @@ import { DownloadCard } from './components/DownloadCard';
 import { MapDescription } from './components/MapDescription';
 import { MapContributors } from './components/MapContributors';
 import { classNames as cn } from './styles';
+import { hasImage } from './helpers';
 
 interface IProps {
-    map: IMap;
+    map: IDisplayMap;
 }
 
 interface IState {
-    headerImage: IImage | null;
+    headerImage: IEditImage;
 }
 
-const backgroundImageStyle = (imageUrl: string): CSSProperties => {
-    return imageUrl
-    ? { 
-        backgroundImage: `url(${imageUrl})`,
-    } : {};
-}
-
-const getDefaultImage = (map: IMap) => {
-    if (!map.mapImagesByMapId.nodes.length) {
-        return null;
+const backgroundImageStyle = (image: IEditImage): CSSProperties => {
+    const imageUrl = get(image, 'storeLocation');
+    const imageFile = get(image, 'file');
+    if (imageUrl) {
+        return {
+            backgroundImage: `url(${imageUrl})`,
+        }
     }
-    const headerImage = map.mapImagesByMapId.nodes.find((image) => !!image.primaryImage);
-    return headerImage
-        ? headerImage.imageByImageId
-        : map.mapImagesByMapId.nodes[0].imageByImageId;
+    if (imageFile) {
+        const url = URL.createObjectURL(imageFile)
+        const style = {
+            backgroundImage: `url(${url})`,
+        }
+        URL.revokeObjectURL(url);
+        return style;
+    }
+    return {};
 }
 
-const getAllImages = (map: IMap): IImage[] => {
-    const images: IImage[] = [];
-    map.mapImagesByMapId.nodes.slice().sort((a, b) => a.order - b.order).map((mapImage) => {
-        images.push(mapImage.imageByImageId);
+const getAllImages = (map: IDisplayMap): IEditImage[] => {
+    const images: IEditImage[] = [];
+    map.mainImage.forEach((image) => {
+        if (hasImage(image)) {
+            images.push(image);
+        }
     });
-    map.stagesByMapId.nodes.slice().sort((a, b) => a.number - b.number).map((stage) => {
-        stage.stageImagesByStageId.nodes.map((image) => {
-            images.push(image.imageByImageId)
-        })
+    map.mapImages.forEach((image) => {
+        if (hasImage(image)) {
+            images.push(image);
+        }
     });
+    map.stages.forEach((stage) => {
+        if(!!stage.images.length && hasImage(stage.images[0])) {
+            images.push(stage.images[0]);
+        }
+    });
+
     return images;
+}
+
+const getDefaultImage = (map: IDisplayMap) => {
+    const allImages = getAllImages(map);
+    if (!!allImages.length) {
+        return allImages[0];
+    }
+    return undefined;
 }
 
 export class MapPage extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
         this.state = {
-            headerImage: getDefaultImage(props.map),
+            headerImage: getDefaultImage(props.map)!,
         }
 
         this.setHeaderImage = this.setHeaderImage.bind(this);
     }
 
-    public setHeaderImage(image: IImage) {
+    public setHeaderImage(image: IEditImage) {
         this.setState({
             headerImage: image,
         })
@@ -69,28 +89,20 @@ export class MapPage extends React.Component<IProps, IState> {
     public componentDidUpdate(prevProps: IProps) {
         if (prevProps.map !== this.props.map) {
             this.setState(() => ({
-                headerImage: getDefaultImage(this.props.map),
+                headerImage: getDefaultImage(this.props.map)!,
             }));
         }
     }
 
     public render() {
-        const descriptions: IMapDescription[] =
-            this.props.map.mapDescriptionsByMapId.nodes.sort((a, b) => a.order - b.order);
-        const images = this.props.map.mapImagesByMapId.nodes;
-        const backgroundImage: string = images.length
-            ? get(
-                images.find((mapImage) => (!!mapImage.backgroundImage)),
-                'imageByImageId.storeLocation',
-                null)
-            : null;
+        const backgroundImage = get(this.props.map.mainImage, '[0]') as IEditImage;
         return (
             <div
                 className={classnames({
                     [cn.mapPageContainer]: true,
                     [cn.mapBackgroundImage]: !!backgroundImage
                 })}
-                style={backgroundImageStyle(backgroundImage)}
+                style={backgroundImageStyle(backgroundImage!)}
             >
                 <div className={cn.mapPageBody}>
                     <MapBodyHeader map={this.props.map}/>
@@ -101,12 +113,9 @@ export class MapPage extends React.Component<IProps, IState> {
                                     map={this.props.map}
                                     onStageClick={this.setHeaderImage}
                                 />
-                                {!!descriptions.length && descriptions.map((description, index) => (
-                                    !!description.textMarkdownByTextMarkdownId.text.length && 
-                                    <MapDescription key={index} description={description} />
-                                ))}
-                                {!!this.props.map.mapContributorsByMapId.nodes.length &&
-                                    <MapContributors contributors={this.props.map.mapContributorsByMapId.nodes} />
+                                {!!this.props.map.description.text.length && <MapDescription description={this.props.map.description.text} />}
+                                {!!this.props.map.contributors.length &&
+                                    <MapContributors contributors={this.props.map.contributors} />
                                 }
                             </Grid>
                         </Grid>
@@ -119,9 +128,9 @@ export class MapPage extends React.Component<IProps, IState> {
                                     setHeaderImage={this.setHeaderImage}
                                     images={getAllImages(this.props.map)}
                                 />
-                                {!!this.props.map.mapFilesByMapId.nodes.length && (
+                                {!!this.props.map.mapFiles.length && (
                                     <DownloadCard
-                                        mapFiles={this.props.map.mapFilesByMapId.nodes}
+                                        mapFiles={this.props.map.mapFiles}
                                     />
                                 )}
                             </Grid>

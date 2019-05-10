@@ -1,5 +1,6 @@
 import * as T from 'shared/types';
 import { IEditImage } from 'shared/components/ImageDropzone';
+import { IEditFile } from 'shared/components/FileDropzone';
 
 export interface IDisplayContribution {
     user: T.IUserSteamInfo;
@@ -21,9 +22,10 @@ export interface IDisplayStage {
 }
 
 export interface IDisplayMapFile {
-    files: File[];
+    file: IEditFile[];
     game: T.IGame;
     description: string;
+    uploader: T.IUserSteamInfo;
 }
 
 export interface IDisplayDescription {

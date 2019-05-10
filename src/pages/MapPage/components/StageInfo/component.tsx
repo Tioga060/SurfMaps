@@ -1,49 +1,39 @@
 import React from 'react';
+import get from 'lodash/get';
 import Typography from '@material-ui/core/Typography';
 import classnames from 'classnames';
-import { IMap, IStage, IImage } from 'shared/types';
+import { IDisplayMap, IDisplayStage } from '../../types';
 import { classNames as cn } from '../../styles'
-import { STAGE_TYPES } from '../../views/EditMap/helpers';
+import { STAGE_TYPES, sortStages, hasImage } from '../../helpers';
+import { IEditImage } from 'shared/components/ImageDropzone';
 
 interface IProps {
-    map: IMap;
-    onStageClick: (image: IImage) => void;
+    map: IDisplayMap;
+    onStageClick: (image: IEditImage) => void;
 }
 
-export const sortStages = (stageList: IStage[]) => {
-    const [stages, bonuses] = stageList.reduce((result: IStage[][], stage) => {
-        result[stage.stageTypeByStageTypeId.name === STAGE_TYPES.BONUS ? 1 : 0].push(stage);
-        return result;
-    }, [[], []]);
-
-    return [
-        ...stages.sort((a: IStage, b: IStage) => a.number - b.number),
-        ...bonuses.sort((a: IStage, b: IStage) => a.number - b.number)
-    ] as IStage[];
-};
-
 export class StageInfo extends React.Component<IProps> {
-    public onStageClick = (stage: IStage) => () => {
-        if (stage.stageImagesByStageId.nodes.length) {
-            this.props.onStageClick(stage.stageImagesByStageId.nodes[0].imageByImageId);
+    public onStageClick = (stage: IDisplayStage) => () => {
+        if (!!stage.images.length && hasImage(stage.images[0])) {
+            this.props.onStageClick(stage.images[0]);
         }
     }
 
     public render() {
-        const stages: IStage[] = sortStages(this.props.map.stagesByMapId.nodes);
+        const stages: IDisplayStage[] = sortStages(this.props.map.stages);
         return (
             <div className={cn.mapCard}>
                 <Typography variant="h3">
-                    {`${this.props.map.gameModeByGameModeId.name} - Tier ${this.props.map.tier}`}
+                    {`${this.props.map.gameMode.name} - Tier ${this.props.map.tier}`}
                 </Typography>
                 <Typography variant="h6" className={cn.mapInfo}>
-                    {this.props.map.gameByGameId.name}
+                    {this.props.map.game.name}
                 </Typography>
                 <Typography variant="h6" className={cn.mapInfo}>
-                    {`${this.props.map.mapTypeByMapTypeId.name} Map`}
+                    {`${this.props.map.mapType.name} Map`}
                 </Typography>
                 {stages.map((stage, index) => {
-                    const stageType = stage.stageTypeByStageTypeId.name;
+                    const stageType = stage.stageType.name;
                     return (
                     <div
                         className={classnames({
@@ -61,10 +51,10 @@ export class StageInfo extends React.Component<IProps> {
                         })} />
                         <div className={classnames(['d-flex', cn.stageText])}>
                             <Typography variant="body1" className="ml-3 position-absolute">
-                                {`${stage.stageTypeByStageTypeId.name} ${stageType !== STAGE_TYPES.LINEAR ? stage.number : ''}`}
+                                {`${stage.stageType.name} ${stageType !== STAGE_TYPES.LINEAR ? stage.number : ''}`}
                             </Typography>
                             <Typography variant="body1" align="right" className="ml-auto mr-3">
-                                {stage.userByAuthorId.userSteamInfoByUserId.name}
+                                {get(stage, 'authors[0].name', '')}
                             </Typography>
                         </div>
                     </div>

@@ -6,7 +6,6 @@ import Delete from '@material-ui/icons/Delete';
 import Typography from '@material-ui/core/Typography';
 import { AddUser } from 'shared/components/AddUser';
 import { IUserSteamInfo } from 'shared/types';
-import { IState as IRootState } from '../EditMapDrawerContent/component';
 import { IDisplayContributionGroup, IDisplayMap } from '../../../../types';
 
 interface IProps {

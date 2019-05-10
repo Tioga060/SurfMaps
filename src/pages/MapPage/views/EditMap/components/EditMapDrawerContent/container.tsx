@@ -15,7 +15,7 @@ export interface IEditMapContext {
 }
 
 export interface IProps {
-    setCurrentMap: (map: T.IMap) => void;
+    setCurrentMap: (map: IDisplayMap) => void;
     mode: number;
     refreshMap: (mapId: string) => void;
     mapState?: Partial<IDisplayMap>;

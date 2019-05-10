@@ -88,7 +88,7 @@ type IEditImageWithType = IEditImage & {
 }
 
 const getAllImages = (map: MapTypes.IDisplayMap): IEditImageWithType[] => {
-    const stageImages = map.stages.map((stage) => stage.images).flat().map((stage) => ({stageId: stage.rowId!, ...stage}));
+    const stageImages = map.stages.filter(stage => !!stage.images.length).map((stage) => ({stageId: stage.rowId!, ...stage.images[0]}));
     return [...map.mainImage, ...map.mapImages, ...stageImages];
 };
 

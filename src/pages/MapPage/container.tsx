@@ -3,7 +3,7 @@ import { QueryRenderer } from 'react-relay';
 import {query} from './MapPageGQL';
 import { environment } from 'shared/resources/graphql';
 import { MapPage } from './component';
-
+import { convertIMapToEditState } from './views/EditMap/helpers';
 interface IProps {
     mapId: string;
 }
@@ -24,7 +24,7 @@ export class MapPageContainer extends React.Component<IProps> {
                     }
                     console.log(props);
                     return props.mapByRowId
-                        ? <MapPage map={props.mapByRowId}/>
+                        ? <MapPage map={convertIMapToEditState(props.mapByRowId)}/>
                         : <div>Error rendering map</div>
                 }}
             />

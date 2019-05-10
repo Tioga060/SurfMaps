@@ -5,8 +5,9 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import { IDisplayMap } from '../../../../types';
+import { MAP_TYPES, STAGE_TYPES } from '../../../../helpers';
 import { IEditMapContext } from '../EditMapDrawerContent/container';
-import { removeAllStages, MAP_TYPES, STAGE_TYPES, alreadyHasLinearSection } from '../../helpers';
+import { removeAllStages, alreadyHasLinearSection } from '../../helpers';
 import * as T from 'shared/types/descriptors';
 import { IUserSteamInfo } from 'shared/types';
 

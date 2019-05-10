@@ -1,13 +1,15 @@
 import React from 'react';
+import get from 'lodash/get';
 import Typography from '@material-ui/core/Typography';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import { EditMapDrawerContent } from './components/EditMapDrawerContent';
 import { MapPage } from '../../';
-import { mockMap } from '../../_mocks/_data';
 import { classNames as cn } from './styles';
 import { IMap } from 'shared/types';
 import { convertIMapToEditState } from './helpers';
+import { IDisplayMap } from 'pages/MapPage/types';
+import { getDefaultDisplayMap } from '../../helpers'
 
 export enum MODES {
     ADD,
@@ -15,7 +17,7 @@ export enum MODES {
 }
 
 interface IState {
-    currentMap: IMap;
+    currentMap: IDisplayMap;
     mode: MODES;
 }
 
@@ -27,24 +29,27 @@ interface IProps {
 export class EditMap extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
+        const currentMap = !!props.map
+            ? convertIMapToEditState(this.props.map!)
+            : getDefaultDisplayMap(get(this.props, 'map.userByUploaderId.userSteamInfoByUserId'));
         this.state = {
-            currentMap: props.map || mockMap,
+            currentMap,
             mode: props.map ? MODES.EDIT : MODES.ADD,
         }
         this.setCurrentMap = this.setCurrentMap.bind(this);
     }
 
     public componentDidUpdate (prevProps: IProps) {
-        if (prevProps.map !== this.props.map) {
+        if (prevProps.map !== this.props.map && !!this.props.map) {
             console.log(this.props.map)
             this.setState(() => ({
                 mode: MODES.EDIT,
-                currentMap: this.props.map!,
+                currentMap: convertIMapToEditState(this.props.map!),
             }));
         }
     }
 
-    public setCurrentMap = (map: IMap) => {
+    public setCurrentMap = (map: IDisplayMap) => {
         this.setState(() => ({
             currentMap: map,
         }))

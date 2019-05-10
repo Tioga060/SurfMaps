@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import classnames from 'classnames';
 import { useDropzone } from 'react-dropzone';
 import { classNames as cn } from './styles';

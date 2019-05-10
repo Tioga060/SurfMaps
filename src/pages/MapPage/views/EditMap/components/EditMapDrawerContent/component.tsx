@@ -53,7 +53,7 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
     }
 
     public setCurrentMap (map: IDisplayMap) {
-        this.props.setCurrentMap(convertEditStateToIMap(map, this.props.context.currentUserSteamInfo));
+        this.props.setCurrentMap(map);
     }
 
     public componentDidUpdate (prevProps: IProps, prevState: IState) {

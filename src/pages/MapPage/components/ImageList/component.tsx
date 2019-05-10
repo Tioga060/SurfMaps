@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import { IImage } from 'shared/types';
 import { classNames as cn } from '../../styles';
+import { IEditImage } from 'shared/components/ImageDropzone';
 
 interface IProps {
-    setHeaderImage: (image: IImage) => void;
-    images: IImage[] | undefined;
+    setHeaderImage: (image: IEditImage) => void;
+    images: IEditImage[];
 }
 
 interface IState {
@@ -19,6 +19,7 @@ interface IState {
 
 export class ImageList extends React.Component<IProps, IState> {
     private _scroller: any;
+    private _pushedUrls: string[];
 
     public constructor(props: IProps) {
         super(props);
@@ -27,10 +28,15 @@ export class ImageList extends React.Component<IProps, IState> {
             scrollLeft: 0,
             clientX: 0,
         }
+        this._pushedUrls = [];
     }
 
-    public setHeaderImage = (image: IImage) => () => {
+    public setHeaderImage = (image: IEditImage) => () => {
         this.props.setHeaderImage(image);
+    }
+
+    public componentWillUnmount() {
+        this._pushedUrls.forEach(url => URL.revokeObjectURL(url));
     }
 
     public componentWillUpdate = (nextProps: IProps, nextState: IState) => {
@@ -91,22 +97,34 @@ export class ImageList extends React.Component<IProps, IState> {
                     onDragEnd={this.onMouseUp}
                     draggable={true}
                 >
-                    {this.props.images!.map((image, index) => (
+                    {this.props.images.map((image, index) => {
+                        if (!image.storeLocation) {
+                            return null;
+                        } // TODO - make sure image destruction works as expected
+                        const url = !!image.storeLocation
+                            ? image.storeLocation
+                            : URL.createObjectURL(image.file);
+                        const cardMedia = <CardMedia className={cn.scrollImage} image={url} />
+
+                        if (!!image.file) {
+                            this._pushedUrls.push(url);
+                        }
+
+                        return (
                         <div
-                            key={`${image.storeLocation}${index}`}
+                            key={`${url}${index}`}
                             className={`m-1 ${cn.scrollImage}`}
                             onClick={this.setHeaderImage(image)}
                         >
                             <Card>
                                 <CardActionArea>
-                                    <CardMedia className={cn.scrollImage} image={image.storeLocation} />
+                                    {cardMedia}
                                 </CardActionArea>
                             </Card>
                         </div>
-                    ))}
+                    )})}
                 </div>
             </div> 
         ) : null;
     }
 }
-//http://puu.sh/Dkyaa/6fca85e9ef.jpg ===========================================================================================================

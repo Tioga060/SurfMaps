@@ -1,5 +1,6 @@
 import * as T from 'shared/types';
 import * as MapTypes from '../types';
+import { IEditImage } from 'shared/components/ImageDropzone';
 
 const createContextPlaceholder = () => ({
     name: '',
@@ -23,3 +24,5 @@ export const getDefaultDisplayMap = (submitter: T.IUserSteamInfo): MapTypes.IDis
     mapFiles: [],
     mapId: '',
 });
+
+export const hasImage = (image: IEditImage) => (!!image.file || !!image.storeLocation);

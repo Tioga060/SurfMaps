@@ -4,7 +4,7 @@ import { IMapDescription } from 'shared/types';
 import { classNames as cn } from '../../styles'
 
 interface IProps {
-    description: IMapDescription;
+    description: string;
 }
 
 // TODO: fix this from expanding when text is super wide
@@ -15,7 +15,7 @@ export class MapDescription extends React.Component<IProps> {
                 <ReactMarkdown
                     skipHtml
                     className={cn.textColor}
-                    source={this.props.description.textMarkdownByTextMarkdownId.text}
+                    source={this.props.description}
                     disallowedTypes={['image']}
                 />
             </div> 

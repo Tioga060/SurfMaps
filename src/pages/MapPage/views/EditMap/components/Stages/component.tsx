@@ -10,11 +10,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import Divider from '@material-ui/core/Divider';
 import { AddUser } from 'shared/components/AddUser';
-import { IUserSteamInfo, IMapType, IStageType } from 'shared/types';
+import { IUserSteamInfo, IMapType } from 'shared/types';
 import { IDisplayMap, IDisplayStage } from '../../../../types';
 import { IEditMapContext } from '../EditMapDrawerContent/container';
 import { classNames as cn } from '../../styles';
-import { MAP_TYPES, STAGE_TYPES, alreadyHasLinearSection } from '../../helpers';
+import { alreadyHasLinearSection } from '../../helpers';
+import { sortStages, MAP_TYPES, STAGE_TYPES } from '../../../../helpers';
 
 interface IProps {
     updateMap: (partialState: Partial<IDisplayMap>) => void;
@@ -61,18 +62,6 @@ const createBlankStage = (props: IProps): IDisplayStage => {
         stageType,
         images: [],
     }
-};
-
-const sortStages = (stageList: IDisplayStage[]): IDisplayStage[] => {
-    const [stages, bonuses] = stageList.reduce((result: IDisplayStage[][], stage) => {
-        result[stage.stageType.name === STAGE_TYPES.BONUS ? 1 : 0].push(stage);
-        return result;
-    }, [[], []]);
-
-    return [
-        ...stages.sort((a: IDisplayStage, b: IDisplayStage) => a.number - b.number),
-        ...bonuses.sort((a: IDisplayStage, b: IDisplayStage) => a.number - b.number)
-    ] as IDisplayStage[];
 };
 
 const getAllowedStageTypes = (props: IProps) => {

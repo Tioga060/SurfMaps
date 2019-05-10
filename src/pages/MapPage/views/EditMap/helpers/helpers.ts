@@ -5,21 +5,9 @@ import * as GQLSubmit from '../services/gqlSubmitHelpers';
 import { ICreateMapResponse } from '../services/SubmitMapGQL';
 import * as GQLUpdate from '../services/gqlUpdateHelpers';
 import * as UpdateHelpers from './updates';
-import { groupContributors } from '../../../components/MapContributors';
-import { sortStages } from '../../../components/StageInfo';
 import { IEditImage } from 'shared/components/ImageDropzone';
 import { uploadImage } from 'shared/resources/uploadImage';
-
-export enum MAP_TYPES {
-    STAGED = 'Staged',
-    LINEAR = 'Linear',
-}
-
-export enum STAGE_TYPES {
-    STAGE = 'Stage',
-    LINEAR = 'Linear',
-    BONUS = 'Bonus',
-}
+import { sortStages, STAGE_TYPES } from '../../../helpers';
 
 export const alreadyHasLinearSection = (stages: MapTypes.IDisplayStage[]): boolean => (
     stages.some((stage) => stage.stageType.name === STAGE_TYPES.LINEAR)
@@ -150,6 +138,16 @@ export const convertEditStateToIMap = (editMapState: MapTypes.IDisplayMap, curre
 });
 
 // IMap => editMap
+interface IContributorMap {
+    [id: string]: T.IMapContributor[];
+}
+
+const groupContributors = (contributors: T.IMapContributor[]): IContributorMap => {
+    return contributors.reduce((result: IContributorMap, contributor) => {
+        (result[contributor.contribution] = result[contributor.contribution] || []).push(contributor);
+        return result;
+    }, {})
+}
 
 const convertIMapContributorsToEditMap = (contributors: T.IMapContributor[]): MapTypes.IDisplayContributionGroup[] => {
     const groups = groupContributors(contributors);
@@ -182,8 +180,7 @@ const convertIMapImagesToEditImage = (images: IGenericImage[], headerOnly: boole
 };
 
 const convertIMapStagesToEditMap = (stages: T.IStage[]): MapTypes.IDisplayStage[] => {
-    const sortedStages = sortStages(stages);
-    return sortedStages.map((stage): MapTypes.IDisplayStage => ({
+    const displayStages = stages.map((stage): MapTypes.IDisplayStage => ({
         rowId: stage.rowId,
         name: stage.name!,
         number: stage.number,
@@ -191,9 +188,10 @@ const convertIMapStagesToEditMap = (stages: T.IStage[]): MapTypes.IDisplayStage[
         stageType: stage.stageTypeByStageTypeId,
         images: convertIMapImagesToEditImage(stage.stageImagesByStageId.nodes),
     }));
+    return sortStages(displayStages);
 }
 
-export const convertIMapToEditState = (map: T.IMap): Partial<MapTypes.IDisplayMap> => ({
+export const convertIMapToEditState = (map: T.IMap): MapTypes.IDisplayMap => ({
     mapId: map.rowId,
     mapName: map.name,
     authors: map.mapAuthorsByMapId.nodes.map((author) => author.userByAuthorId.userSteamInfoByUserId),
@@ -208,6 +206,7 @@ export const convertIMapToEditState = (map: T.IMap): Partial<MapTypes.IDisplayMa
     mapImages: convertIMapImagesToEditImage(map.mapImagesByMapId.nodes),
     releaseDate: map.releasedAt || map.createdAt,
     mapFiles: [], // TODO
+    submitter: get(map, 'userByUploaderId.userSteamInfoByUserId'),
 });
 
 // Submission helpers
@@ -270,7 +269,7 @@ export const modifyMap = (originalMap: MapTypes.IDisplayMap, modifiedMap: MapTyp
     });
 
     if (UpdateHelpers.shouldUpdateDescription(originalMap, modifiedMap)) {
-        if (modifiedMap.description.rowId!.length < 36) {
+        if (modifiedMap.description.rowId && modifiedMap.description.rowId.length < 36) {
             GQLSubmit.createDescription(modifiedMap, callBack);
         } else {
             GQLUpdate.updateDescription(modifiedMap.description, submitterId, callBack);

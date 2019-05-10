@@ -4,22 +4,28 @@ import classnames from 'classnames';
 import { useDropzone } from 'react-dropzone';
 import { classNames as cn } from './styles';
 
-interface IProps {
-    files: File[];
-    setFiles: (files: File[]) => void;
-    singleFile?: boolean;
+export interface IEditFile {
+    storeLocation?: string;
+    name?: string;
+    file?: File;
+    rowId?: string;
 }
 
+interface IProps {
+    files: IEditFile[];
+    setFiles: (files: IEditFile[]) => void;
+    singleFile?: boolean;
+}
 
 export const FileDropzone: React.StatelessComponent<IProps> = ({singleFile, files, setFiles}) => {
     const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
         accept: 'image/jpeg, image/png',
         onDrop: acceptedFiles => {
             setFiles(singleFile
-                ? [acceptedFiles[0]]
+                ? [{file: acceptedFiles[0]}]
                 : [
                     ...files,
-                    ...acceptedFiles
+                    {file: acceptedFiles[0]}
                 ]);
         }
     });
@@ -32,7 +38,7 @@ export const FileDropzone: React.StatelessComponent<IProps> = ({singleFile, file
     const thumbs = files.map((file, index) => (
         <div className={cn.thumbnail} key={index} onClick={removeFile(index)}>
             <Typography variant="body1">
-                {file.name}
+                {file.name ? file.name : file.file!.name}
             </Typography>
         </div>
     ));

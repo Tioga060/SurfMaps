@@ -4,7 +4,7 @@ import * as MapTypes from '../../../types';
 import { fetchQuery } from 'react-relay';
 import {environment} from 'shared/resources/graphql';
 import { validMapNameQuery } from './ValidatorGQL';
-import { STAGE_TYPES, MAP_TYPES } from '../helpers';
+import { STAGE_TYPES, MAP_TYPES } from '../../../helpers';
 import { MAX_CHARS } from '../components/MapDescription';
 import { getNextStageNumber } from '../components/Stages';
 import { MODES } from '../component';

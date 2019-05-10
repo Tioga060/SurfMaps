@@ -10,7 +10,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import { FileDropzone } from 'shared/components/FileDropzone';
+import { FileDropzone, IEditFile } from 'shared/components/FileDropzone';
 import { IDisplayMap, IDisplayMapFile } from '../../../../types';
 import { classNames as cn } from '../../styles';
 import { IEditMapContext } from '../EditMapDrawerContent/container';
@@ -21,12 +21,12 @@ interface IProps {
     context: IEditMapContext;
 }
 
-const updateFiles = (props: IProps, index: number) => (files: File[]) => {
+const updateFiles = (props: IProps, index: number) => (file: IEditFile[]) => {
     props.updateMap({mapFiles: [
         ...props.mapFiles.slice(0, index),
         {
             ...props.mapFiles[index],
-            files,
+            file,
         },
         ...props.mapFiles.slice(index + 1),
     ]});
@@ -60,9 +60,10 @@ const updateGame = (props: IProps, index: number) => (e: React.ChangeEvent<HTMLS
 }
 
 const createBlankMapFile = (context: IEditMapContext): IDisplayMapFile => ({
-    files: [],
+    file: [],
     game: context.allGames.nodes[0],
     description: '',
+    uploader: context.currentUserSteamInfo,
 })
 
 const addMapFile = (props: IProps) => () => {
@@ -127,7 +128,7 @@ export const FileUpload: React.StatelessComponent<IProps> = (props) => (
                     onChange={updateDescription(props, index)}
                 />
                 {!!get(mapFile, 'game.name', null) && 
-                    <FileDropzone files={mapFile.files} setFiles={updateFiles(props, index)} singleFile />
+                    <FileDropzone files={mapFile.file} setFiles={updateFiles(props, index)} singleFile />
                 }
             </div>
         ))}
