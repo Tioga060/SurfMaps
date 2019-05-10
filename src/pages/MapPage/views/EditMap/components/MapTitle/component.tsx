@@ -1,14 +1,14 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import { IState as IRootState } from '../EditMapDrawerContent/component';
+import { IDisplayMap } from '../../../../types';
 
 interface IProps {
     value: string;
-    updateRootState: (partialState: Partial<IRootState>) => void;
+    updateMap: (partialState: Partial<IDisplayMap>) => void;
 }
 
 const editMapName = (props: IProps) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    props.updateRootState({
+    props.updateMap({
         mapName: e.target.value,
     });
 };

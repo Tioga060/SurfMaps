@@ -1,19 +1,22 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import { IState as IRootState } from '../EditMapDrawerContent/component';
+import { IDisplayMap, IDisplayDescription } from '../../../../types';
 import { classNames as cn } from '../../styles';
 
 export const MAX_CHARS = 1500;
 
 interface IProps {
-    value: string;
-    updateRootState: (partialState: Partial<IRootState>) => void;
+    description: IDisplayDescription;
+    updateMap: (partialState: Partial<IDisplayMap>) => void;
 }
 
 const editDescription = (props: IProps) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    props.updateRootState({
-        description: e.target.value,
+    props.updateMap({
+        description: {
+            ...props.description,
+            text: e.target.value,
+        }
     });
 };
 
@@ -28,7 +31,7 @@ export const MapDescription: React.StatelessComponent<IProps> = (props) => (
             multiline
             fullWidth
             rowsMax={10}
-            value={props.value}
+            value={props.description.text}
             onChange={editDescription(props)}
             InputProps={{
                 classes: {

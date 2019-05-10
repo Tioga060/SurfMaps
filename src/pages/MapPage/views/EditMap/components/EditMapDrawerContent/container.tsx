@@ -2,7 +2,8 @@ import React from 'react';
 import { QueryRenderer } from 'react-relay';
 import {query} from './EditMapGQL';
 import { environment } from 'shared/resources/graphql';
-import { EditMapDrawerContent, IState as IEditMapState } from './component';
+import { IDisplayMap } from '../../../../types';
+import { EditMapDrawerContent } from './component';
 import * as T from 'shared/types';
 
 export interface IEditMapContext {
@@ -17,7 +18,7 @@ export interface IProps {
     setCurrentMap: (map: T.IMap) => void;
     mode: number;
     refreshMap: (mapId: string) => void;
-    mapState?: Partial<IEditMapState>;
+    mapState?: Partial<IDisplayMap>;
     originalMap?: T.IMap;
 }
 

@@ -1,15 +1,15 @@
 import React from 'react';
 import Slider from '@material-ui/lab/Slider';
 import Typography from '@material-ui/core/Typography';
-import { IState as IRootState } from '../EditMapDrawerContent/component';
+import { IDisplayMap } from '../../../../types';
 
 interface IProps {
     tier: number;
-    updateRootState: (partialState: Partial<IRootState>) => void;
+    updateMap: (partialState: Partial<IDisplayMap>) => void;
 }
 
 const updateTier = (props: IProps) => (e: any, tier: number) => {
-    props.updateRootState({
+    props.updateMap({
         tier,
     })
 }

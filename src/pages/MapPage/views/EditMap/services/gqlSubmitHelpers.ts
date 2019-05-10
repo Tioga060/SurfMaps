@@ -1,8 +1,8 @@
-import { IState as IEditMapState, IEditStage } from '../components/EditMapDrawerContent/component';
+import * as MapTypes from '../../../types';
 import * as SubmitGQL from './SubmitMapGQL';
 import { IUserSteamInfo } from 'shared/types';
 
-export const createMap = (editMapState: IEditMapState, callBack: (data: SubmitGQL.ICreateMapResponse) => void) => {
+export const createMap = (editMapState: MapTypes.IDisplayMap, callBack: (data: SubmitGQL.ICreateMapResponse) => void) => {
     const mapData: SubmitGQL.ICreateMapMutation = {
         map: {
             clientMutationId: editMapState.submitter.userId,
@@ -36,7 +36,7 @@ export const createAuthor = (author: IUserSteamInfo, mapId: string, clientMutati
     SubmitGQL.createAuthor(data, callBack);
 };
 
-export const createStage = (stage: IEditStage, mapId: string, clientMutationId: string, callBack: () => void) => {
+export const createStage = (stage: MapTypes.IDisplayStage, mapId: string, clientMutationId: string, callBack: () => void) => {
     const newStage: SubmitGQL.ICreateStageMutation = {
         stage: {
             clientMutationId,
@@ -55,12 +55,12 @@ export const createStage = (stage: IEditStage, mapId: string, clientMutationId: 
     SubmitGQL.createStage(newStage, callBack);
 };
 
-export const createDescription = (editMapState: IEditMapState, callBack: () => void) => {
+export const createDescription = (editMapState: MapTypes.IDisplayMap, callBack: () => void) => {
     const data = {
         description: {
             clientMutationId: editMapState.submitter.userId,
             textMarkdown: {
-                text: editMapState.description,
+                text: editMapState.description.text,
                 authorId: editMapState.submitter.userId,
             }
         }
@@ -70,7 +70,7 @@ export const createDescription = (editMapState: IEditMapState, callBack: () => v
             description: {
                 clientMutationId: editMapState.submitter.userId,
                 mapDescription: {
-                    mapId: editMapState.mapId,
+                    mapId: editMapState.mapId!,
                     textMarkdownId: response.createTextMarkdown.textMarkdown.rowId,
                     order: 0,
                 }

@@ -7,21 +7,21 @@ import Typography from '@material-ui/core/Typography';
 import { AddUser } from 'shared/components/AddUser';
 import { IUserSteamInfo } from 'shared/types';
 import { IState as IRootState } from '../EditMapDrawerContent/component';
-import { IContributor } from '../EditMapDrawerContent/component';
+import { IDisplayContributionGroup, IDisplayMap } from '../../../../types';
 
 interface IProps {
-    updateRootState: (partialState: Partial<IRootState>) => void;
-    contributors: IContributor[];
+    updateMap: (partialState: Partial<IDisplayMap>) => void;
+    contributors: IDisplayContributionGroup[];
 }
 
-const createBlankContributor = (): IContributor => ({
+const createBlankContributor = (): IDisplayContributionGroup => ({
     contribution: '',
     contributionList: [],
 });
 
 export class Contributors extends React.Component<IProps> {
     public updateContribution = (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.props.updateRootState({
+        this.props.updateMap({
             contributors: [
                 ...this.props.contributors.slice(0, index),
                 {
@@ -34,7 +34,7 @@ export class Contributors extends React.Component<IProps> {
     }
 
     public updateContributionList = (index: number) => (userList: IUserSteamInfo[]) => {
-        this.props.updateRootState({
+        this.props.updateMap({
             contributors: [
                 ...this.props.contributors.slice(0, index),
                 {
@@ -47,7 +47,7 @@ export class Contributors extends React.Component<IProps> {
     }
 
     public addContributor = () => {
-        this.props.updateRootState({
+        this.props.updateMap({
             contributors: [
                 ...this.props.contributors,
                 createBlankContributor(),
@@ -56,7 +56,7 @@ export class Contributors extends React.Component<IProps> {
     }
 
     public deleteContribution = (index: number) => () => {
-        this.props.updateRootState({
+        this.props.updateMap({
             contributors: [
                 ...this.props.contributors.slice(0, index),
                 ...this.props.contributors.slice(index +1),

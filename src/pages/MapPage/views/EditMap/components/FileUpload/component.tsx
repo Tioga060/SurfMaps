@@ -11,18 +11,18 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import { FileDropzone } from 'shared/components/FileDropzone';
-import { IState as IRootState, IEditMapFile } from '../EditMapDrawerContent/component';
+import { IDisplayMap, IDisplayMapFile } from '../../../../types';
 import { classNames as cn } from '../../styles';
 import { IEditMapContext } from '../EditMapDrawerContent/container';
 
 interface IProps {
-    updateRootState: (partialState: Partial<IRootState>) => void;
-    mapFiles: IEditMapFile[];
+    updateMap: (partialState: Partial<IDisplayMap>) => void;
+    mapFiles: IDisplayMapFile[];
     context: IEditMapContext;
 }
 
 const updateFiles = (props: IProps, index: number) => (files: File[]) => {
-    props.updateRootState({mapFiles: [
+    props.updateMap({mapFiles: [
         ...props.mapFiles.slice(0, index),
         {
             ...props.mapFiles[index],
@@ -33,7 +33,7 @@ const updateFiles = (props: IProps, index: number) => (files: File[]) => {
 };
 
 const updateDescription = (props: IProps, index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    props.updateRootState({mapFiles: [
+    props.updateMap({mapFiles: [
         ...props.mapFiles.slice(0, index),
         {
             ...props.mapFiles[index],
@@ -48,7 +48,7 @@ const updateGame = (props: IProps, index: number) => (e: React.ChangeEvent<HTMLS
         gameName.name === e.target.value
     ));
     if (game) {
-        props.updateRootState({mapFiles: [
+        props.updateMap({mapFiles: [
             ...props.mapFiles.slice(0, index),
             {
                 ...props.mapFiles[index],
@@ -59,14 +59,14 @@ const updateGame = (props: IProps, index: number) => (e: React.ChangeEvent<HTMLS
     }
 }
 
-const createBlankMapFile = (context: IEditMapContext): IEditMapFile => ({
+const createBlankMapFile = (context: IEditMapContext): IDisplayMapFile => ({
     files: [],
     game: context.allGames.nodes[0],
     description: '',
 })
 
 const addMapFile = (props: IProps) => () => {
-    props.updateRootState({
+    props.updateMap({
         mapFiles: [
             ...props.mapFiles,
             createBlankMapFile(props.context),
@@ -75,7 +75,7 @@ const addMapFile = (props: IProps) => () => {
 }
 
 const deleteFile = (props: IProps, index: number) => () => {
-    props.updateRootState({
+    props.updateMap({
         mapFiles: [
             ...props.mapFiles.slice(0, index),
             ...props.mapFiles.slice(index + 1),

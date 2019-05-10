@@ -4,7 +4,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import { IState as IRootState, IEditStage } from '../EditMapDrawerContent/component';
+import { IDisplayMap } from '../../../../types';
 import { IEditMapContext } from '../EditMapDrawerContent/container';
 import { removeAllStages, MAP_TYPES, STAGE_TYPES, alreadyHasLinearSection } from '../../helpers';
 import * as T from 'shared/types/descriptors';
@@ -13,10 +13,9 @@ import { IUserSteamInfo } from 'shared/types';
 type IUnion = T.IMapTypeAsNodes | T.IGameAsNodes | T.IGameModeAsNodes;
 
 interface IProps {
-    state: Partial<IRootState>;
-    updateRootState: (partialState: Partial<IRootState>) => void;
+    updateMap: (partialState: Partial<IDisplayMap>) => void;
     context: IEditMapContext;
-    stages: IEditStage[];
+    map: IDisplayMap;
     primaryAuthor: IUserSteamInfo;
 }
 
@@ -28,16 +27,16 @@ enum FIELDS {
 
 const updateState = (
     field: string,
-    updateRootState: (partialState: Partial<IRootState>) => void,
+    updateMap: (partialState: Partial<IDisplayMap>) => void,
     list: IUnion,
     props: IProps,
 ) => (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedItem = list.nodes.find((item) => item.name === e.target.value);
     if (selectedItem) {
-        let stages = props.stages;
+        let stages = props.map.stages;
         if (field === FIELDS.MAP_TYPE) {
             if (selectedItem.name === MAP_TYPES.LINEAR) {
-                stages = removeAllStages(props.stages, STAGE_TYPES.STAGE);
+                stages = removeAllStages(props.map.stages, STAGE_TYPES.STAGE);
                 if (!alreadyHasLinearSection(stages)) {
                     stages.push({
                         name: '',
@@ -48,10 +47,10 @@ const updateState = (
                     })
                 }
             } else if (selectedItem.name === MAP_TYPES.STAGED) {
-                stages = removeAllStages(props.stages, STAGE_TYPES.LINEAR);
+                stages = removeAllStages(props.map.stages, STAGE_TYPES.LINEAR);
             }
         }
-        updateRootState({[field]: selectedItem, stages});
+        updateMap({[field]: selectedItem, stages});
     }
 }
 
@@ -61,8 +60,8 @@ export const MapInfoSelections: React.StatelessComponent<IProps> = (props) => (
             <div className="mb-3">
                 <InputLabel htmlFor="game-input">Primary Game</InputLabel>
                 <Select
-                    value={get(props, 'state.game.name', '')}
-                    onChange={updateState(FIELDS.GAME, props.updateRootState, props.context.allGames, props)}
+                    value={get(props, 'map.game.name', '')}
+                    onChange={updateState(FIELDS.GAME, props.updateMap, props.context.allGames, props)}
                     inputProps={{
                         id: 'game-input',
                         className: 'text-left',
@@ -79,8 +78,8 @@ export const MapInfoSelections: React.StatelessComponent<IProps> = (props) => (
             <div className="mb-3">
                 <InputLabel htmlFor="gameMode-input">Game Mode</InputLabel>
                 <Select
-                    value={get(props, 'state.gameMode.name', '')}
-                    onChange={updateState(FIELDS.GAME_MODE, props.updateRootState, props.context.allGameModes, props)}
+                    value={get(props, 'map.gameMode.name', '')}
+                    onChange={updateState(FIELDS.GAME_MODE, props.updateMap, props.context.allGameModes, props)}
                     inputProps={{
                         id: 'gameMode-input',
                         className: 'text-left',
@@ -97,8 +96,8 @@ export const MapInfoSelections: React.StatelessComponent<IProps> = (props) => (
             <div className="mb-3">
                 <InputLabel htmlFor="mapType-input">Map Type</InputLabel>
                 <Select
-                    value={get(props, 'state.mapType.name', '')}
-                    onChange={updateState(FIELDS.MAP_TYPE, props.updateRootState, props.context.allMapTypes, props)}
+                    value={get(props, 'map.mapType.name', '')}
+                    onChange={updateState(FIELDS.MAP_TYPE, props.updateMap, props.context.allMapTypes, props)}
                     inputProps={{
                         id: 'mapType-input',
                         className: 'text-left',

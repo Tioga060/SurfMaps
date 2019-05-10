@@ -1,6 +1,6 @@
 import * as T from 'shared/types';
 import get from 'lodash/get';
-import { IState as IEditMapState, IEditStage, IEditMapFile, IContributor } from '../components/EditMapDrawerContent/component';
+import * as MapTypes from '../../../types';
 import { fetchQuery } from 'react-relay';
 import {environment} from 'shared/resources/graphql';
 import { validMapNameQuery } from './ValidatorGQL';
@@ -52,7 +52,7 @@ const validateMapName = async (name: string, mode: MODES) => {
 const validateAuthors = (authors: T.IUserSteamInfo[]) => !!authors && authors.length > 0;
 const validateTier = (tier: number) => !!tier && 1 <= tier && tier <= 6;
 const validateSelection = (selection: GenericContext) => !!selection && get(selection, 'rowId.length', 0) === 36;
-const validateStages = (stages: IEditStage[], mapType: T.IMapType): string[] => {
+const validateStages = (stages: MapTypes.IDisplayStage[], mapType: T.IMapType): string[] => {
     const errors: string[] = [];
 
     // check each stage
@@ -102,13 +102,13 @@ const validateStages = (stages: IEditStage[], mapType: T.IMapType): string[] => 
     return errors;
 };
 
-const validateDescription = (description: string) => description.length < MAX_CHARS;
+const validateDescription = (description: MapTypes.IDisplayDescription) => description.text.length < MAX_CHARS;
 
-const validateContributors = (contributors: IContributor[]) => (
+const validateContributors = (contributors: MapTypes.IDisplayContributionGroup[]) => (
     !contributors.some((contributor) => contributor.contribution.length < 1)
 )
 
-export const validateMapInfo = async (editMapState: IEditMapState, mode: MODES): Promise<string[]> => {
+export const validateMapInfo = async (editMapState: MapTypes.IDisplayMap, mode: MODES): Promise<string[]> => {
     let errors: string[] = [];
 
     errors = [...errors, ...await validateMapName(editMapState.mapName, mode)]

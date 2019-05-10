@@ -1,6 +1,6 @@
 import * as T from 'shared/types';
 import get from 'lodash/get';
-import { IState as IEditMapState, IEditStage, IEditMapFile, IContributor } from '../components/EditMapDrawerContent/component';
+import * as MapTypes from '../../../types';
 import * as GQLSubmit from '../services/gqlSubmitHelpers';
 import { ICreateMapResponse } from '../services/SubmitMapGQL';
 import * as GQLUpdate from '../services/gqlUpdateHelpers';
@@ -21,11 +21,11 @@ export enum STAGE_TYPES {
     BONUS = 'Bonus',
 }
 
-export const alreadyHasLinearSection = (stages: IEditStage[]): boolean => (
+export const alreadyHasLinearSection = (stages: MapTypes.IDisplayStage[]): boolean => (
     stages.some((stage) => stage.stageType.name === STAGE_TYPES.LINEAR)
 )
 
-export const removeAllStages = (stages: IEditStage[], type: string = STAGE_TYPES.STAGE): IEditStage[] => (
+export const removeAllStages = (stages: MapTypes.IDisplayStage[], type: string = STAGE_TYPES.STAGE): MapTypes.IDisplayStage[] => (
     stages.filter((stage) => stage.stageType.name !== type)
 );
 
@@ -44,7 +44,7 @@ const convertAuthors = (authors: T.IUserSteamInfo[]): T.IMapAuthorAsNodes => ({
     }))
 });
 
-export const convertContributors = (contributors: IContributor[]): T.IMapContributorAsNodes => {
+export const convertContributors = (contributors: MapTypes.IDisplayContributionGroup[]): T.IMapContributorAsNodes => {
     const contributorList: T.IMapContributor[] = [];
     contributors.map((contribution) => {
         contribution.contributionList.map((cont) => {
@@ -64,7 +64,7 @@ const storeLocationToIImage = (storeLocation: string, userByUploaderId: T.IUser)
     uploadedAt: '',
 });
 
-const stageToIStageImage = (stage: IEditStage, currentUser: T.IUserSteamInfo): T.IStageImage[] => {
+const stageToIStageImage = (stage: MapTypes.IDisplayStage, currentUser: T.IUserSteamInfo): T.IStageImage[] => {
     const storeLocation = get(stage, 'images[0].storeLocation');
     if (storeLocation) {
         return [{imageByImageId: storeLocationToIImage(storeLocation, userSteamInfoToIUser(currentUser))}];
@@ -72,7 +72,7 @@ const stageToIStageImage = (stage: IEditStage, currentUser: T.IUserSteamInfo): T
     return [];
 }
 
-const convertStages = (stages: IEditStage[], currentUser: T.IUserSteamInfo): T.IStageAsNodes => ({
+const convertStages = (stages: MapTypes.IDisplayStage[], currentUser: T.IUserSteamInfo): T.IStageAsNodes => ({
     nodes: stages.map((stage) => ({
         rowId: stage.rowId,
         name: stage.name,
@@ -94,7 +94,7 @@ const editFileToIFIle = (currentUser: T.IUserSteamInfo): T.IFile => ({
     }
 });
 
-const editMapFilesToIMapFile = (editFiles: IEditMapFile[], currentUser: T.IUserSteamInfo): T.IMapFileAsNodes => ({
+const editMapFilesToIMapFile = (editFiles: MapTypes.IDisplayMapFile[], currentUser: T.IUserSteamInfo): T.IMapFileAsNodes => ({
     nodes: editFiles.map((file) => ({
         gameByGameId: file.game,
         label: file.description,
@@ -102,18 +102,18 @@ const editMapFilesToIMapFile = (editFiles: IEditMapFile[], currentUser: T.IUserS
     }))
 });
 
-const editDescriptionToIMapDescription = (description: string, descriptionId: string, currentUser: T.IUserSteamInfo): T.IMapDescrtionAsNodes => ({
+const editDescriptionToIMapDescription = (description: MapTypes.IDisplayDescription, currentUser: T.IUserSteamInfo): T.IMapDescrtionAsNodes => ({
     nodes: [{
         order: 0,
         textMarkdownByTextMarkdownId: {
-            rowId: descriptionId,
-            text: description,
+            rowId: description.rowId,
+            text: description.text,
             userByAuthorId: userSteamInfoToIUser(currentUser),
         }
     }]
 });
 
-const convertMapImagesToIMapImages = (editMapState: IEditMapState): T.IMapImage[] => {
+const convertMapImagesToIMapImages = (editMapState: MapTypes.IDisplayMap): T.IMapImage[] => {
     const uploader = userSteamInfoToIUser(editMapState.submitter);
 
     const storeImages = editMapState.mapImages.filter((image) => !!image.storeLocation).map((image, index): T.IMapImage => ({
@@ -134,7 +134,7 @@ const convertMapImagesToIMapImages = (editMapState: IEditMapState): T.IMapImage[
     return storeImages;
 }
 
-export const convertEditStateToIMap = (editMapState: IEditMapState, currentUser: T.IUserSteamInfo): T.IMap => ({
+export const convertEditStateToIMap = (editMapState: MapTypes.IDisplayMap, currentUser: T.IUserSteamInfo): T.IMap => ({
     name: editMapState.mapName,
     createdAt: editMapState.releaseDate,
     gameModeByGameModeId: editMapState.gameMode,
@@ -145,15 +145,15 @@ export const convertEditStateToIMap = (editMapState: IEditMapState, currentUser:
     stagesByMapId: convertStages(editMapState.stages, currentUser),
     mapImagesByMapId: {nodes: convertMapImagesToIMapImages(editMapState)}, //TODO
     mapFilesByMapId: editMapFilesToIMapFile(editMapState.mapFiles, currentUser),
-    mapDescriptionsByMapId: editDescriptionToIMapDescription(editMapState.description, editMapState.descriptionId, currentUser),
+    mapDescriptionsByMapId: editDescriptionToIMapDescription(editMapState.description, currentUser),
     mapContributorsByMapId: convertContributors(editMapState.contributors),
 });
 
 // IMap => editMap
 
-const convertIMapContributorsToEditMap = (contributors: T.IMapContributor[]): IContributor[] => {
+const convertIMapContributorsToEditMap = (contributors: T.IMapContributor[]): MapTypes.IDisplayContributionGroup[] => {
     const groups = groupContributors(contributors);
-    const contributions: IContributor[] = [];
+    const contributions: MapTypes.IDisplayContributionGroup[] = [];
     for (const contribution of Object.keys(groups)) {
         contributions.push({
             contribution,
@@ -181,9 +181,9 @@ const convertIMapImagesToEditImage = (images: IGenericImage[], headerOnly: boole
     }));
 };
 
-const convertIMapStagesToEditMap = (stages: T.IStage[]): IEditStage[] => {
+const convertIMapStagesToEditMap = (stages: T.IStage[]): MapTypes.IDisplayStage[] => {
     const sortedStages = sortStages(stages);
-    return sortedStages.map((stage): IEditStage => ({
+    return sortedStages.map((stage): MapTypes.IDisplayStage => ({
         rowId: stage.rowId,
         name: stage.name!,
         number: stage.number,
@@ -193,7 +193,7 @@ const convertIMapStagesToEditMap = (stages: T.IStage[]): IEditStage[] => {
     }));
 }
 
-export const convertIMapToEditState = (map: T.IMap): Partial<IEditMapState> => ({
+export const convertIMapToEditState = (map: T.IMap): Partial<MapTypes.IDisplayMap> => ({
     mapId: map.rowId,
     mapName: map.name,
     authors: map.mapAuthorsByMapId.nodes.map((author) => author.userByAuthorId.userSteamInfoByUserId),
@@ -201,8 +201,7 @@ export const convertIMapToEditState = (map: T.IMap): Partial<IEditMapState> => (
     gameMode: map.gameModeByGameModeId,
     game: map.gameByGameId,
     mapType: map.mapTypeByMapTypeId,
-    description: get(map.mapDescriptionsByMapId.nodes, '[0].textMarkdownByTextMarkdownId.text', ''),
-    descriptionId: get(map.mapDescriptionsByMapId.nodes, '[0].textMarkdownByTextMarkdownId.rowId', ''),
+    description: {...get(map.mapDescriptionsByMapId.nodes, '[0].textMarkdownByTextMarkdownId', {text: ''})},
     contributors: convertIMapContributorsToEditMap(map.mapContributorsByMapId.nodes),
     stages: convertIMapStagesToEditMap(map.stagesByMapId.nodes),
     mainImage: convertIMapImagesToEditImage(map.mapImagesByMapId.nodes, true),
@@ -213,7 +212,7 @@ export const convertIMapToEditState = (map: T.IMap): Partial<IEditMapState> => (
 
 // Submission helpers
 
-const createMapSubmitCallback = (editMapState: IEditMapState, refreshCallback: (mapId: string) => void) => (response: ICreateMapResponse) => {
+const createMapSubmitCallback = (editMapState: MapTypes.IDisplayMap, refreshCallback: (mapId: string) => void) => (response: ICreateMapResponse) => {
     const mapId = response.createMap.map.rowId;
     const submitterId = editMapState.submitter.userId;
     const callBack = () => { refreshCallback(mapId); }
@@ -226,7 +225,7 @@ const createMapSubmitCallback = (editMapState: IEditMapState, refreshCallback: (
         GQLSubmit.createStage(stage, mapId, submitterId, callBack);
     })
 
-    if (editMapState.description.length > 0) {
+    if (editMapState.description.text.length > 0) {
         GQLSubmit.createDescription(editMapState, callBack);
     }
 
@@ -237,14 +236,14 @@ const createMapSubmitCallback = (editMapState: IEditMapState, refreshCallback: (
     callBack();
 }
 
-export const submitMap = (editMapState: IEditMapState, refreshCallback: (mapId: string) => void) => {
+export const submitMap = (editMapState: MapTypes.IDisplayMap, refreshCallback: (mapId: string) => void) => {
     GQLSubmit.createMap(editMapState, createMapSubmitCallback(editMapState, refreshCallback));
 };
 
 // Modifiy map
 
-export const modifyMap = (originalMap: IEditMapState, modifiedMap: IEditMapState, refreshCallback: (mapId: string) => void) => {
-    const mapId = modifiedMap.mapId;
+export const modifyMap = (originalMap: MapTypes.IDisplayMap, modifiedMap: MapTypes.IDisplayMap, refreshCallback: (mapId: string) => void) => {
+    const mapId = modifiedMap.mapId!;
     const submitterId = modifiedMap.submitter.userId;
     const callBack = () => { refreshCallback(mapId) };
     if (UpdateHelpers.shouldUpdateMap(originalMap, modifiedMap)) {
@@ -271,10 +270,10 @@ export const modifyMap = (originalMap: IEditMapState, modifiedMap: IEditMapState
     });
 
     if (UpdateHelpers.shouldUpdateDescription(originalMap, modifiedMap)) {
-        if (modifiedMap.descriptionId.length < 36) {
+        if (modifiedMap.description.rowId!.length < 36) {
             GQLSubmit.createDescription(modifiedMap, callBack);
         } else {
-            GQLUpdate.updateDescription(modifiedMap.description, modifiedMap.descriptionId, submitterId, callBack);
+            GQLUpdate.updateDescription(modifiedMap.description, submitterId, callBack);
         }
     }
 

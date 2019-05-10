@@ -6,15 +6,15 @@ import {
     DatePicker,
     MuiPickersUtilsProvider,
 } from "material-ui-pickers";
-import { IState as IRootState } from '../EditMapDrawerContent/component';
+import { IDisplayMap } from '../../../../types';
 
 interface IProps {
     releaseDate: string;
-    updateRootState: (partialState: Partial<IRootState>) => void;
+    updateMap: (partialState: Partial<IDisplayMap>) => void;
 }
 
 const handleDateChange = (props: IProps) => (date: Date) => {
-    props.updateRootState({
+    props.updateMap({
         releaseDate: date.toString(),
     });
 };
@@ -23,7 +23,7 @@ export const ReleaseDate: React.StatelessComponent<IProps> = (props) => {
     const [released, setReleased] = useState(false);
     const updateReleased = (event: React.ChangeEvent<HTMLInputElement>) => {
         const releaseDate = event.target.checked ? (new Date()).toString() : '';
-        props.updateRootState({
+        props.updateMap({
             releaseDate,
         })
         setReleased(event.target.checked)

@@ -11,15 +11,14 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Divider from '@material-ui/core/Divider';
 import { AddUser } from 'shared/components/AddUser';
 import { IUserSteamInfo, IMapType, IStageType } from 'shared/types';
-import { IState as IRootState } from '../EditMapDrawerContent/component';
-import { IEditStage } from '../EditMapDrawerContent/component';
+import { IDisplayMap, IDisplayStage } from '../../../../types';
 import { IEditMapContext } from '../EditMapDrawerContent/container';
 import { classNames as cn } from '../../styles';
 import { MAP_TYPES, STAGE_TYPES, alreadyHasLinearSection } from '../../helpers';
 
 interface IProps {
-    updateRootState: (partialState: Partial<IRootState>) => void;
-    stages: IEditStage[];
+    updateMap: (partialState: Partial<IDisplayMap>) => void;
+    stages: IDisplayStage[];
     context: IEditMapContext;
     mapType: IMapType;
     primaryAuthor: IUserSteamInfo;
@@ -39,7 +38,7 @@ const getDefaultStageType = (props: IProps) => {
     return props.context.allStageTypes.nodes.find((stageType) => stageType.name === defaultName);
 };
 
-export const getNextStageNumber = (stages: IEditStage[], stageTypeName: string) => {
+export const getNextStageNumber = (stages: IDisplayStage[], stageTypeName: string) => {
     const stageNumbers = stages.filter((stage) => (
         stage.stageType.name === stageTypeName
     )).map((stage) => (
@@ -53,7 +52,7 @@ export const getNextStageNumber = (stages: IEditStage[], stageTypeName: string) 
     return stageNumbers.length + 1;
 }
 
-const createBlankStage = (props: IProps): IEditStage => {
+const createBlankStage = (props: IProps): IDisplayStage => {
     const stageType = getDefaultStageType(props) || {name: 'Select'};
     return {
         name: '',
@@ -64,16 +63,16 @@ const createBlankStage = (props: IProps): IEditStage => {
     }
 };
 
-const sortStages = (stageList: IEditStage[]): IEditStage[] => {
-    const [stages, bonuses] = stageList.reduce((result: IEditStage[][], stage) => {
+const sortStages = (stageList: IDisplayStage[]): IDisplayStage[] => {
+    const [stages, bonuses] = stageList.reduce((result: IDisplayStage[][], stage) => {
         result[stage.stageType.name === STAGE_TYPES.BONUS ? 1 : 0].push(stage);
         return result;
     }, [[], []]);
 
     return [
-        ...stages.sort((a: IEditStage, b: IEditStage) => a.number - b.number),
-        ...bonuses.sort((a: IEditStage, b: IEditStage) => a.number - b.number)
-    ] as IEditStage[];
+        ...stages.sort((a: IDisplayStage, b: IDisplayStage) => a.number - b.number),
+        ...bonuses.sort((a: IDisplayStage, b: IDisplayStage) => a.number - b.number)
+    ] as IDisplayStage[];
 };
 
 const getAllowedStageTypes = (props: IProps) => {
@@ -88,7 +87,7 @@ const getAllowedStageTypes = (props: IProps) => {
 
 export class Stages extends React.Component<IProps> {
     public updateStageName = (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.props.updateRootState({
+        this.props.updateMap({
             stages: [
                 ...this.props.stages.slice(0, index),
                 {
@@ -101,7 +100,7 @@ export class Stages extends React.Component<IProps> {
     }
 
     public updateAuthors = (index: number) => (authors: IUserSteamInfo[]) => {
-        this.props.updateRootState({
+        this.props.updateMap({
             stages: [
                 ...this.props.stages.slice(0, index),
                 {
@@ -118,7 +117,7 @@ export class Stages extends React.Component<IProps> {
             type.name === e.target.value
         ));
         if (stageType) {
-            this.props.updateRootState({
+            this.props.updateMap({
                 stages: sortStages([
                     ...this.props.stages.slice(0, index),
                     {
@@ -133,7 +132,7 @@ export class Stages extends React.Component<IProps> {
     }
 
     public addStage = () => {
-        this.props.updateRootState({
+        this.props.updateMap({
             stages: sortStages([
                 ...this.props.stages,
                 createBlankStage(this.props),
@@ -142,7 +141,7 @@ export class Stages extends React.Component<IProps> {
     }
 
     public deleteStage = (index: number) => () => {
-        this.props.updateRootState({
+        this.props.updateMap({
             stages: [
                 ...this.props.stages.slice(0, index),
                 ...this.props.stages.slice(index +1),

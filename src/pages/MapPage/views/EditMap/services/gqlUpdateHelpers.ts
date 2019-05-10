@@ -1,11 +1,11 @@
-import { IState as IEditMapState, IEditStage } from '../components/EditMapDrawerContent/component';
+import * as MapTypes from '../../../types';
 import * as GQLUpdate from './UpdateMapGQL';
 
-export const updateMap = (editMapState: IEditMapState, callBack: () => void) => {
+export const updateMap = (editMapState: MapTypes.IDisplayMap, callBack: () => void) => {
     const data = {
         map: {
             clientMutationId: editMapState.submitter.userId,
-            rowId: editMapState.mapId,
+            rowId: editMapState.mapId!,
             mapPatch: {
                 name: editMapState.mapName,
                 gameModeId: editMapState.gameMode.rowId,
@@ -30,7 +30,7 @@ export const deleteAuthor = (authorId: string, mapId: string, clientMutationId: 
     GQLUpdate.deleteAuthor(data, callBack);
 };
 
-export const updateStage = (stage: IEditStage, clientMutationId: string, callBack: () => void) => {
+export const updateStage = (stage: MapTypes.IDisplayStage, clientMutationId: string, callBack: () => void) => {
     const data = {
         stage: {
             clientMutationId,
@@ -46,7 +46,7 @@ export const updateStage = (stage: IEditStage, clientMutationId: string, callBac
     GQLUpdate.updateStage(data, callBack);
 };
 
-export const deleteStage = (stage: IEditStage, clientMutationId: string, callBack: () => void) => {
+export const deleteStage = (stage: MapTypes.IDisplayStage, clientMutationId: string, callBack: () => void) => {
     const data = {
         stage: {
             clientMutationId,
@@ -56,13 +56,13 @@ export const deleteStage = (stage: IEditStage, clientMutationId: string, callBac
     GQLUpdate.deleteStage(data, callBack);
 };
 
-export const updateDescription = (description: string, rowId: string, clientMutationId: string, callBack: () => void) => {
+export const updateDescription = (description: MapTypes.IDisplayDescription, clientMutationId: string, callBack: () => void) => {
     const data = {
         description: {
             clientMutationId,
-            rowId,
+            rowId: description.rowId!,
             textMarkdownPatch: {
-                text: description,
+                text: description.text,
             }
         }
     }

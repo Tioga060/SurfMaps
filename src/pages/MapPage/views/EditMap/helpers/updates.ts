@@ -1,8 +1,8 @@
-import { IState as IEditMapState, IEditStage, IEditContribution, IContributor } from '../components/EditMapDrawerContent/component';
+import * as MapTypes from '../../../types';
 import { IImageOption } from 'shared/resources/uploadImage';
 import { IEditImage } from 'shared/components/ImageDropzone';
 
-export const shouldUpdateMap = (originalMap: IEditMapState, modifiedMap: IEditMapState): boolean => (
+export const shouldUpdateMap = (originalMap: MapTypes.IDisplayMap, modifiedMap: MapTypes.IDisplayMap): boolean => (
     originalMap.mapName !== modifiedMap.mapName
         || originalMap.releaseDate !== modifiedMap.releaseDate
         || originalMap.game.name !== modifiedMap.game.name
@@ -11,7 +11,7 @@ export const shouldUpdateMap = (originalMap: IEditMapState, modifiedMap: IEditMa
         || originalMap.tier !== modifiedMap.tier
 );
 
-export const getCreatedAndDeletedAuthors = (originalMap: IEditMapState, modifiedMap: IEditMapState) => {
+export const getCreatedAndDeletedAuthors = (originalMap: MapTypes.IDisplayMap, modifiedMap: MapTypes.IDisplayMap) => {
     const originalAuthorIds = originalMap.authors.map((author) => author.userId);
     const modifiedAuthorIds = modifiedMap.authors.map((author) => author.userId)
     const deletedAuthors = originalMap.authors.filter((x) => !modifiedAuthorIds.includes(x.userId));
@@ -19,15 +19,15 @@ export const getCreatedAndDeletedAuthors = (originalMap: IEditMapState, modified
     return {createdAuthors, deletedAuthors};
 }
 
-export const shouldUpdateDescription = (originalMap: IEditMapState, modifiedMap: IEditMapState): boolean => (
+export const shouldUpdateDescription = (originalMap: MapTypes.IDisplayMap, modifiedMap: MapTypes.IDisplayMap): boolean => (
     originalMap.description !== modifiedMap.description
 );
 
-const shouldUpdateStage = (originalStage: IEditStage, modifiedStage: IEditStage): boolean => (
+const shouldUpdateStage = (originalStage: MapTypes.IDisplayStage, modifiedStage: MapTypes.IDisplayStage): boolean => (
     JSON.stringify(originalStage) !== JSON.stringify(modifiedStage)
 );
 
-export const getCreatedModifiedAndDeletedStages = (originalMap: IEditMapState, modifiedMap: IEditMapState) => {
+export const getCreatedModifiedAndDeletedStages = (originalMap: MapTypes.IDisplayMap, modifiedMap: MapTypes.IDisplayMap) => {
     const createdStages = modifiedMap.stages.filter((stage) => !stage.rowId);
 
     // If it still has a rowId, it must be an existing stage
@@ -52,7 +52,7 @@ interface ITemporaryContribution {
     contribution: string;
 }
 
-export const flattenContributionsToTemp = (contributors: IContributor[]) => {
+export const flattenContributionsToTemp = (contributors: MapTypes.IDisplayContributionGroup[]) => {
     return contributors.reduce((conts: ITemporaryContribution[], contribution) => {
         const tempConts: ITemporaryContribution[] = contribution.contributionList.map((cont) => ({
             rowId: cont.rowId,
@@ -64,7 +64,7 @@ export const flattenContributionsToTemp = (contributors: IContributor[]) => {
     }, []);
 }
 
-export const getCreatedModifiedAndDeletedContributions = (originalMap: IEditMapState, modifiedMap: IEditMapState) => {
+export const getCreatedModifiedAndDeletedContributions = (originalMap: MapTypes.IDisplayMap, modifiedMap: MapTypes.IDisplayMap) => {
     const originalContributions = flattenContributionsToTemp(originalMap.contributors);
     const modifiedMapContributions = flattenContributionsToTemp(modifiedMap.contributors);
 
@@ -87,7 +87,7 @@ type IEditImageWithType = IEditImage & {
     stageId?: string;
 }
 
-const getAllImages = (map: IEditMapState): IEditImageWithType[] => {
+const getAllImages = (map: MapTypes.IDisplayMap): IEditImageWithType[] => {
     const stageImages = map.stages.map((stage) => stage.images).flat().map((stage) => ({stageId: stage.rowId!, ...stage}));
     return [...map.mainImage, ...map.mapImages, ...stageImages];
 };
@@ -98,7 +98,7 @@ interface IOptionWithFile {
 }
 
 // TODO - you can only upload images on existing stages
-const getImagesWithTypeInfo = (map: IEditMapState) => {
+const getImagesWithTypeInfo = (map: MapTypes.IDisplayMap) => {
     const stageImages: IOptionWithFile[] = map.stages.filter((stage) => !!stage.rowId && stage.images.length && !!stage.images[0].file).map((stage) => ({
         file: stage.images[0].file!,
         options: {stageId: stage.rowId},
@@ -122,7 +122,7 @@ const getImagesWithTypeInfo = (map: IEditMapState) => {
     return [...stageImages, ...headerImages, ...mapImages];
 }
 
-export const getCreatedAndDeletedImages = (originalMap: IEditMapState, modifiedMap: IEditMapState) => {
+export const getCreatedAndDeletedImages = (originalMap: MapTypes.IDisplayMap, modifiedMap: MapTypes.IDisplayMap) => {
     const allOriginalImages = getAllImages(originalMap);
     const originalRemainingImages = allOriginalImages.filter((image) => !!image.storeLocation);
     const allModifiedImages = getAllImages(modifiedMap);
