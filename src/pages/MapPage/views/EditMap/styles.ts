@@ -14,6 +14,7 @@ export const classNames = {
 
     drawerHeader: style({
         height: globalSizes.topBarHeight,
+        minHeight: globalSizes.topBarHeight,
     }),
 
     content: style({

@@ -64,8 +64,7 @@ export const classNames = {
     textColor: style({
         color: theme.palette.text.primary.toString(),
     }),
-    contributorBadgeContainer: style({
-        marginBottom: '1rem',
+    badgeContainer: style({
         $nest: {
             '& > *': {
                 marginRight: '0.5rem',

@@ -9,7 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import { classNames as cn } from '../../styles'
 import { UserBadge } from 'shared/components/UserBadge'
-import { IDisplayMapFile } from '../../types';
+import { IDisplayMapFile } from '../../../../types';
 
 interface IProps {
     mapFiles: IDisplayMapFile[];

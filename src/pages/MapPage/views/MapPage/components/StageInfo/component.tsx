@@ -2,9 +2,9 @@ import React from 'react';
 import get from 'lodash/get';
 import Typography from '@material-ui/core/Typography';
 import classnames from 'classnames';
-import { IDisplayMap, IDisplayStage } from '../../types';
+import { IDisplayMap, IDisplayStage } from '../../../../types';
 import { classNames as cn } from '../../styles'
-import { STAGE_TYPES, sortStages, hasImage } from '../../helpers';
+import { STAGE_TYPES, sortStages, hasImage } from '../../../../helpers';
 import { IEditImage } from 'shared/components/ImageDropzone';
 
 interface IProps {

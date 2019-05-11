@@ -4,17 +4,11 @@ import Typography from '@material-ui/core/Typography';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import { EditMapDrawerContent } from './components/EditMapDrawerContent';
-import { MapPage } from '../../';
+import { MapPage } from '../MapPage';
 import { classNames as cn } from './styles';
 import { IMap } from 'shared/types';
-import { convertIMapToEditState } from './helpers';
 import { IDisplayMap } from 'pages/MapPage/types';
-import { getDefaultDisplayMap } from '../../helpers'
-
-export enum MODES {
-    ADD,
-    EDIT,
-}
+import { getDefaultDisplayMap, convertIMapToEditState, MODES } from '../../helpers'
 
 interface IState {
     currentMap: IDisplayMap;

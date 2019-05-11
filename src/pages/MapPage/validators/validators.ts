@@ -1,13 +1,12 @@
 import * as T from 'shared/types';
 import get from 'lodash/get';
-import * as MapTypes from '../../../types';
+import * as MapTypes from '../types';
 import { fetchQuery } from 'react-relay';
 import {environment} from 'shared/resources/graphql';
 import { validMapNameQuery } from './ValidatorGQL';
-import { STAGE_TYPES, MAP_TYPES } from '../../../helpers';
-import { MAX_CHARS } from '../components/MapDescription';
-import { getNextStageNumber } from '../components/Stages';
-import { MODES } from '../component';
+import { STAGE_TYPES, MAP_TYPES, MAX_DESCRIPTION_LENGTH, MODES } from '../helpers';
+import { getNextStageNumber } from '../helpers';
+
 
 interface GenericContext {
     rowId?: string;
@@ -102,7 +101,7 @@ const validateStages = (stages: MapTypes.IDisplayStage[], mapType: T.IMapType): 
     return errors;
 };
 
-const validateDescription = (description: MapTypes.IDisplayDescription) => description.text.length < MAX_CHARS;
+const validateDescription = (description: MapTypes.IDisplayDescription) => description.text.length < MAX_DESCRIPTION_LENGTH;
 
 const validateContributors = (contributors: MapTypes.IDisplayContributionGroup[]) => (
     !contributors.some((contributor) => contributor.contribution.length < 1)

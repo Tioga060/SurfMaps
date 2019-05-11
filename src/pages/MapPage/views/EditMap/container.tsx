@@ -1,7 +1,7 @@
 import React from 'react';
 import debounce from 'lodash/debounce';
 import { QueryRenderer } from 'react-relay';
-import {query} from '../../MapPageGQL';
+import { query } from '../MapPage/MapPageGQL';
 import { environment } from 'shared/resources/graphql';
 import { EditMap } from './component';
 

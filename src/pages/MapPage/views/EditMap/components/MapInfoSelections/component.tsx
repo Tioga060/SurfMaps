@@ -4,10 +4,10 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import { IDisplayMap } from '../../../../types';
+import { IDisplayMap, IDisplayStage } from '../../../../types';
 import { MAP_TYPES, STAGE_TYPES } from '../../../../helpers';
 import { IEditMapContext } from '../EditMapDrawerContent/container';
-import { removeAllStages, alreadyHasLinearSection } from '../../helpers';
+import { removeAllStages, alreadyHasLinearSection } from '../../../../helpers';
 import * as T from 'shared/types/descriptors';
 import { IUserSteamInfo } from 'shared/types';
 import { classNames as cn } from '../../styles';
@@ -27,6 +27,14 @@ enum FIELDS {
     GAME_MODE = 'gameMode',
 }
 
+const createLinearSection = (props: IProps): IDisplayStage => ({
+    name: '',
+    number: -1,
+    authors: [props.primaryAuthor],
+    stageType: props.context.allStageTypes.nodes.find((stageType) => stageType.name === STAGE_TYPES.LINEAR) || {name: STAGE_TYPES.LINEAR},
+    images: [],
+})
+
 const updateState = (
     field: string,
     updateMap: (partialState: Partial<IDisplayMap>) => void,
@@ -40,13 +48,7 @@ const updateState = (
             if (selectedItem.name === MAP_TYPES.LINEAR) {
                 stages = removeAllStages(props.map.stages, STAGE_TYPES.STAGE);
                 if (!alreadyHasLinearSection(stages)) {
-                    stages.push({
-                        name: '',
-                        number: -1,
-                        authors: [props.primaryAuthor],
-                        stageType: props.context.allStageTypes.nodes.find((stageType) => stageType.name === STAGE_TYPES.LINEAR) || {name: STAGE_TYPES.LINEAR},
-                        images: [],
-                    })
+                    stages.push(createLinearSection(props))
                 }
             } else if (selectedItem.name === MAP_TYPES.STAGED) {
                 stages = removeAllStages(props.map.stages, STAGE_TYPES.LINEAR);

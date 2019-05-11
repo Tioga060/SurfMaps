@@ -2,7 +2,7 @@ import React, { CSSProperties } from 'react';
 import get from 'lodash/get';
 import Grid from '@material-ui/core/Grid';
 import classnames from 'classnames';
-import { IDisplayMap } from './types';
+import { IDisplayMap } from '../../types';
 import { IEditImage } from 'shared/components/ImageDropzone';
 import { MapBodyHeader } from './components/MapBodyHeader';
 import { StageInfo } from './components/StageInfo';
@@ -12,7 +12,7 @@ import { DownloadCard } from './components/DownloadCard';
 import { MapDescription } from './components/MapDescription';
 import { MapContributors } from './components/MapContributors';
 import { classNames as cn } from './styles';
-import { hasImage } from './helpers';
+import { hasImage } from '../../helpers';
 
 interface IProps {
     map: IDisplayMap;

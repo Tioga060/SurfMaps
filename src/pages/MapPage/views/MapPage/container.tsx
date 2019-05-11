@@ -3,7 +3,7 @@ import { QueryRenderer } from 'react-relay';
 import {query} from './MapPageGQL';
 import { environment } from 'shared/resources/graphql';
 import { MapPage } from './component';
-import { convertIMapToEditState } from './views/EditMap/helpers';
+import { convertIMapToEditState } from '../../helpers';
 interface IProps {
     mapId: string;
 }

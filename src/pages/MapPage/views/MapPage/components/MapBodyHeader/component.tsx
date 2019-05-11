@@ -1,7 +1,7 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { UserBadge } from 'shared/components/UserBadge';
-import { IDisplayMap } from '../../types';
+import { IDisplayMap } from '../../../../types';
 import { classNames as cn } from '../../styles';
 
 interface IProps {
@@ -15,7 +15,7 @@ export class MapBodyHeader extends React.Component<IProps> {
                 <Typography variant="h2">
                     {this.props.map.mapName}
                 </Typography>
-                <div className="mt-2">
+                <div className={`mt-2 ${cn.badgeContainer}`}>
                     {this.props.map.authors.map((author) => (
                         <UserBadge
                             key={author.userId}

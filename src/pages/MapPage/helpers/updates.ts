@@ -1,4 +1,4 @@
-import * as MapTypes from '../../../types';
+import * as MapTypes from '../types';
 import { IImageOption } from 'shared/resources/uploadImage';
 import { IEditImage } from 'shared/components/ImageDropzone';
 

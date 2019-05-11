@@ -10,8 +10,7 @@ import { IUserSteamInfo, IMapType, IStageType } from 'shared/types';
 import { IDisplayMap, IDisplayStage } from '../../../../types';
 import { IEditMapContext } from '../EditMapDrawerContent/container';
 import { classNames as cn } from '../../styles';
-import { alreadyHasLinearSection } from '../../helpers';
-import { sortStages, MAP_TYPES, STAGE_TYPES } from '../../../../helpers';
+import { sortStages, MAP_TYPES, STAGE_TYPES, alreadyHasLinearSection, getNextStageNumber } from '../../../../helpers';
 
 interface IProps {
     updateMap: (partialState: Partial<IDisplayMap>) => void;
@@ -19,20 +18,6 @@ interface IProps {
     context: IEditMapContext;
     mapType: IMapType;
     primaryAuthor: IUserSteamInfo;
-}
-
-export const getNextStageNumber = (stages: IDisplayStage[], stageTypeName: string) => {
-    const stageNumbers = stages.filter((stage) => (
-        stage.stageType.name === stageTypeName
-    )).map((stage) => (
-        stage.number
-    ));
-    for (let i = 1; i < stageNumbers.length + 1; i += 1) {
-        if (!stageNumbers.includes(i)) {
-            return i;
-        }
-    }
-    return stageNumbers.length + 1;
 }
 
 const createBlankStage = (props: IProps, stageType: IStageType): IDisplayStage => ({
@@ -154,7 +139,7 @@ export class Stages extends React.Component<IProps> {
                                     label="Stage Name"
                                     margin="dense"
                                     variant="outlined"
-                                    value={stage.name}
+                                    value={stage.name || ''}
                                     onChange={this.updateStageName(index)}
                                 />
                             </div>

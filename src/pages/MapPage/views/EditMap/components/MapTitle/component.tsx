@@ -20,6 +20,7 @@ export const MapTitle: React.StatelessComponent<IProps> = (props) => (
             margin="dense"
             variant="outlined"
             value={props.value}
+            fullWidth
             onChange={editMapName(props)}
         />
     </div>

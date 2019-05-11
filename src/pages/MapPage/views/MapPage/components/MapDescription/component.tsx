@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import { IMapDescription } from 'shared/types';
 import { classNames as cn } from '../../styles'
 
 interface IProps {

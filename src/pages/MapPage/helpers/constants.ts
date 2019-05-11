@@ -8,3 +8,10 @@ export enum STAGE_TYPES {
     LINEAR = 'Linear',
     BONUS = 'Bonus',
 }
+
+export const MAX_DESCRIPTION_LENGTH = 1500;
+
+export enum MODES {
+    ADD,
+    EDIT,
+}

@@ -2,9 +2,8 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { IDisplayMap, IDisplayDescription } from '../../../../types';
+import { MAX_DESCRIPTION_LENGTH } from '../../../../helpers';
 import { classNames as cn } from '../../styles';
-
-export const MAX_CHARS = 1500;
 
 interface IProps {
     description: IDisplayDescription;
@@ -42,7 +41,7 @@ export const MapDescription: React.StatelessComponent<IProps> = (props) => (
                     }
                 }}
                 inputProps={{
-                    maxLength: MAX_CHARS,
+                    maxLength: MAX_DESCRIPTION_LENGTH,
                 }}
             />
         </div>

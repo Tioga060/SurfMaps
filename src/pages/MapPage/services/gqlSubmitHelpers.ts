@@ -1,4 +1,4 @@
-import * as MapTypes from '../../../types';
+import * as MapTypes from '../types';
 import * as SubmitGQL from './SubmitMapGQL';
 import { IUserSteamInfo } from 'shared/types';
 
@@ -55,7 +55,7 @@ export const createStage = (stage: MapTypes.IDisplayStage, mapId: string, client
     SubmitGQL.createStage(newStage, callBack);
 };
 
-export const createDescription = (editMapState: MapTypes.IDisplayMap, callBack: () => void) => {
+export const createDescription = (editMapState: MapTypes.IDisplayMap, mapId: string, callBack: () => void) => {
     const data = {
         description: {
             clientMutationId: editMapState.submitter.userId,
@@ -70,12 +70,13 @@ export const createDescription = (editMapState: MapTypes.IDisplayMap, callBack: 
             description: {
                 clientMutationId: editMapState.submitter.userId,
                 mapDescription: {
-                    mapId: editMapState.mapId!,
+                    mapId,
                     textMarkdownId: response.createTextMarkdown.textMarkdown.rowId,
                     order: 0,
                 }
             }
         };
+        console.log(descriptionData)
         SubmitGQL.createMapDescription(descriptionData, callBack);
     })
 };

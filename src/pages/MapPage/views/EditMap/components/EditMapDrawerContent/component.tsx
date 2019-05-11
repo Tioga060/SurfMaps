@@ -4,12 +4,13 @@ import classnames from 'classnames';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import * as T from 'shared/types';
 import { MapTitle } from '../MapTitle';
 import { TierPicker } from '../TierPicker';
 import { AddUser } from 'shared/components/AddUser';
 import { IDisplayMap } from '../../../../types';
 import { getDefaultDisplayMap } from '../../../../helpers';
-import * as T from 'shared/types';
 import { IEditMapContext } from './container';
 import { MapInfoSelections } from '../MapInfoSelections';
 import { MapDescription } from '../MapDescription';
@@ -20,9 +21,8 @@ import { FileUpload } from '../FileUpload';
 import { Stages } from '../Stages';
 import { classNames as cn } from '../../styles';
 import { IProps as IContainerProps } from './container';
-import { convertEditStateToIMap, submitMap, modifyMap, convertIMapToEditState } from '../../helpers';
-import { validateMapInfo, FORM_ERRORS } from '../../validators/validators';
-import { MODES } from '../../component';
+import { submitMap, modifyMap, convertIMapToEditState, MODES } from '../../../../helpers';
+import { validateMapInfo, FORM_ERRORS } from '../../../../validators/validators';
 
 type IProps = IContainerProps & {
     context: IEditMapContext;
@@ -135,12 +135,19 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
                             || this.state.validationErrors.includes(FORM_ERRORS.AUTHORS)
                             || this.state.validationErrors.includes(FORM_ERRORS.MAP_NAME_EXISTS),
                     })}>
-                        <MapTitle value={this.state.map.mapName} updateMap={this.updateMap}/>
-                        <AddUser
-                            steamUserList={this.state.map.authors}
-                            updateSteamUserList={this.updateAuthors}
-                            descriptor="Authors"
-                        />
+                        <div className={cn.drawerCardHeader}>
+                        <Typography variant="h6" align="center">
+                            Name / Authors
+                        </Typography>
+                        </div>
+                        <div className={cn.drawerCardContent}>
+                            <MapTitle value={this.state.map.mapName} updateMap={this.updateMap}/>
+                            <AddUser
+                                steamUserList={this.state.map.authors}
+                                updateSteamUserList={this.updateAuthors}
+                                descriptor="Authors"
+                            />
+                        </div>
                     </div>
                     <div className={classnames({
                         [cn.drawerCard]: true,

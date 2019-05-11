@@ -1,4 +1,4 @@
-import * as MapTypes from '../../../types';
+import * as MapTypes from '../types';
 import * as GQLUpdate from './UpdateMapGQL';
 
 export const updateMap = (editMapState: MapTypes.IDisplayMap, callBack: () => void) => {
