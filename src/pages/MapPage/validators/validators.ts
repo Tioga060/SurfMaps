@@ -7,7 +7,6 @@ import { validMapNameQuery } from './ValidatorGQL';
 import { STAGE_TYPES, MAP_TYPES, MAX_DESCRIPTION_LENGTH, MODES } from '../helpers';
 import { getNextStageNumber } from '../helpers';
 
-
 interface GenericContext {
     rowId?: string;
     name: string | undefined;
@@ -27,6 +26,7 @@ export enum FORM_ERRORS {
     STAGE_LINEAR_COUNT = 'stageLinearCount',
     DESCRIPTION = 'description',
     CONTRIBUTORS = 'contributors',
+    MAP_FILES = 'mapFiles',
 };
 
 interface IMapNameResponse {
@@ -107,6 +107,10 @@ const validateContributors = (contributors: MapTypes.IDisplayContributionGroup[]
     !contributors.some((contributor) => contributor.contribution.length < 1)
 )
 
+const validateMapFiles = (mapFiles: MapTypes.IDisplayMapFile[]) => (
+    !mapFiles.some(mapFile => mapFile.description.length === 0)
+);
+
 export const validateMapInfo = async (editMapState: MapTypes.IDisplayMap, mode: MODES): Promise<string[]> => {
     let errors: string[] = [];
 
@@ -133,5 +137,10 @@ export const validateMapInfo = async (editMapState: MapTypes.IDisplayMap, mode: 
     if (!validateContributors(editMapState.contributors)) {
         errors.push(FORM_ERRORS.CONTRIBUTORS);
     }
+    if (!validateMapFiles(editMapState.mapFiles)) {
+        console.log('map file errors')
+        errors.push(FORM_ERRORS.MAP_FILES);
+    }
+
     return errors;
 };

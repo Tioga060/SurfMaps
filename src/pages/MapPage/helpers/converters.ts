@@ -14,7 +14,7 @@ const groupContributors = (contributors: T.IMapContributor[]): IContributorMap =
         (result[contributor.contribution] = result[contributor.contribution] || []).push(contributor);
         return result;
     }, {})
-}
+};
 
 const convertIMapContributorsToEditMap = (contributors: T.IMapContributor[]): MapTypes.IDisplayContributionGroup[] => {
     const groups = groupContributors(contributors);
@@ -29,7 +29,7 @@ const convertIMapContributorsToEditMap = (contributors: T.IMapContributor[]): Ma
         });
     }
     return contributions;
-}
+};
 
 interface IGenericImage {
     imageByImageId: {
@@ -39,12 +39,12 @@ interface IGenericImage {
     primaryImage?: boolean;
 }
 
-const convertIMapImagesToEditImage = (images: IGenericImage[], headerOnly: boolean = false): IEditImage[] => {
-    return images.filter(image => image.primaryImage === undefined || image.primaryImage === headerOnly).map((image) => ({
+const convertIMapImagesToEditImage = (images: IGenericImage[], headerOnly: boolean = false): IEditImage[] => (
+    images.filter(image => image.primaryImage === undefined || image.primaryImage === headerOnly).map((image) => ({
         storeLocation: image.imageByImageId.storeLocation,
         rowId: image.imageByImageId.rowId,
-    }));
-};
+    }))
+);
 
 const convertIMapStagesToEditMap = (stages: T.IStage[]): MapTypes.IDisplayStage[] => {
     const displayStages = stages.map((stage): MapTypes.IDisplayStage => ({
@@ -56,7 +56,20 @@ const convertIMapStagesToEditMap = (stages: T.IStage[]): MapTypes.IDisplayStage[
         images: convertIMapImagesToEditImage(stage.stageImagesByStageId.nodes),
     }));
     return sortStages(displayStages);
-}
+};
+
+const convertFilesToEditMap = (files: T.IMapFile[]): MapTypes.IDisplayMapFile[] => (
+    files.map((file): MapTypes.IDisplayMapFile => ({
+        file: [{
+            rowId: file.fileByFileId.rowId, 
+            storeLocation: file.fileByFileId.storeLocation,
+        }],
+        game: file.gameByGameId,
+        description: file.label,
+        uploader: file.fileByFileId.userByUploaderId.userSteamInfoByUserId,
+        fileType: file.fileByFileId.fileTypeByFileTypeId,
+    }))
+);
 
 export const convertIMapToEditState = (map: T.IMap): MapTypes.IDisplayMap => ({
     mapId: map.rowId,
@@ -72,6 +85,6 @@ export const convertIMapToEditState = (map: T.IMap): MapTypes.IDisplayMap => ({
     mainImage: convertIMapImagesToEditImage(map.mapImagesByMapId.nodes, true),
     mapImages: convertIMapImagesToEditImage(map.mapImagesByMapId.nodes),
     releaseDate: map.releasedAt || map.createdAt,
-    mapFiles: [], // TODO
+    mapFiles: convertFilesToEditMap(map.mapFilesByMapId.nodes), // TODO
     submitter: get(map, 'userByUploaderId.userSteamInfoByUserId'),
 });

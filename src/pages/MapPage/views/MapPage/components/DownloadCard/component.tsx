@@ -28,7 +28,7 @@ export class DownloadCard extends React.Component<IProps, IState> {
     public constructor(props: IProps) {
         super(props);
         this.gameModes = props.mapFiles.reduce((result: string[], mapfile) => {
-            if (!(mapfile.game.name in result)) {
+            if (!result.includes(mapfile.game.name)) {
                 result.push(mapfile.game.name);
             }
             return result;

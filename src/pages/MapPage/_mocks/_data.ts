@@ -108,7 +108,7 @@ const mapFiles: IMapFile[] = [
             userByUploaderId: mockUser,
             createdAt: '2019-01-08 04:05:06 -8:00',
             active: true,
-            fileTypeByFileTypeId: {type: 'bsp'},
+            fileTypeByFileTypeId: {name: 'bsp'},
         }
     }, {
         gameByGameId: {name: 'Counter-Strike: Global Offensive'},
@@ -119,7 +119,7 @@ const mapFiles: IMapFile[] = [
             userByUploaderId: mockUser,
             createdAt: '2019-02-10 04:05:06 -8:00',
             active: true,
-            fileTypeByFileTypeId: {type: 'bsp'},
+            fileTypeByFileTypeId: {name: 'bsp'},
         }
     }
 ];

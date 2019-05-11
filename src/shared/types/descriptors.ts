@@ -31,7 +31,7 @@ export interface IFileTypeAsNodes {
 
 export interface IFileType {
     rowId?: string;
-    type: string;
+    name: string;
 }
 
 export interface IStageTypeAsNodes {

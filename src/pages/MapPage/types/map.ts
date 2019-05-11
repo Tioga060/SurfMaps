@@ -26,6 +26,7 @@ export interface IDisplayMapFile {
     game: T.IGame;
     description: string;
     uploader: T.IUserSteamInfo;
+    fileType: T.IFileType;
 }
 
 export interface IDisplayDescription {

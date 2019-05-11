@@ -181,3 +181,44 @@ mutation UpdateMapGQL_deleteStageImageMutation($image: DeleteStageImageByStageId
 }
 `
 export const deleteStageImage = simpleMutationCreator<IDeleteStageImageMutation>(batchEnvironment, deleteStageImageQuery);
+
+// ============================================ Update MapFile ============================================
+interface IUpdateMapFileMutation {
+  mapFile: {
+      clientMutationId: string;
+      mapId: string;
+      fileId: string;
+      mapFilePatch: {
+          gameId?: string;
+          label?: string;
+          isPrimary?: string;
+      }
+  }
+}
+
+const updateMapFileQuery = graphql`
+mutation UpdateMapGQL_updateMapFileMutation($mapFile: UpdateMapFileByMapIdAndFileIdInput!) {
+updateMapFileByMapIdAndFileId(input: $mapFile) {
+  clientMutationId
+}
+}
+`
+export const updateMapFile = simpleMutationCreator<IUpdateMapFileMutation>(batchEnvironment, updateMapFileQuery);
+
+// ============================================ Delete MapFile ============================================
+interface IDeleteMapFileMutation {
+    mapFile: {
+        clientMutationId: string;
+        mapId: string;
+        fileId: string;
+    }
+}
+
+const deleteMapFileQuery = graphql`
+mutation UpdateMapGQL_deleteMapFileMutation($mapFile: DeleteMapFileByMapIdAndFileIdInput!) {
+deleteMapFileByMapIdAndFileId(input: $mapFile) {
+  deletedMapFileId
+}
+}
+`
+export const deleteMapFile = simpleMutationCreator<IDeleteMapFileMutation>(batchEnvironment, deleteMapFileQuery);

@@ -113,3 +113,29 @@ export const deleteStageImage = (imageId: string, stageId: string, clientMutatio
     }
     GQLUpdate.deleteStageImage(data, callBack);
 };
+
+export const updateMapFile = (mapFile: MapTypes.IDisplayMapFile, mapId: string, clientMutationId: string, callBack: () => void) =>  {
+    const data = {
+        mapFile: {
+            clientMutationId,
+            mapId,
+            fileId: mapFile.file[0].rowId!,
+            mapFilePatch: {
+                gameId: mapFile.game.rowId!,
+                label: mapFile.description,
+            }
+        }
+    };
+    GQLUpdate.updateMapFile(data, callBack);
+};
+
+export const deleteMapFile = (fileId: string, mapId: string, clientMutationId: string, callBack: () => void) =>  {
+    const data = {
+        mapFile: {
+            clientMutationId,
+            mapId,
+            fileId,
+        }
+    };
+    GQLUpdate.deleteMapFile(data, callBack);
+};

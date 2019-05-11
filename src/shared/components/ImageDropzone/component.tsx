@@ -24,6 +24,9 @@ export const ImageDropzone: React.StatelessComponent<IProps> = ({singleImage, fi
     const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
         accept: 'image/jpeg, image/png',
         onDrop: acceptedFiles => {
+            if (!acceptedFiles.length) {
+                return;
+            }
             setFiles(singleImage
                 ? [{file: acceptedFiles[0]}]
                 : [

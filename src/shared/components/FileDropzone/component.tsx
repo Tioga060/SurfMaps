@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import get from 'lodash/get';
 import Typography from '@material-ui/core/Typography';
 import classnames from 'classnames';
 import { useDropzone } from 'react-dropzone';
@@ -6,7 +7,6 @@ import { classNames as cn } from './styles';
 
 export interface IEditFile {
     storeLocation?: string;
-    name?: string;
     file?: File;
     rowId?: string;
 }
@@ -19,8 +19,11 @@ interface IProps {
 
 export const FileDropzone: React.StatelessComponent<IProps> = ({singleFile, files, setFiles}) => {
     const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
-        accept: 'image/jpeg, image/png',
+        accept: '.bsp, application/octet-stream', // TODO
         onDrop: acceptedFiles => {
+            if (!acceptedFiles.length) {
+                return;
+            }
             setFiles(singleFile
                 ? [{file: acceptedFiles[0]}]
                 : [
@@ -38,7 +41,7 @@ export const FileDropzone: React.StatelessComponent<IProps> = ({singleFile, file
     const thumbs = files.map((file, index) => (
         <div className={cn.thumbnail} key={index} onClick={removeFile(index)}>
             <Typography variant="body1">
-                {file.name ? file.name : file.file!.name}
+                {file.storeLocation ? file.storeLocation.split('-').slice(-1)[0] : get(file, 'file.name', '<ERROR>')}
             </Typography>
         </div>
     ));

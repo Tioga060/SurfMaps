@@ -26,6 +26,12 @@ query EditMapGQL_contextQuery {
             name
         }
     }
+    allFileTypes {
+        nodes {
+            rowId,
+            name,
+        }
+    }
     currentUserSteamInfo {
         name,
         profileUrl,

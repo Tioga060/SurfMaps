@@ -142,7 +142,7 @@ query MapPageGQL_getMapByIdQuery($mapId: UUID!) {
                 fileByFileId {
                     fileTypeByFileTypeId {
                         rowId
-                        type
+                        name
                     }
                     rowId
                     storeLocation

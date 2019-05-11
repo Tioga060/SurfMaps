@@ -11,6 +11,7 @@ export interface IEditMapContext {
     allGameModes: T.IGameModeAsNodes;
     allGames: T.IGameAsNodes;
     allStageTypes: T.IStageTypeAsNodes;
+    allFileTypes: T.IFileTypeAsNodes;
     currentUserSteamInfo: T.IUserSteamInfo;
 }
 

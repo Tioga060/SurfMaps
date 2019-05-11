@@ -1,4 +1,5 @@
 import * as MapTypes from '../types';
+import get from 'lodash/get';
 import { IImageOption } from 'shared/resources/uploadImage';
 import { IEditImage } from 'shared/components/ImageDropzone';
 
@@ -131,4 +132,33 @@ export const getCreatedAndDeletedImages = (originalMap: MapTypes.IDisplayMap, mo
     const deletedImages = originalRemainingImages.filter((image) => !modifiedRemainingImageLocations.includes(image.storeLocation!));
     const createdImages = getImagesWithTypeInfo(modifiedMap);
     return { createdImages, deletedImages };
+};
+
+const fileIsModified = (originalFile: MapTypes.IDisplayMapFile, modifiedFile: MapTypes.IDisplayMapFile) => (
+    originalFile.description !== modifiedFile.description
+        || originalFile.game !== modifiedFile.game
+)
+
+export const getAllCreatedModifiedAndDeletedFiles = (originalMap: MapTypes.IDisplayMap, modifiedMap: MapTypes.IDisplayMap) => {
+    const remainingFiles = modifiedMap.mapFiles.filter(mapFile => !!get(mapFile, 'file[0].rowId'));
+    const remainingFileIds = remainingFiles.map(mapFile => mapFile.file[0].rowId!);
+
+    const deletedFiles = originalMap.mapFiles.filter((mapFile) => !remainingFileIds.includes(mapFile.file[0].rowId!));
+    const createdFiles = modifiedMap.mapFiles.reduce((files: MapTypes.IDisplayMapFile[], mapFile) => {
+        const file = get(mapFile, 'file[0].file');
+        if(file) {
+            files.push(mapFile);
+        }
+        return files;
+    }, []);
+
+    const modifiedFiles = remainingFiles.filter(modifiedFile => {
+        const originalFile = originalMap.mapFiles.find(mapFile => !!mapFile.file[0].rowId && mapFile.file[0].rowId === modifiedFile.file[0].rowId);
+        if (originalFile) {
+            return fileIsModified(originalFile, modifiedFile);
+        }
+        return false;
+    });
+
+    return {createdFiles, modifiedFiles, deletedFiles};
 };

@@ -3,34 +3,30 @@ import { stringify } from 'query-string';
 const REST_HOST = 'http://localhost:3040';
 
 export interface IResponse {
-    stage?: {
-        imageId: string;
-        stageId: string;
-    }
-    map?: {
-        imageId: string;
+    mapFile?: {
+        fileId: string;
         mapId: string;
-        order: number;
-        primaryImage: boolean;
-        backgroundImage: boolean;
+        gameId: string;
+        label: string;
+        isPrimary: boolean;
     }
     error?: string;
 };
 
-export interface IImageOption {
-    mapId?: string;
-    stageId?: string;
-    order?: number;
-    primaryImage?: boolean;
-    backgroundImage?: boolean;
+export interface IFileOption {
+    mapId: string;
+    gameId: string;
+    fileTypeId: string;
+    isPrimary: boolean;
+    label: string;
 }
 
 //TODO: filesize
-export const uploadImage = (image: File, imageOptions: IImageOption, callBack: (response: IResponse) => void) => {
+export const uploadFile = (image: File, fileOptions: IFileOption, callBack: (response: IResponse) => void) => {
     const formData = new FormData();
-    formData.append('image', image);
-    const params = stringify(imageOptions);
-    fetch(`${REST_HOST}/image/upload?${params}`, {
+    formData.append('file', image);
+    const params = stringify(fileOptions);
+    fetch(`${REST_HOST}/file/upload?${params}`, {
         method: 'POST',
         credentials: 'include',
         body: formData,

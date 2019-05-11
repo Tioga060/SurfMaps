@@ -64,6 +64,7 @@ const createBlankMapFile = (context: IEditMapContext): IDisplayMapFile => ({
     game: context.allGames.nodes[0],
     description: '',
     uploader: context.currentUserSteamInfo,
+    fileType: context.allFileTypes.nodes[0],
 })
 
 const addMapFile = (props: IProps) => () => {
