@@ -158,3 +158,72 @@ mutation SubmitMapGQL_mapContributionMutation($contribution: CreateMapContributo
 }
 `
 export const createContribution = simpleMutationCreator<ICreateMapContributionMutation>(batchEnvironment, createContributionQuery); 
+
+// ============================================ Create Image ============================================
+interface ICreateImageMutation {
+  image: {
+      clientMutationId: string;
+      image: {
+          storeLocation: string;
+          uploaderId: string;
+      }
+  }
+}
+export interface ICreateImageResponse {
+  createImage: {
+      image: {
+          rowId: string;
+      }
+  }
+}
+const createImageQuery = graphql`
+mutation SubmitMapGQL_ImageMutation($image: CreateImageInput!) {
+  createImage(input: $image) {
+    image {
+      rowId,
+    }
+  }
+}
+`
+export const createImage = callbackMutationCreator<ICreateImageMutation, ICreateImageResponse>(environment, createImageQuery); 
+
+// ============================================ Create MapImage ============================================
+interface ICreateMapImageMutation {
+  image: {
+      clientMutationId: string;
+      mapImage: {
+          mapId: string;
+          imageId: string;
+          backgroundImage: boolean;
+          primaryImage: boolean;
+          order: number;
+      }
+  }
+}
+const createMapImageQuery = graphql`
+mutation SubmitMapGQL_mapImageMutation($image: CreateMapImageInput!) {
+  createMapImage(input: $image) {
+    clientMutationId
+  }
+}
+`
+export const createMapImage = simpleMutationCreator<ICreateMapImageMutation>(batchEnvironment, createMapImageQuery);
+
+// ============================================ Create StageImage ============================================
+interface ICreateStageImageMutation {
+  image: {
+      clientMutationId: string;
+      stageImage: {
+          stageId: string;
+          imageId: string;
+      }
+  }
+}
+const createStageImageQuery = graphql`
+mutation SubmitMapGQL_stageImageMutation($image: CreateStageImageInput!) {
+  createStageImage(input: $image) {
+    clientMutationId
+  }
+}
+`
+export const createStageImage = simpleMutationCreator<ICreateStageImageMutation>(batchEnvironment, createStageImageQuery);

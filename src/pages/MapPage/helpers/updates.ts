@@ -1,6 +1,6 @@
 import * as MapTypes from '../types';
 import get from 'lodash/get';
-import { IImageOption } from 'shared/resources/uploadImage';
+import { IImageOption } from '../services/uploadImage';
 import { IEditImage } from 'shared/components/ImageDropzone';
 
 export const shouldUpdateMap = (originalMap: MapTypes.IDisplayMap, modifiedMap: MapTypes.IDisplayMap): boolean => (
@@ -107,7 +107,6 @@ const getImagesWithTypeInfo = (map: MapTypes.IDisplayMap) => {
     const headerImages: IOptionWithFile[] = map.mainImage.filter((image) => !!image.file).map((image) => ({
         file: image.file!,
         options: {
-            mapId: map.mapId,
             order: -1,
             primaryImage: true,
             backgroundImage: true,
@@ -116,7 +115,6 @@ const getImagesWithTypeInfo = (map: MapTypes.IDisplayMap) => {
     const mapImages: IOptionWithFile[] = map.mapImages.filter((image) => !!image.file).map((image, index) => ({
         file: image.file!!,
         options: {
-            mapId: map.mapId,
             order: index,
         }
     }));

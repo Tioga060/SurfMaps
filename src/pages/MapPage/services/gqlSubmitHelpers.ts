@@ -94,3 +94,58 @@ export const createMapContribution = (userId: string, text: string, mapId: strin
     };
     SubmitGQL.createContribution(data, callBack);
 };
+
+export const createImage = (uploaderId: string, cb: (response: SubmitGQL.ICreateImageResponse) => void) => {
+    const data = {
+        image: {
+            clientMutationId: uploaderId,
+            image: {
+                storeLocation: '',
+                uploaderId
+            }
+        }
+    }
+    SubmitGQL.createImage(data, cb);
+}
+
+export const createMapImage = (
+    mapId: string,
+    clientMutationId: string,
+    response: SubmitGQL.ICreateImageResponse,
+    order: number,
+    callBack: () => void,
+    backgroundImage: boolean = false,
+    primaryImage: boolean = false,
+) => {
+    const data = {
+        image: {
+            clientMutationId,
+            mapImage: {
+                mapId,
+                imageId: response.createImage.image.rowId,
+                backgroundImage,
+                primaryImage,
+                order,
+            }
+        }
+    };
+    SubmitGQL.createMapImage(data, callBack);
+};
+
+export const createStageImage = (
+    stageId: string,
+    clientMutationId: string,
+    response: SubmitGQL.ICreateImageResponse,
+    callBack: () => void,
+) => {
+    const data = {
+        image: {
+            clientMutationId,
+            stageImage: {
+                stageId,
+                imageId: response.createImage.image.rowId,
+            }
+        }
+    };
+    SubmitGQL.createStageImage(data, callBack);
+};
