@@ -74,3 +74,9 @@ export interface BatchMiddlewareOpts {
 }
 
 export function batchMiddleware(opts?: BatchMiddlewareOpts): Middleware;
+
+todo - look into https://docs.microsoft.com/en-us/azure/postgresql/concepts-firewall-rules azure settings authentication
+
+.\pg_dump.exe -d postgres://postgres:a@localhost:5432/postgres -f "C:\Users\jeffh\Documents\test_dump_f" -x
+
+.\psql.exe -U 'shandy_kubota@surfmaps-pg' -d 'postgres' -h 'surfmaps-pg.postgres.database.azure.com' -f 'C:\Users\jeffh\Documents\test_dump_f'

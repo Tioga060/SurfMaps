@@ -6,7 +6,7 @@ import {
 } from 'relay-runtime';
 
 const GRAPHQL_HOST = 'http://localhost:3040';
-
+//const GRAPHQL_HOST = 'http://localhost:7071/api';
 function fetchQuery(
     operation: any,
     variables: any,
