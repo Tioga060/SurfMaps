@@ -3,7 +3,7 @@ import * as GQLSubmit from '../services/gqlSubmitHelpers';
 import { ICreateMapResponse } from '../services/SubmitMapGQL';
 import * as GQLUpdate from '../services/gqlUpdateHelpers';
 import * as UpdateHelpers from './updates';
-import { uploadImage } from '../services/uploadImage';
+import { uploadImages } from '../services/uploadImage';
 import { uploadFile } from 'shared/resources/uploadFile';
 
 const createMapSubmitCallback = (editMapState: MapTypes.IDisplayMap, refreshCallback: (mapId: string) => void) => (response: ICreateMapResponse) => {
@@ -81,15 +81,14 @@ export const modifyMap = (originalMap: MapTypes.IDisplayMap, modifiedMap: MapTyp
     });
 
     const { createdImages, deletedImages } = UpdateHelpers.getCreatedAndDeletedImages(originalMap, modifiedMap);
-    createdImages.forEach((image) => {
-        uploadImage(mapId, submitterId, image.file, image.options, callBack);
-    });
+    uploadImages(createdImages, mapId, submitterId, callBack);
     deletedImages.forEach((image) => {
         if (image.stageId) {
             GQLUpdate.deleteStageImage(image.rowId!, image.stageId!, submitterId, callBack);
         } else {
             GQLUpdate.deleteMapImage(image.rowId!, mapId, submitterId, callBack);
         }
+        GQLUpdate.updateImage(image.rowId!, true, submitterId, callBack);
     })
 
     const { createdFiles,  modifiedFiles, deletedFiles } = UpdateHelpers.getAllCreatedModifiedAndDeletedFiles(originalMap, modifiedMap);

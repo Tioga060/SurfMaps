@@ -93,7 +93,7 @@ const getAllImages = (map: MapTypes.IDisplayMap): IEditImageWithType[] => {
     return [...map.mainImage, ...map.mapImages, ...stageImages];
 };
 
-interface IOptionWithFile {
+export interface IOptionWithFile {
     options: IImageOption;
     file: File;
 }
@@ -123,11 +123,10 @@ const getImagesWithTypeInfo = (map: MapTypes.IDisplayMap) => {
 
 export const getCreatedAndDeletedImages = (originalMap: MapTypes.IDisplayMap, modifiedMap: MapTypes.IDisplayMap) => {
     const allOriginalImages = getAllImages(originalMap);
-    const originalRemainingImages = allOriginalImages.filter((image) => !!image.storeLocation);
+    const originalRemainingImages = allOriginalImages.filter((image) => !!image.rowId);
     const allModifiedImages = getAllImages(modifiedMap);
-    const modifiedRemainingImageLocations = allModifiedImages.filter((image) => !!image.storeLocation).map((image) => image.storeLocation!);
-
-    const deletedImages = originalRemainingImages.filter((image) => !modifiedRemainingImageLocations.includes(image.storeLocation!));
+    const modifiedRemainingRowIds = allModifiedImages.filter((image) => !!image.rowId).map((image) => image.rowId!);
+    const deletedImages = originalRemainingImages.filter((image) => !modifiedRemainingRowIds.includes(image.rowId!));
     const createdImages = getImagesWithTypeInfo(modifiedMap);
     return { createdImages, deletedImages };
 };

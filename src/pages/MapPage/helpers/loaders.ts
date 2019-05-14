@@ -25,4 +25,4 @@ export const getDefaultDisplayMap = (submitter: T.IUserSteamInfo): MapTypes.IDis
     mapId: '',
 });
 
-export const hasImage = (image: IEditImage) => (!!image.file || !!image.storeLocation);
+export const hasImage = (image: IEditImage) => (!!image.file || !!image.rowId || !!image.storeLocation);

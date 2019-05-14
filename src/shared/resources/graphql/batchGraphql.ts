@@ -3,15 +3,13 @@ import { Environment, RecordSource, Store } from 'relay-runtime';
 import { RelayNetworkLayer, batchMiddleware, urlMiddleware, RelayRequestAny, MiddlewareNextFn } from 'react-relay-network-modern';
 import Hash from 'object-hash';
 
-const GRAPHQL_HOST = 'http://localhost:3040';
-
 type IReqWithId = RelayRequestAny & {
     id?: string;
 }
 
 const network = new RelayNetworkLayer([
     urlMiddleware({
-        url: GRAPHQL_HOST + '/graphql',
+        url: process.env.REACT_APP_TEMP_GRAPHQL_URL + '/graphql',
     }),
     (next: MiddlewareNextFn) => async (req: IReqWithId) => {
         req.fetchOpts.credentials = 'include'; // TODO - same origin instead
@@ -20,7 +18,7 @@ const network = new RelayNetworkLayer([
         return res;
     },
     batchMiddleware({
-        batchUrl: GRAPHQL_HOST + '/graphql',
+        batchUrl: process.env.REACT_APP_TEMP_GRAPHQL_URL + '/graphql',
         batchTimeout: 30,
         allowMutations: true,
     }),

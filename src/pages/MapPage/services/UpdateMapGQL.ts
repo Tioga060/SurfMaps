@@ -222,3 +222,23 @@ deleteMapFileByMapIdAndFileId(input: $mapFile) {
 }
 `
 export const deleteMapFile = simpleMutationCreator<IDeleteMapFileMutation>(batchEnvironment, deleteMapFileQuery);
+
+// ============================================ Update Image ============================================
+interface IUpdateImageMutation {
+  image: {
+      clientMutationId: string;
+      rowId: string;
+      imagePatch: {
+          isOrphan?: boolean;
+      }
+  }
+}
+
+const updateImageQuery = graphql`
+mutation UpdateMapGQL_updateImageMutation($image: UpdateImageByRowIdInput!) {
+  updateImageByRowId(input: $image) {
+    clientMutationId
+  }
+}
+`
+export const updateImage = simpleMutationCreator<IUpdateImageMutation>(batchEnvironment, updateImageQuery);

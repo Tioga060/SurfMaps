@@ -138,7 +138,6 @@ export const validateMapInfo = async (editMapState: MapTypes.IDisplayMap, mode: 
         errors.push(FORM_ERRORS.CONTRIBUTORS);
     }
     if (!validateMapFiles(editMapState.mapFiles)) {
-        console.log('map file errors')
         errors.push(FORM_ERRORS.MAP_FILES);
     }
 

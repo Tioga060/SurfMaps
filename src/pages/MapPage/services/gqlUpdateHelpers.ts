@@ -139,3 +139,16 @@ export const deleteMapFile = (fileId: string, mapId: string, clientMutationId: s
     };
     GQLUpdate.deleteMapFile(data, callBack);
 };
+
+export const updateImage = (rowId: string, isOrphan: boolean, clientMutationId: string, callBack: () => void) =>  {
+    const data = {
+        image: {
+            clientMutationId,
+            rowId,
+            imagePatch: {
+                isOrphan,
+            }
+        }
+    };
+    GQLUpdate.updateImage(data, callBack);
+};

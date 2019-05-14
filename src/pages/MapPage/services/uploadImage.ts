@@ -2,7 +2,7 @@ import { uploadFile, generateSas } from 'shared/resources/azure';
 import * as SubmitHelpers from './gqlSubmitHelpers';
 import { ICreateImageResponse } from './SubmitMapGQL';
 import { TransferProgressEvent } from '@azure/ms-rest-js';
-
+import { IOptionWithFile } from '../helpers';
 const FILE_NAME_LENGTH = -50;
 
 export interface IImageOption {
@@ -14,26 +14,29 @@ export interface IImageOption {
 
 const tempProgressCallback = (ev: TransferProgressEvent) => console.log(ev); // TODO
 
-export const uploadImage = async (mapId: string, uploaderId: string, file: File, options: IImageOption, cb: () => void) => {
+export const uploadImages = async (files: IOptionWithFile[], mapId: string, uploaderId: string, cb: () => void) => {
+    const { token } = await generateSas(mapId);
+    files.forEach((image) => {
+        uploadImage(mapId, uploaderId, image.file, token, image.options, cb);
+    });
+}
+
+const uploadImage = (mapId: string, uploaderId: string, file: File, token: string, options: IImageOption, cb: () => void) => {
+    const fileName = encodeURI(file.name.substr(FILE_NAME_LENGTH));
     if (options.stageId) {
-        SubmitHelpers.createImage(uploaderId, async (response: ICreateImageResponse) => {
+        SubmitHelpers.createImage(uploaderId, (response: ICreateImageResponse) => {
             SubmitHelpers.createStageImage(options.stageId!, uploaderId, response, cb);
 
-            const fileName = encodeURI(file.name.substr(FILE_NAME_LENGTH));
             const imageId = response.createImage.image.rowId;
-            const blobName = `${options.stageId}/${imageId}/${fileName}`;
-            const { token, uri } = await generateSas(mapId); // TODO: do not request token on every upload, reuse them instead
-            console.log(uri);
+            const blobName = `${imageId}/${fileName}`;
             uploadFile(file, token, mapId, blobName, tempProgressCallback);
         });
     } else {
-        SubmitHelpers.createImage(uploaderId, async (response: ICreateImageResponse) => {
+        SubmitHelpers.createImage(uploaderId, (response: ICreateImageResponse) => {
             SubmitHelpers.createMapImage(mapId, uploaderId, response, options.order!, cb, options.backgroundImage, options.primaryImage);
 
-            const fileName = encodeURI(file.name.substr(FILE_NAME_LENGTH));
             const imageId = response.createImage.image.rowId;
-            const blobName = `${options.stageId}/${imageId}/${fileName}`;
-            const { token } = await generateSas(mapId);
+            const blobName = `${imageId}/${fileName}`;
             uploadFile(file, token, mapId, blobName, tempProgressCallback);
         });
     }

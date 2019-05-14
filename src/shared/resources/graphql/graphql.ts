@@ -5,13 +5,11 @@ import {
     Store,
 } from 'relay-runtime';
 
-const GRAPHQL_HOST = 'http://localhost:3040';
-//const GRAPHQL_HOST = 'http://localhost:7071/api';
 function fetchQuery(
     operation: any,
     variables: any,
 ) {
-    return fetch(GRAPHQL_HOST + '/graphql', {
+    return fetch(process.env.REACT_APP_TEMP_GRAPHQL_URL + '/graphql', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -23,6 +21,7 @@ function fetchQuery(
         credentials: 'include', // TODO - same origin
         //mode: 'no-cors', // TODO - remove me
     }).then(response => {
+        console.log(response);
         return response.json();
     });
 }
