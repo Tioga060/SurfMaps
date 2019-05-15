@@ -9,7 +9,7 @@ type IReqWithId = RelayRequestAny & {
 
 const network = new RelayNetworkLayer([
     urlMiddleware({
-        url: process.env.REACT_APP_TEMP_GRAPHQL_URL + '/graphql',
+        url: process.env.REACT_APP_AZURE_FUNCTION_DEV_URL + '/graphql',
     }),
     (next: MiddlewareNextFn) => async (req: IReqWithId) => {
         req.fetchOpts.credentials = 'include'; // TODO - same origin instead
@@ -18,7 +18,7 @@ const network = new RelayNetworkLayer([
         return res;
     },
     batchMiddleware({
-        batchUrl: process.env.REACT_APP_TEMP_GRAPHQL_URL + '/graphql',
+        batchUrl: process.env.REACT_APP_AZURE_FUNCTION_DEV_URL + '/graphql',
         batchTimeout: 30,
         allowMutations: true,
     }),

@@ -9,7 +9,7 @@ function fetchQuery(
     operation: any,
     variables: any,
 ) {
-    return fetch(process.env.REACT_APP_TEMP_GRAPHQL_URL + '/graphql', {
+    return fetch(process.env.REACT_APP_AZURE_FUNCTION_DEV_URL + '/graphql', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -21,7 +21,6 @@ function fetchQuery(
         credentials: 'include', // TODO - same origin
         //mode: 'no-cors', // TODO - remove me
     }).then(response => {
-        console.log(response);
         return response.json();
     });
 }
