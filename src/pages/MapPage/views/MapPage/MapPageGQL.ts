@@ -136,6 +136,7 @@ query MapPageGQL_getMapByIdQuery($mapId: UUID!) {
             nodes {
                 gameByGameId {
                     name
+                    rowId
                 }
                 label
                 isPrimary
@@ -147,7 +148,7 @@ query MapPageGQL_getMapByIdQuery($mapId: UUID!) {
                     rowId
                     storeLocation
                     createdAt
-                    active
+                    isOrphan
                     userByUploaderId {
                         rowId
                         role

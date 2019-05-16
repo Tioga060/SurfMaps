@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import get from 'lodash/get';
 import Typography from '@material-ui/core/Typography';
 import classnames from 'classnames';
@@ -41,7 +41,7 @@ export const FileDropzone: React.StatelessComponent<IProps> = ({singleFile, file
     const thumbs = files.map((file, index) => (
         <div className={cn.thumbnail} key={index} onClick={removeFile(index)}>
             <Typography variant="body1">
-                {file.storeLocation ? file.storeLocation.split('-').slice(-1)[0] : get(file, 'file.name', '<ERROR>')}
+                {file.storeLocation ? file.storeLocation.split('/').slice(-1)[0] : get(file, 'file.name', '<ERROR>')}
             </Typography>
         </div>
     ));

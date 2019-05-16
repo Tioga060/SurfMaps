@@ -227,3 +227,54 @@ mutation SubmitMapGQL_stageImageMutation($image: CreateStageImageInput!) {
 }
 `
 export const createStageImage = simpleMutationCreator<ICreateStageImageMutation>(batchEnvironment, createStageImageQuery);
+
+// ============================================ Create File ============================================
+interface ICreateFileMutation {
+  file: {
+      clientMutationId: string;
+      file: {
+          storeLocation: string;
+          uploaderId: string;
+          fileTypeId: string;
+      }
+  }
+}
+export interface ICreateFileResponse {
+  createFile: {
+      file: {
+          rowId: string;
+      }
+  }
+}
+const createFileQuery = graphql`
+mutation SubmitMapGQL_FileMutation($file: CreateFileInput!) {
+  createFile(input: $file) {
+    file {
+      rowId,
+    }
+  }
+}
+`
+export const createFile = callbackMutationCreator<ICreateFileMutation, ICreateFileResponse>(environment, createFileQuery); 
+
+// ============================================ Create MapFile ============================================
+interface ICreateMapFileMutation {
+  file: {
+      clientMutationId: string;
+      mapFile: {
+          mapId: string;
+          fileId: string;
+          gameId: string;
+          label: string;
+          isPrimary: boolean;
+      }
+  }
+}
+const createMapFileQuery = graphql`
+mutation SubmitMapGQL_mapFileMutation($file: CreateMapFileInput!) {
+  createMapFile(input: $file) {
+    clientMutationId
+  }
+}
+`
+export const createMapFile = simpleMutationCreator<ICreateMapFileMutation>(batchEnvironment, createMapFileQuery);

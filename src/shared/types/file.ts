@@ -4,7 +4,7 @@ export interface IFile {
     rowId: string;
     storeLocation: string;
     createdAt: string;
-    active: boolean;
+    isOrphan: boolean;
     userByUploaderId: IUser;
     fileTypeByFileTypeId: IFileType;
 }

@@ -106,7 +106,7 @@ export const createImage = (uploaderId: string, cb: (response: SubmitGQL.ICreate
         }
     }
     SubmitGQL.createImage(data, cb);
-}
+};
 
 export const createMapImage = (
     mapId: string,
@@ -148,4 +148,42 @@ export const createStageImage = (
         }
     };
     SubmitGQL.createStageImage(data, callBack);
+};
+
+export const createFile = (uploaderId: string, fileTypeId: string, cb: (response: SubmitGQL.ICreateFileResponse) => void) => {
+    const data = {
+        file: {
+            clientMutationId: uploaderId,
+            file: {
+                storeLocation: '',
+                uploaderId,
+                fileTypeId,
+            }
+        }
+    }
+    SubmitGQL.createFile(data, cb);
+};
+
+export const createMapFile = (
+    mapId: string,
+    gameId: string,
+    label: string,
+    clientMutationId: string,
+    response: SubmitGQL.ICreateFileResponse,
+    callBack: () => void,
+    isPrimary: boolean = false,
+) => {
+    const data = {
+        file: {
+            clientMutationId,
+            mapFile: {
+                mapId,
+                fileId: response.createFile.file.rowId,
+                gameId,
+                label,
+                isPrimary,
+            }
+        }
+    };
+    SubmitGQL.createMapFile(data, callBack);
 };

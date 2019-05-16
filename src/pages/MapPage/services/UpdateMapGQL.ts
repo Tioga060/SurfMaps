@@ -242,3 +242,24 @@ mutation UpdateMapGQL_updateImageMutation($image: UpdateImageByRowIdInput!) {
 }
 `
 export const updateImage = simpleMutationCreator<IUpdateImageMutation>(batchEnvironment, updateImageQuery);
+
+// ============================================ Update File ============================================
+interface IUpdateFileMutation {
+  file: {
+      clientMutationId: string;
+      rowId: string;
+      filePatch: {
+          isOrphan?: boolean;
+          fileTypeId?: string;
+      }
+  }
+}
+
+const updateFileQuery = graphql`
+mutation UpdateMapGQL_updateFileMutation($file: UpdateFileByRowIdInput!) {
+  updateFileByRowId(input: $file) {
+    clientMutationId
+  }
+}
+`
+export const updateFile = simpleMutationCreator<IUpdateFileMutation>(batchEnvironment, updateFileQuery);

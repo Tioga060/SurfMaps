@@ -107,7 +107,7 @@ const mapFiles: IMapFile[] = [
             storeLocation: 'A place',
             userByUploaderId: mockUser,
             createdAt: '2019-01-08 04:05:06 -8:00',
-            active: true,
+            isOrphan: false,
             fileTypeByFileTypeId: {name: 'bsp'},
         }
     }, {
@@ -118,7 +118,7 @@ const mapFiles: IMapFile[] = [
             storeLocation: 'A place 2',
             userByUploaderId: mockUser,
             createdAt: '2019-02-10 04:05:06 -8:00',
-            active: true,
+            isOrphan: false,
             fileTypeByFileTypeId: {name: 'bsp'},
         }
     }

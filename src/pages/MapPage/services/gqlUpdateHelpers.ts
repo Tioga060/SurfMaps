@@ -152,3 +152,17 @@ export const updateImage = (rowId: string, isOrphan: boolean, clientMutationId: 
     };
     GQLUpdate.updateImage(data, callBack);
 };
+
+export const updateFile = (rowId: string, clientMutationId: string, callBack: () => void, isOrphan: boolean = false, fileTypeId: string = undefined!) =>  {
+    const data = {
+        file: {
+            clientMutationId,
+            rowId,
+            filePatch: {
+                isOrphan,
+                fileTypeId,
+            }
+        }
+    };
+    GQLUpdate.updateFile(data, callBack);
+};

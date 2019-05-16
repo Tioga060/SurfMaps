@@ -8,19 +8,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/*
-:root {
-  --mdc-theme-primary: #fcb8ab;
-  --mdc-theme-secondary: #feeae6;
-}
-
-*/
-
-:root {
-  --mdc-theme-primary: #5c7293;
-  --mdc-theme-secondary: #996666;
-}
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
