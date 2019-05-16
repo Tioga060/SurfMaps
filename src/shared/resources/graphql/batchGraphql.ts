@@ -5,6 +5,7 @@ import Hash from 'object-hash';
 
 type IReqWithId = RelayRequestAny & {
     id?: string;
+    body?: string;
 }
 
 const network = new RelayNetworkLayer([
@@ -14,6 +15,9 @@ const network = new RelayNetworkLayer([
     (next: MiddlewareNextFn) => async (req: IReqWithId) => {
         req.fetchOpts.credentials = 'include'; // TODO - same origin instead
         req.id = Hash.MD5(req.fetchOpts.body);
+        const body = JSON.parse(req.fetchOpts.body as string);
+        body['id'] = req.id;
+        req.fetchOpts.body = JSON.stringify(body);
         const res = await next(req);
         return res;
     },
@@ -22,7 +26,6 @@ const network = new RelayNetworkLayer([
         batchTimeout: 30,
         allowMutations: true,
     }),
-    
 ]);
 
 export const batchEnvironment = new Environment({
