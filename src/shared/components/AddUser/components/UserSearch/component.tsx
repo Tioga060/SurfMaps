@@ -60,25 +60,23 @@ export class UserSearch extends React.Component<IProps, IState> {
         }));
     }
 
-    public fetchSteamUser = () => {
+    public fetchSteamUser = async () => {
         this.setState(() => ({
             fetching: true,
             result: null,
             hasFetched: true,
         }))
-        fetchSteamUser(this.state.searchText, (user: IUserSteamInfo | null) => {
-            if (user) {
-                if(get(user, 'numericSteamId', null))
-                this.setState(() => ({
-                    fetching: false,
-                    result: user,
-                }))
-            } else {
-                this.setState(() => ({
-                    fetching: false,
-                }))
-            }
-        })
+        const user: IUserSteamInfo = await fetchSteamUser(this.state.searchText);
+        if (get(user, 'numericSteamId', null)) {
+            this.setState(() => ({
+                fetching: false,
+                result: user,
+            }));
+        } else {
+            this.setState(() => ({
+                fetching: false,
+            }))
+        }
     }
 
     public render() {

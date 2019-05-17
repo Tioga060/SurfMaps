@@ -22,7 +22,7 @@ export class UserListForQuery extends React.Component<IContainerProps> {
                         return <div>{error.message}</div>;
                     }
                     if (!props) {
-                        return <div>Missing props</div>
+                        return <span>Fetching ...</span>
                     }
                     if (get(props, 'searchSteamUsers.nodes', null)) {
                         const steamUserList = [
