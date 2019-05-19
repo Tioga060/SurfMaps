@@ -46,7 +46,7 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
             },
             currentTab: 0,
             validationErrors: [],
-            canPressAdd: props.mode === MODES.ADD,
+            canPressAdd: true,
         }
         this.updateAuthors = this.updateAuthors.bind(this);
         this.updateMap = this.updateMap.bind(this);

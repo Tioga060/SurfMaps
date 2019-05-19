@@ -19,14 +19,12 @@ const createMapSubmitCallback = (editMapState: MapTypes.IDisplayMap, refreshCall
         GQLSubmit.createStage(stage, mapId, submitterId, callBack);
     })
 
-    if (editMapState.description.text.length > 0) {
-        GQLSubmit.createDescription(editMapState, mapId, callBack);
-    }
+    GQLSubmit.createDescription(editMapState, mapId, callBack);
 
     UpdateHelpers.flattenContributionsToTemp(editMapState.contributors).forEach((contribution) => {
         GQLSubmit.createMapContribution(contribution.userId, contribution.contribution, mapId, submitterId, callBack);
     });
-
+    // TODO - create blob container
     callBack();
 }
 
@@ -79,7 +77,7 @@ export const modifyMap = (originalMap: MapTypes.IDisplayMap, modifiedMap: MapTyp
     deletedContributions.forEach((contribution) => {
         GQLUpdate.deleteContribution(contribution.rowId!, submitterId, callBack);
     });
-
+    // TODO - cascade drop stageImages first
     const { createdImages, deletedImages } = UpdateHelpers.getCreatedAndDeletedImages(originalMap, modifiedMap);
     uploadImages(createdImages, mapId, submitterId, callBack);
     deletedImages.forEach((image) => {
@@ -88,7 +86,8 @@ export const modifyMap = (originalMap: MapTypes.IDisplayMap, modifiedMap: MapTyp
         } else {
             GQLUpdate.deleteMapImage(image.rowId!, mapId, submitterId, callBack);
         }
-        GQLUpdate.updateImage(image.rowId!, true, submitterId, callBack);
+        // TODO - figure out how to best orphan an image with RLS
+        //GQLUpdate.updateImage(image.rowId!, true, submitterId, callBack);
     })
 
     const { createdFiles,  modifiedFiles, deletedFiles } = UpdateHelpers.getAllCreatedModifiedAndDeletedFiles(originalMap, modifiedMap);
@@ -98,6 +97,7 @@ export const modifyMap = (originalMap: MapTypes.IDisplayMap, modifiedMap: MapTyp
     });
     deletedFiles.forEach(file => {
         GQLUpdate.deleteMapFile(file.file[0].rowId!, mapId, submitterId, callBack);
-        GQLUpdate.updateFile(file.file[0].rowId!, submitterId, callBack, true);
+        // TODO - figure out how to best orphan a file with RLS
+        //GQLUpdate.updateFile(file.file[0].rowId!, submitterId, callBack, true);
     });
 };

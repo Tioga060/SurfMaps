@@ -15,6 +15,9 @@ export interface IImageOption {
 const tempProgressCallback = (ev: TransferProgressEvent) => console.log(ev); // TODO
 
 export const uploadImages = async (files: IOptionWithFile[], mapId: string, uploaderId: string, cb: () => void) => {
+    if (!files.length) {
+        return;
+    }
     const { token } = await generateSas(mapId);
     files.forEach((image) => {
         uploadImage(mapId, uploaderId, image.file, token, image.options, cb);

@@ -25,6 +25,7 @@ const network = new RelayNetworkLayer([
         batchUrl: process.env.REACT_APP_AZURE_FUNCTION_DEV_URL + '/graphql',
         batchTimeout: 30,
         allowMutations: true,
+        credentials: 'include', // TODO - same origin instead
     }),
 ]);
 

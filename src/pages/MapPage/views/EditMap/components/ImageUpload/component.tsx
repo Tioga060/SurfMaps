@@ -43,7 +43,7 @@ export const ImageUpload: React.StatelessComponent<IProps> = (props) => (
         </div>
         {!!props.stages.length && <div className={`${cn.drawerCard} p-2`}>
             {props.stages.map((stage, index) => {
-                return (
+                return ( // TODO - only allow users to upload images for committed stages
                     <div key={index}>
                         {index !== 0 && <Divider/>}
                         <Typography variant="h6" align="center">

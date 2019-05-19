@@ -21,7 +21,7 @@ export const getCreatedAndDeletedAuthors = (originalMap: MapTypes.IDisplayMap, m
 }
 
 export const shouldUpdateDescription = (originalMap: MapTypes.IDisplayMap, modifiedMap: MapTypes.IDisplayMap): boolean => (
-    originalMap.description !== modifiedMap.description
+    originalMap.description.text !== modifiedMap.description.text
 );
 
 const shouldUpdateStage = (originalStage: MapTypes.IDisplayStage, modifiedStage: MapTypes.IDisplayStage): boolean => (

@@ -16,6 +16,9 @@ export interface IMapFileOption {
 const tempProgressCallback = (ev: TransferProgressEvent) => console.log(ev); // TODO
 
 export const uploadFiles = async (files: IDisplayMapFile[], mapId: string, uploaderId: string, cb: () => void) => {
+    if (!files.length) {
+        return;
+    }
     const { token } = await generateSas(mapId);
     files.forEach((file) => {
         const options: IMapFileOption = {

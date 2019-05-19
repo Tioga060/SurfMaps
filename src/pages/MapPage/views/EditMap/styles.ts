@@ -48,6 +48,7 @@ export const classNames = {
         padding: '0.5rem 0',
         position: 'sticky',
         top: 0,
+        zIndex: 5,
     }),
 
     drawerCardError: style({
