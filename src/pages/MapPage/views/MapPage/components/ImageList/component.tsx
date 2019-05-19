@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import classnames from 'classnames';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -87,7 +88,11 @@ export class ImageList extends React.Component<IProps, IState> {
         return this.props.images ? (
             <div className={cn.mapCard}>
                 <div
-                    className={cn.scrollImageContainer}
+                    className={classnames({
+                        [cn.scrollImageContainer]: true,
+                        [cn.scrollImageContainerBig]: this.props.images.length > 7,
+                        [cn.scrollImageContainerSmall]: this.props.images.length <= 7,
+                    })}
                     ref={this.attachScroller}
                     onMouseDown={this.onMouseDown}
                     onMouseUp={this.onMouseUp}

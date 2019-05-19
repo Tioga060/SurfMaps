@@ -14,11 +14,13 @@ import { FileDropzone, IEditFile } from 'shared/components/FileDropzone';
 import { IDisplayMap, IDisplayMapFile } from '../../../../types';
 import { classNames as cn } from '../../styles';
 import { IEditMapContext } from '../EditMapDrawerContent/container';
+import { IGame } from 'shared/types';
 
 interface IProps {
     updateMap: (partialState: Partial<IDisplayMap>) => void;
     mapFiles: IDisplayMapFile[];
     context: IEditMapContext;
+    defaultGame: IGame;
 }
 
 const updateFiles = (props: IProps, index: number) => (file: IEditFile[]) => {
@@ -59,19 +61,19 @@ const updateGame = (props: IProps, index: number) => (e: React.ChangeEvent<HTMLS
     }
 }
 
-const createBlankMapFile = (context: IEditMapContext): IDisplayMapFile => ({
+const createBlankMapFile = (context: IEditMapContext, game: IGame): IDisplayMapFile => ({
     file: [],
-    game: context.allGames.nodes[0],
+    game,
     description: '',
     uploader: context.currentUserSteamInfo,
-    fileType: context.allFileTypes.nodes[0],
+    fileType: context.allFileTypes.nodes[0], // TODO when more than just BSP support exists
 })
 
 const addMapFile = (props: IProps) => () => {
     props.updateMap({
         mapFiles: [
             ...props.mapFiles,
-            createBlankMapFile(props.context),
+            createBlankMapFile(props.context, props.defaultGame),
         ]
     })
 }
@@ -92,7 +94,7 @@ export const FileUpload: React.StatelessComponent<IProps> = (props) => (
         </Typography>
         {props.mapFiles.map((mapFile, index) => (
             <div className="py-3" key={index}>
-                {index !== 0 && <Divider/>}
+                {index !== 0 && <Divider className="mb-3"/>}
                 <div className="d-flex">
                     <div className="pt-2">
                         <IconButton

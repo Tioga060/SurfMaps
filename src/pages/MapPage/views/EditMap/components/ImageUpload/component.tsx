@@ -43,14 +43,14 @@ export const ImageUpload: React.StatelessComponent<IProps> = (props) => (
         </div>
         {!!props.stages.length && <div className={`${cn.drawerCard} p-2`}>
             {props.stages.map((stage, index) => {
-                return ( // TODO - only allow users to upload images for committed stages
+                return ( stage.rowId ? (
                     <div key={index}>
                         {index !== 0 && <Divider/>}
                         <Typography variant="h6" align="center">
                             {`${stage.stageType.name} ${stage.number > 0 ? stage.number : ''}`}
                         </Typography>
                         <ImageDropzone files={stage.images} setFiles={updateStageImages(props, index)} singleImage/>
-                    </div>
+                    </div> ) : <StageImagePlaceholder key={index} stage={stage} />
                 )
             })}
         </div>}
@@ -60,5 +60,20 @@ export const ImageUpload: React.StatelessComponent<IProps> = (props) => (
             </Typography>
             <ImageDropzone files={props.mapImages} setFiles={updateMapImages(props)}/>
         </div>
+    </>
+);
+
+interface IPlaceholderProps {
+    stage: IDisplayStage;
+}
+
+const StageImagePlaceholder: React.StatelessComponent<IPlaceholderProps> = ({stage}) => (
+    <>
+        <Typography variant="h6" align="center">
+            {`${stage.stageType.name} ${stage.number > 0 ? stage.number : ''}`}
+        </Typography>
+        <Typography variant="caption" align="center">
+            You must commit this stage before adding images
+        </Typography>
     </>
 );

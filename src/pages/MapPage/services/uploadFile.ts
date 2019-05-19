@@ -1,9 +1,9 @@
 import { uploadFile as uploadAzureFile, generateSas } from 'shared/resources/azure';
+import { getFileName } from 'shared/helpers';
 import * as SubmitHelpers from './gqlSubmitHelpers';
 import { ICreateFileResponse } from './SubmitMapGQL';
 import { TransferProgressEvent } from '@azure/ms-rest-js';
 import { IDisplayMapFile } from '../types';
-const FILE_NAME_LENGTH = -50;
 
 export interface IMapFileOption {
     gameId: string;
@@ -20,6 +20,9 @@ export const uploadFiles = async (files: IDisplayMapFile[], mapId: string, uploa
         return;
     }
     const { token } = await generateSas(mapId);
+    if (!token) {
+        return;
+    }
     files.forEach((file) => {
         const options: IMapFileOption = {
             gameId: file.game.rowId!,
@@ -27,13 +30,12 @@ export const uploadFiles = async (files: IDisplayMapFile[], mapId: string, uploa
             isPrimary: true, //TODO
             fileTypeId: file.fileType.rowId!,
         }
-        console.log(file)
         uploadFile(mapId, uploaderId, file.file[0].file!, token, options, cb);
     });
 }
 
 const uploadFile = (mapId: string, uploaderId: string, file: File, token: string, options: IMapFileOption, cb: () => void) => {
-    const fileName = encodeURI(file.name.substr(FILE_NAME_LENGTH));
+    const fileName = getFileName(file.name);
     SubmitHelpers.createFile(uploaderId, options.fileTypeId, (response: ICreateFileResponse) => {
         SubmitHelpers.createMapFile(mapId, options.gameId, options.label, uploaderId, response, cb, options.isPrimary);
 

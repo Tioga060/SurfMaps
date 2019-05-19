@@ -1,3 +1,4 @@
+import { generateSas } from 'shared/resources/azure';
 import * as MapTypes from '../types';
 import * as GQLSubmit from '../services/gqlSubmitHelpers';
 import { ICreateMapResponse } from '../services/SubmitMapGQL';
@@ -24,7 +25,7 @@ const createMapSubmitCallback = (editMapState: MapTypes.IDisplayMap, refreshCall
     UpdateHelpers.flattenContributionsToTemp(editMapState.contributors).forEach((contribution) => {
         GQLSubmit.createMapContribution(contribution.userId, contribution.contribution, mapId, submitterId, callBack);
     });
-    // TODO - create blob container
+    generateSas(mapId, true);
     callBack();
 }
 
@@ -86,8 +87,7 @@ export const modifyMap = (originalMap: MapTypes.IDisplayMap, modifiedMap: MapTyp
         } else {
             GQLUpdate.deleteMapImage(image.rowId!, mapId, submitterId, callBack);
         }
-        // TODO - figure out how to best orphan an image with RLS
-        //GQLUpdate.updateImage(image.rowId!, true, submitterId, callBack);
+        GQLUpdate.updateImage(image.rowId!, true, submitterId, callBack);
     })
 
     const { createdFiles,  modifiedFiles, deletedFiles } = UpdateHelpers.getAllCreatedModifiedAndDeletedFiles(originalMap, modifiedMap);
@@ -97,7 +97,6 @@ export const modifyMap = (originalMap: MapTypes.IDisplayMap, modifiedMap: MapTyp
     });
     deletedFiles.forEach(file => {
         GQLUpdate.deleteMapFile(file.file[0].rowId!, mapId, submitterId, callBack);
-        // TODO - figure out how to best orphan a file with RLS
-        //GQLUpdate.updateFile(file.file[0].rowId!, submitterId, callBack, true);
+        GQLUpdate.updateFile(file.file[0].rowId!, submitterId, callBack, true);
     });
 };

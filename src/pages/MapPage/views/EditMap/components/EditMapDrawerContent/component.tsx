@@ -210,6 +210,7 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
                         updateMap={this.updateMap}
                         context={this.props.context}
                         mapFiles={this.state.map.mapFiles}
+                        defaultGame={this.state.map.game}
                     />
                 )}
             </>

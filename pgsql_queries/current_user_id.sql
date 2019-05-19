@@ -48,6 +48,8 @@ create policy update_map_debug on public."Map" for update using (true) with chec
 
 create policy update_map_debug on public."Map" for update using (true) with check (true)
 
+grant update("isOrphan") on public."File" to verified_user;
+
 drop policy public_select on public."File";
 drop policy public_select on public."Image";
 drop policy public_select on public."Map";

@@ -3,8 +3,14 @@ export interface IResponse {
     uri: string;
 }
 
-export const generateSas = async (containerName: string): Promise<IResponse> => {
-    const response = await fetch(`${process.env.REACT_APP_AZURE_FUNCTION_DEV_URL}/GenerateSas?container=${containerName}`);
+export const generateSas = async (containerName: string, createContainer: boolean = false): Promise<IResponse> => {
+    const response = await fetch(`${
+        process.env.REACT_APP_AZURE_FUNCTION_DEV_URL
+    }/GenerateSas?container=${
+        containerName
+    }${createContainer ? '&create=true' : ''}`, {
+        credentials: 'include', // TODO - same origin
+    });
     if (response.ok) {
         return await response.json();
     } else {

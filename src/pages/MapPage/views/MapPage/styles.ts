@@ -26,7 +26,7 @@ export const classNames = {
         backgroundColor: globalColors.pageBackground.toString(),
     }),
     mapInfo: style({
-        marginTop: '-0.5rem',
+        marginTop: '-0.3rem',
     }),
     mapCard: style({
         backgroundColor: globalColors.cardColor.toString(),
@@ -74,6 +74,12 @@ export const classNames = {
     scrollImageContainer: style({
         //override below
     }),
+    scrollImageContainerSmall: style({
+        height: '170px',
+    }),
+    scrollImageContainerBig: style({
+        height: '340px',
+    }),
     scrollImage: style({
         width: mapImageWH,
         height: mapImageWH,
@@ -82,7 +88,6 @@ export const classNames = {
 
 cssRaw(`
 .${classNames.scrollImageContainer} {
-    height: 340px;
     overflow-x: auto;
     display: flex;
     flex-direction: column;

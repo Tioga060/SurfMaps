@@ -20,6 +20,7 @@ const handleDateChange = (props: IProps) => (date: Date) => {
 };
 
 export const ReleaseDate: React.StatelessComponent<IProps> = (props) => {
+    // TODO - make this persist release date
     const [released, setReleased] = useState(false);
     const updateReleased = (event: React.ChangeEvent<HTMLInputElement>) => {
         const releaseDate = event.target.checked ? (new Date()).toString() : '';
