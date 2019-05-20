@@ -1,5 +1,5 @@
 import { graphql } from 'react-relay';
-import { simpleMutationCreator, batchEnvironment } from 'shared/resources/graphql';
+import { mutationCreator, batchEnvironment } from 'shared/resources/graphql';
 
 // ============================================ Update Map ============================================
 interface IUpdateMapMutation {
@@ -26,7 +26,7 @@ mutation UpdateMapGQL_mapMutation($map: UpdateMapByRowIdInput!) {
   }
 }
 `
-export const updateMap = simpleMutationCreator<IUpdateMapMutation>(batchEnvironment, updateMapQuery);
+export const updateMap = mutationCreator<IUpdateMapMutation>(batchEnvironment, updateMapQuery);
 
 // ============================================ Delete Author ============================================
 interface IDeleteAuthorMutation {
@@ -44,7 +44,7 @@ mutation UpdateMapGQL_deleteAuthorMutation($author: DeleteMapAuthorByAuthorIdAnd
   }
 }
 `
-export const deleteAuthor = simpleMutationCreator<IDeleteAuthorMutation>(batchEnvironment, deleteAuthorQuery);
+export const deleteAuthor = mutationCreator<IDeleteAuthorMutation>(batchEnvironment, deleteAuthorQuery);
 
 // ============================================ Delete Stage ============================================
 interface IDeleteStageMutation {
@@ -60,7 +60,7 @@ mutation UpdateMapGQL_deleteStageMutation($stage: DeleteStageByRowIdInput!) {
   }
 }
 `
-export const deleteStage = simpleMutationCreator<IDeleteStageMutation>(batchEnvironment, deleteStageQuery);
+export const deleteStage = mutationCreator<IDeleteStageMutation>(batchEnvironment, deleteStageQuery);
 
 // ============================================ Update Stage ============================================
 interface IUpdateStageMutation {
@@ -85,7 +85,7 @@ mutation UpdateMapGQL_stageMutation($stage: UpdateStageByRowIdInput!) {
   }
 }
 `
-export const updateStage = simpleMutationCreator<IUpdateStageMutation>(batchEnvironment, updateStageQuery);
+export const updateStage = mutationCreator<IUpdateStageMutation>(batchEnvironment, updateStageQuery);
 
 // ============================================ Update Description ============================================
 interface IUpdateDescriptionMutation {
@@ -107,7 +107,7 @@ mutation UpdateMapGQL_descriptionMutation($description: UpdateTextMarkdownByRowI
   }
 }
 `
-export const updateDescription = simpleMutationCreator<IUpdateDescriptionMutation>(batchEnvironment, updateDescriptionQuery);
+export const updateDescription = mutationCreator<IUpdateDescriptionMutation>(batchEnvironment, updateDescriptionQuery);
 
 // ============================================ Update Contribution ============================================
 interface IUpdateContributionMutation {
@@ -127,7 +127,7 @@ mutation UpdateMapGQL_updateContributionMutation($contribution: UpdateMapContrib
   }
 }
 `
-export const updateContribution = simpleMutationCreator<IUpdateContributionMutation>(batchEnvironment, updateContributionQuery);
+export const updateContribution = mutationCreator<IUpdateContributionMutation>(batchEnvironment, updateContributionQuery);
 
 // ============================================ Delete Contribution ============================================
 interface IDeleteContributionMutation {
@@ -144,7 +144,7 @@ mutation UpdateMapGQL_deleteContributionMutation($contribution: DeleteMapContrib
   }
 }
 `
-export const deleteContribution = simpleMutationCreator<IDeleteContributionMutation>(batchEnvironment, deleteContributionQuery);
+export const deleteContribution = mutationCreator<IDeleteContributionMutation>(batchEnvironment, deleteContributionQuery);
 
 // ============================================ Delete MapImage ============================================
 interface IDeleteMapImageMutation {
@@ -162,7 +162,7 @@ mutation UpdateMapGQL_deleteMapImageMutation($image: DeleteMapImageByMapIdAndIma
   }
 }
 `
-export const deleteMapImage = simpleMutationCreator<IDeleteMapImageMutation>(batchEnvironment, deleteMapImageQuery);
+export const deleteMapImage = mutationCreator<IDeleteMapImageMutation>(batchEnvironment, deleteMapImageQuery);
 
 // ============================================ Delete StageImage ============================================
 interface IDeleteStageImageMutation {
@@ -180,7 +180,7 @@ mutation UpdateMapGQL_deleteStageImageMutation($image: DeleteStageImageByStageId
   }
 }
 `
-export const deleteStageImage = simpleMutationCreator<IDeleteStageImageMutation>(batchEnvironment, deleteStageImageQuery);
+export const deleteStageImage = mutationCreator<IDeleteStageImageMutation>(batchEnvironment, deleteStageImageQuery);
 
 // ============================================ Update MapFile ============================================
 interface IUpdateMapFileMutation {
@@ -203,7 +203,7 @@ updateMapFileByMapIdAndFileId(input: $mapFile) {
 }
 }
 `
-export const updateMapFile = simpleMutationCreator<IUpdateMapFileMutation>(batchEnvironment, updateMapFileQuery);
+export const updateMapFile = mutationCreator<IUpdateMapFileMutation>(batchEnvironment, updateMapFileQuery);
 
 // ============================================ Delete MapFile ============================================
 interface IDeleteMapFileMutation {
@@ -221,7 +221,7 @@ deleteMapFileByMapIdAndFileId(input: $mapFile) {
 }
 }
 `
-export const deleteMapFile = simpleMutationCreator<IDeleteMapFileMutation>(batchEnvironment, deleteMapFileQuery);
+export const deleteMapFile = mutationCreator<IDeleteMapFileMutation>(batchEnvironment, deleteMapFileQuery);
 
 // ============================================ Update Image ============================================
 interface IUpdateImageMutation {
@@ -241,7 +241,7 @@ mutation UpdateMapGQL_updateImageMutation($image: UpdateImageByRowIdInput!) {
   }
 }
 `
-export const updateImage = simpleMutationCreator<IUpdateImageMutation>(batchEnvironment, updateImageQuery);
+export const updateImage = mutationCreator<IUpdateImageMutation>(batchEnvironment, updateImageQuery);
 
 // ============================================ Update File ============================================
 interface IUpdateFileMutation {
@@ -262,4 +262,4 @@ mutation UpdateMapGQL_updateFileMutation($file: UpdateFileByRowIdInput!) {
   }
 }
 `
-export const updateFile = simpleMutationCreator<IUpdateFileMutation>(batchEnvironment, updateFileQuery);
+export const updateFile = mutationCreator<IUpdateFileMutation>(batchEnvironment, updateFileQuery);

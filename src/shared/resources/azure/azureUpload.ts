@@ -35,7 +35,7 @@ export const uploadFile = async (
     const blobURL = BlobURL.fromContainerURL(containerURL, blobName);
     const blockBlobURL = BlockBlobURL.fromBlobURL(blobURL);
 
-    await uploadBrowserDataToBlockBlob(Aborter.none, file, blockBlobURL, {
+    return await uploadBrowserDataToBlockBlob(Aborter.none, file, blockBlobURL, {
         blockSize: 4 * 1024 * 1024, // 4MB block size
         parallelism: 20, // 20 concurrency
         progress: progressCallback,

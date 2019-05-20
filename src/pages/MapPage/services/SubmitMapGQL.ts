@@ -1,5 +1,5 @@
 import { graphql } from 'react-relay';
-import { simpleMutationCreator, callbackMutationCreator, batchEnvironment, environment } from 'shared/resources/graphql';
+import { mutationCreator, batchEnvironment, environment } from 'shared/resources/graphql';
 
 // ============================================ Create Map ============================================
 export interface ICreateMapMutation {
@@ -34,7 +34,7 @@ mutation SubmitMapGQL_mapMutation($map: CreateMapInput!) {
   }
 }
 `
-export const createMap = callbackMutationCreator<ICreateMapMutation, ICreateMapResponse>(environment, createMapQuery);
+export const createMap = mutationCreator<ICreateMapMutation, ICreateMapResponse>(environment, createMapQuery);
 
 // ============================================ Create Author ============================================
 interface ICreateAuthorMutation {
@@ -56,7 +56,7 @@ mutation SubmitMapGQL_authorMutation($author: CreateMapAuthorInput!) {
   }
 }
 `
-export const createAuthor = simpleMutationCreator<ICreateAuthorMutation>(batchEnvironment, createAuthorQuery);
+export const createAuthor = mutationCreator<ICreateAuthorMutation>(batchEnvironment, createAuthorQuery);
 
 // ============================================ Create Stage ============================================
 export interface ICreateStageMutation {
@@ -80,7 +80,7 @@ mutation SubmitMapGQL_stageMutation($stage: CreateStageInput!) {
   }
 }
 `
-export const createStage = simpleMutationCreator<ICreateStageMutation>(batchEnvironment, createStageQuery);
+export const createStage = mutationCreator<ICreateStageMutation>(batchEnvironment, createStageQuery);
 
 
 // ============================================ Create Description ============================================
@@ -110,7 +110,7 @@ mutation SubmitMapGQL_descriptionMutation($description: CreateTextMarkdownInput!
   }
 }
 `
-export const createDescription = callbackMutationCreator<ICreateDescriptionMutation, ICreateDescriptionResponse>(environment, createDescriptionQuery);
+export const createDescription = mutationCreator<ICreateDescriptionMutation, ICreateDescriptionResponse>(environment, createDescriptionQuery);
 
 // ============================================ Create MapDescription ============================================
 interface ICreateMapDescriptionMutation {
@@ -133,7 +133,7 @@ mutation SubmitMapGQL_mapDescriptionMutation($description: CreateMapDescriptionI
   }
 }
 `
-export const createMapDescription = simpleMutationCreator<ICreateMapDescriptionMutation>(batchEnvironment, createMapDescriptionQuery);
+export const createMapDescription = mutationCreator<ICreateMapDescriptionMutation>(batchEnvironment, createMapDescriptionQuery);
 
 // ============================================ Create Contribution ============================================
 interface ICreateMapContributionMutation {
@@ -157,7 +157,7 @@ mutation SubmitMapGQL_mapContributionMutation($contribution: CreateMapContributo
   }
 }
 `
-export const createContribution = simpleMutationCreator<ICreateMapContributionMutation>(batchEnvironment, createContributionQuery); 
+export const createContribution = mutationCreator<ICreateMapContributionMutation>(batchEnvironment, createContributionQuery); 
 
 // ============================================ Create Image ============================================
 interface ICreateImageMutation {
@@ -185,7 +185,7 @@ mutation SubmitMapGQL_ImageMutation($image: CreateImageInput!) {
   }
 }
 `
-export const createImage = callbackMutationCreator<ICreateImageMutation, ICreateImageResponse>(environment, createImageQuery); 
+export const createImage = mutationCreator<ICreateImageMutation, ICreateImageResponse>(environment, createImageQuery); 
 
 // ============================================ Create MapImage ============================================
 interface ICreateMapImageMutation {
@@ -207,7 +207,7 @@ mutation SubmitMapGQL_mapImageMutation($image: CreateMapImageInput!) {
   }
 }
 `
-export const createMapImage = simpleMutationCreator<ICreateMapImageMutation>(batchEnvironment, createMapImageQuery);
+export const createMapImage = mutationCreator<ICreateMapImageMutation>(batchEnvironment, createMapImageQuery);
 
 // ============================================ Create StageImage ============================================
 interface ICreateStageImageMutation {
@@ -226,7 +226,7 @@ mutation SubmitMapGQL_stageImageMutation($image: CreateStageImageInput!) {
   }
 }
 `
-export const createStageImage = simpleMutationCreator<ICreateStageImageMutation>(batchEnvironment, createStageImageQuery);
+export const createStageImage = mutationCreator<ICreateStageImageMutation>(batchEnvironment, createStageImageQuery);
 
 // ============================================ Create File ============================================
 interface ICreateFileMutation {
@@ -255,7 +255,7 @@ mutation SubmitMapGQL_FileMutation($file: CreateFileInput!) {
   }
 }
 `
-export const createFile = callbackMutationCreator<ICreateFileMutation, ICreateFileResponse>(environment, createFileQuery); 
+export const createFile = mutationCreator<ICreateFileMutation, ICreateFileResponse>(environment, createFileQuery); 
 
 // ============================================ Create MapFile ============================================
 interface ICreateMapFileMutation {
@@ -277,4 +277,4 @@ mutation SubmitMapGQL_mapFileMutation($file: CreateMapFileInput!) {
   }
 }
 `
-export const createMapFile = simpleMutationCreator<ICreateMapFileMutation>(batchEnvironment, createMapFileQuery);
+export const createMapFile = mutationCreator<ICreateMapFileMutation>(batchEnvironment, createMapFileQuery);

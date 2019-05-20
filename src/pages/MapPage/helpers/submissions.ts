@@ -1,102 +1,126 @@
 import { generateSas } from 'shared/resources/azure';
 import * as MapTypes from '../types';
 import * as GQLSubmit from '../services/gqlSubmitHelpers';
-import { ICreateMapResponse } from '../services/SubmitMapGQL';
 import * as GQLUpdate from '../services/gqlUpdateHelpers';
 import * as UpdateHelpers from './updates';
 import { uploadImages } from '../services/uploadImage';
 import { uploadFiles } from '../services/uploadFile';
 
-const createMapSubmitCallback = (editMapState: MapTypes.IDisplayMap, refreshCallback: (mapId: string) => void) => (response: ICreateMapResponse) => {
+export const submitMap = async (editMapState: MapTypes.IDisplayMap) => {
+    const response = await GQLSubmit.createMap(editMapState);
     const mapId = response.createMap.map.rowId;
     const submitterId = editMapState.submitter.userId;
-    const callBack = () => { refreshCallback(mapId); }
 
-    editMapState.authors.forEach((author) => {
-        GQLSubmit.createAuthor(author, mapId, submitterId, callBack);
-    })
+    const authorPromises = editMapState.authors.map((author) => (
+        GQLSubmit.createAuthor(author, mapId, submitterId)
+    ))
 
-    editMapState.stages.forEach((stage) => {
-        GQLSubmit.createStage(stage, mapId, submitterId, callBack);
-    })
+    const stagePromises = editMapState.stages.map((stage) => (
+        GQLSubmit.createStage(stage, mapId, submitterId)
+    ));
 
-    GQLSubmit.createDescription(editMapState, mapId, callBack);
+    const descriptionPromise = GQLSubmit.createDescription(editMapState, mapId);
 
-    UpdateHelpers.flattenContributionsToTemp(editMapState.contributors).forEach((contribution) => {
-        GQLSubmit.createMapContribution(contribution.userId, contribution.contribution, mapId, submitterId, callBack);
-    });
-    generateSas(mapId, true);
-    callBack();
-}
-
-export const submitMap = (editMapState: MapTypes.IDisplayMap, refreshCallback: (mapId: string) => void) => {
-    GQLSubmit.createMap(editMapState, createMapSubmitCallback(editMapState, refreshCallback));
+    const contributionPromises = UpdateHelpers.flattenContributionsToTemp(editMapState.contributors).map((contribution) => (
+        GQLSubmit.createMapContribution(contribution.userId, contribution.contribution, mapId, submitterId)
+    ));
+    const containerPromise = generateSas(mapId, true);
+    const results = await Promise.all([
+        ...authorPromises,
+        ...stagePromises,
+        descriptionPromise,
+        ...contributionPromises,
+        containerPromise
+    ]);
+    console.log(results);
+    return mapId;
 };
 
-export const modifyMap = (originalMap: MapTypes.IDisplayMap, modifiedMap: MapTypes.IDisplayMap, refreshCallback: (mapId: string) => void) => {
+export const modifyMap = async (originalMap: MapTypes.IDisplayMap, modifiedMap: MapTypes.IDisplayMap) => {
     const mapId = modifiedMap.mapId!;
     const submitterId = modifiedMap.submitter.userId;
-    const callBack = () => { refreshCallback(mapId) };
+
+    const conditionalPromises: Promise<any>[] = [];
     if (UpdateHelpers.shouldUpdateMap(originalMap, modifiedMap)) {
-        GQLUpdate.updateMap(modifiedMap, callBack);
+        conditionalPromises.push(GQLUpdate.updateMap(modifiedMap));
     }
 
     const {createdAuthors, deletedAuthors} = UpdateHelpers.getCreatedAndDeletedAuthors(originalMap, modifiedMap);
-    createdAuthors.forEach((author) => {
-        GQLSubmit.createAuthor(author, mapId, submitterId, callBack);
-    });
-    deletedAuthors.forEach((author) => {
-        GQLUpdate.deleteAuthor(author.userId, mapId, submitterId, callBack)
-    });
-
-    const {createdStages, modifiedStages, deletedStages} = UpdateHelpers.getCreatedModifiedAndDeletedStages(originalMap, modifiedMap);
-    createdStages.forEach((stage) => {
-        GQLSubmit.createStage(stage, mapId, submitterId, callBack);
-    });
-    modifiedStages.forEach((stage) => {
-        GQLUpdate.updateStage(stage, submitterId, callBack);
-    });
-    deletedStages.forEach((stage) => {
-        GQLUpdate.deleteStage(stage, submitterId, callBack);
-    });
+    const authorPromises = [
+        ...createdAuthors.map((author) => (
+            GQLSubmit.createAuthor(author, mapId, submitterId)
+        )),
+        ...deletedAuthors.map((author) => (
+            GQLUpdate.deleteAuthor(author.userId, mapId, submitterId)
+        )),
+    ];
 
     if (UpdateHelpers.shouldUpdateDescription(originalMap, modifiedMap)) {
-        if (!modifiedMap.description.rowId || modifiedMap.description.rowId.length < 36) {
-            GQLSubmit.createDescription(modifiedMap, mapId, callBack);
-        } else {
-            GQLUpdate.updateDescription(modifiedMap.description, submitterId, callBack);
-        }
+        conditionalPromises.push(GQLUpdate.updateDescription(modifiedMap.description, submitterId));
     }
 
     const { createdContributions, modifiedContributions, deletedContributions } = UpdateHelpers.getCreatedModifiedAndDeletedContributions(originalMap, modifiedMap);
-    createdContributions.forEach((contribution) => {
-        GQLSubmit.createMapContribution(contribution.userId, contribution.contribution, mapId, submitterId, callBack);
-    });
-    modifiedContributions.forEach((contribution) => {
-        GQLUpdate.updateContribution(contribution.contribution, contribution.rowId!, submitterId, callBack);
-    });
-    deletedContributions.forEach((contribution) => {
-        GQLUpdate.deleteContribution(contribution.rowId!, submitterId, callBack);
-    });
-    // TODO - cascade drop stageImages first
+    const contributionPromises = [
+        ...createdContributions.map((contribution) => (
+            GQLSubmit.createMapContribution(contribution.userId, contribution.contribution, mapId, submitterId)
+        )),
+        ...modifiedContributions.map((contribution) => (
+            GQLUpdate.updateContribution(contribution.contribution, contribution.rowId!, submitterId)
+        )),
+        ...deletedContributions.map((contribution) => (
+            GQLUpdate.deleteContribution(contribution.rowId!, submitterId)
+        )),
+    ];
+
     const { createdImages, deletedImages } = UpdateHelpers.getCreatedAndDeletedImages(originalMap, modifiedMap);
-    uploadImages(createdImages, mapId, submitterId, callBack);
+    const createdImagePromises = uploadImages(createdImages, mapId, submitterId);
+    const deletedImagePromises: Promise<any>[] = [];
     deletedImages.forEach((image) => {
         if (image.stageId) {
-            GQLUpdate.deleteStageImage(image.rowId!, image.stageId!, submitterId, callBack);
+            deletedImagePromises.push(GQLUpdate.deleteStageImage(image.rowId!, image.stageId!, submitterId));
         } else {
-            GQLUpdate.deleteMapImage(image.rowId!, mapId, submitterId, callBack);
+            deletedImagePromises.push(GQLUpdate.deleteMapImage(image.rowId!, mapId, submitterId));
         }
-        GQLUpdate.updateImage(image.rowId!, true, submitterId, callBack);
-    })
+        deletedImagePromises.push(GQLUpdate.updateImage(image.rowId!, true, submitterId));
+    });
 
     const { createdFiles,  modifiedFiles, deletedFiles } = UpdateHelpers.getAllCreatedModifiedAndDeletedFiles(originalMap, modifiedMap);
-    uploadFiles(createdFiles, mapId, submitterId, callBack);
-    modifiedFiles.forEach(file => {
-        GQLUpdate.updateMapFile(file, mapId, submitterId, callBack);
-    });
+    const createdFilePromises = uploadFiles(createdFiles, mapId, submitterId);
+    const modifiedFilePromises = modifiedFiles.map(file => (
+        GQLUpdate.updateMapFile(file, mapId, submitterId)
+    ));
+    const deletedFilePromises: Promise<any>[] = [];
     deletedFiles.forEach(file => {
-        GQLUpdate.deleteMapFile(file.file[0].rowId!, mapId, submitterId, callBack);
-        GQLUpdate.updateFile(file.file[0].rowId!, submitterId, callBack, true);
+        deletedFilePromises.push(GQLUpdate.deleteMapFile(file.file[0].rowId!, mapId, submitterId));
+        deletedFilePromises.push(GQLUpdate.updateFile(file.file[0].rowId!, submitterId, true));
     });
+
+    const {createdStages, modifiedStages, deletedStages} = UpdateHelpers.getCreatedModifiedAndDeletedStages(originalMap, modifiedMap);
+    const stagePromises = [
+        ...createdStages.map((stage) => (
+            GQLSubmit.createStage(stage, mapId, submitterId)
+        )),
+        ...modifiedStages.map((stage) => (
+            GQLUpdate.updateStage(stage, submitterId)
+        )),
+    ];
+
+    await Promise.all(deletedImagePromises);
+    // have to delete stage images before deleting the stage
+    const deletedStagePromises = deletedStages.map((stage) => (
+        GQLUpdate.deleteStage(stage, submitterId)
+    ));
+
+    return await Promise.all([
+        ...conditionalPromises,
+        ...authorPromises,
+        ...contributionPromises,
+        ...deletedImagePromises,
+        ...modifiedFilePromises,
+        ...deletedFilePromises,
+        ...stagePromises,
+        ...deletedStagePromises,
+        ...(await createdImagePromises),
+        ...(await createdFilePromises),
+    ]);
 };

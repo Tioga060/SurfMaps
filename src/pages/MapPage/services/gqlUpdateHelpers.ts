@@ -1,7 +1,7 @@
 import * as MapTypes from '../types';
 import * as GQLUpdate from './UpdateMapGQL';
 
-export const updateMap = (editMapState: MapTypes.IDisplayMap, callBack: () => void) => {
+export const updateMap = (editMapState: MapTypes.IDisplayMap) => {
     const data = {
         map: {
             clientMutationId: editMapState.submitter.userId,
@@ -16,10 +16,10 @@ export const updateMap = (editMapState: MapTypes.IDisplayMap, callBack: () => vo
             }
         }
     }
-    GQLUpdate.updateMap(data, callBack);
+    return GQLUpdate.updateMap(data);
 }
 
-export const deleteAuthor = (authorId: string, mapId: string, clientMutationId: string, callBack: () => void) => {
+export const deleteAuthor = (authorId: string, mapId: string, clientMutationId: string) => {
     const data = {
         author: {
             clientMutationId,
@@ -27,10 +27,10 @@ export const deleteAuthor = (authorId: string, mapId: string, clientMutationId: 
             mapId,
         }
     };
-    GQLUpdate.deleteAuthor(data, callBack);
+    return GQLUpdate.deleteAuthor(data);
 };
 
-export const updateStage = (stage: MapTypes.IDisplayStage, clientMutationId: string, callBack: () => void) => {
+export const updateStage = (stage: MapTypes.IDisplayStage, clientMutationId: string) => {
     const data = {
         stage: {
             clientMutationId,
@@ -43,20 +43,20 @@ export const updateStage = (stage: MapTypes.IDisplayStage, clientMutationId: str
             }
         }
     }
-    GQLUpdate.updateStage(data, callBack);
+    return GQLUpdate.updateStage(data);
 };
 
-export const deleteStage = (stage: MapTypes.IDisplayStage, clientMutationId: string, callBack: () => void) => {
+export const deleteStage = (stage: MapTypes.IDisplayStage, clientMutationId: string) => {
     const data = {
         stage: {
             clientMutationId,
             rowId: stage.rowId!,
         }
     }
-    GQLUpdate.deleteStage(data, callBack);
+    return GQLUpdate.deleteStage(data);
 };
 
-export const updateDescription = (description: MapTypes.IDisplayDescription, clientMutationId: string, callBack: () => void) => {
+export const updateDescription = (description: MapTypes.IDisplayDescription, clientMutationId: string) => {
     const data = {
         description: {
             clientMutationId,
@@ -66,10 +66,10 @@ export const updateDescription = (description: MapTypes.IDisplayDescription, cli
             }
         }
     }
-    GQLUpdate.updateDescription(data, callBack);
+    return GQLUpdate.updateDescription(data);
 };
 
-export const updateContribution = (contribution: string, rowId: string, clientMutationId: string, callBack: () => void) => {
+export const updateContribution = (contribution: string, rowId: string, clientMutationId: string) => {
     const data = {
         contribution: {
             clientMutationId,
@@ -79,20 +79,20 @@ export const updateContribution = (contribution: string, rowId: string, clientMu
             }
         }
     }
-    GQLUpdate.updateContribution(data, callBack);
+    return GQLUpdate.updateContribution(data);
 };
 
-export const deleteContribution = (rowId: string, clientMutationId: string, callBack: () => void) => {
+export const deleteContribution = (rowId: string, clientMutationId: string) => {
     const data = {
         contribution: {
             clientMutationId,
             rowId,
         }
     }
-    GQLUpdate.deleteContribution(data, callBack);
+    return GQLUpdate.deleteContribution(data);
 };
 
-export const deleteMapImage = (imageId: string, mapId: string, clientMutationId: string, callBack: () => void) => {
+export const deleteMapImage = (imageId: string, mapId: string, clientMutationId: string) => {
     const data = {
         image: {
             clientMutationId,
@@ -100,10 +100,10 @@ export const deleteMapImage = (imageId: string, mapId: string, clientMutationId:
             mapId,
         }
     }
-    GQLUpdate.deleteMapImage(data, callBack);
+    return GQLUpdate.deleteMapImage(data);
 };
 
-export const deleteStageImage = (imageId: string, stageId: string, clientMutationId: string, callBack: () => void) => {
+export const deleteStageImage = (imageId: string, stageId: string, clientMutationId: string) => {
     const data = {
         image: {
             clientMutationId,
@@ -111,10 +111,10 @@ export const deleteStageImage = (imageId: string, stageId: string, clientMutatio
             stageId,
         }
     }
-    GQLUpdate.deleteStageImage(data, callBack);
+    return GQLUpdate.deleteStageImage(data);
 };
 
-export const updateMapFile = (mapFile: MapTypes.IDisplayMapFile, mapId: string, clientMutationId: string, callBack: () => void) =>  {
+export const updateMapFile = (mapFile: MapTypes.IDisplayMapFile, mapId: string, clientMutationId: string) =>  {
     const data = {
         mapFile: {
             clientMutationId,
@@ -126,10 +126,10 @@ export const updateMapFile = (mapFile: MapTypes.IDisplayMapFile, mapId: string, 
             }
         }
     };
-    GQLUpdate.updateMapFile(data, callBack);
+    return GQLUpdate.updateMapFile(data);
 };
 
-export const deleteMapFile = (fileId: string, mapId: string, clientMutationId: string, callBack: () => void) =>  {
+export const deleteMapFile = (fileId: string, mapId: string, clientMutationId: string) =>  {
     const data = {
         mapFile: {
             clientMutationId,
@@ -137,10 +137,10 @@ export const deleteMapFile = (fileId: string, mapId: string, clientMutationId: s
             fileId,
         }
     };
-    GQLUpdate.deleteMapFile(data, callBack);
+    return GQLUpdate.deleteMapFile(data);
 };
 
-export const updateImage = (rowId: string, isOrphan: boolean, clientMutationId: string, callBack: () => void) =>  {
+export const updateImage = (rowId: string, isOrphan: boolean, clientMutationId: string) =>  {
     const data = {
         image: {
             clientMutationId,
@@ -150,19 +150,19 @@ export const updateImage = (rowId: string, isOrphan: boolean, clientMutationId: 
             }
         }
     };
-    GQLUpdate.updateImage(data, callBack);
+    return GQLUpdate.updateImage(data);
 };
 
-export const updateFile = (rowId: string, clientMutationId: string, callBack: () => void, isOrphan: boolean = false, fileTypeId: string = undefined!) =>  {
+export const updateFile = (rowId: string, clientMutationId: string, isOrphan: boolean = false, fileTypeId: string = undefined!) =>  {
     const data = {
         file: {
             clientMutationId,
             rowId,
             filePatch: {
                 isOrphan,
-                fileTypeId,
+                fileTypeId, // TODO - edit security policy to allow this
             }
         }
     };
-    GQLUpdate.updateFile(data, callBack);
+    return GQLUpdate.updateFile(data);
 };

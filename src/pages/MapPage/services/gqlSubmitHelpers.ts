@@ -2,7 +2,7 @@ import * as MapTypes from '../types';
 import * as SubmitGQL from './SubmitMapGQL';
 import { IUserSteamInfo } from 'shared/types';
 
-export const createMap = (editMapState: MapTypes.IDisplayMap, callBack: (data: SubmitGQL.ICreateMapResponse) => void) => {
+export const createMap = (editMapState: MapTypes.IDisplayMap) => {
     const mapData: SubmitGQL.ICreateMapMutation = {
         map: {
             clientMutationId: editMapState.submitter.userId,
@@ -20,10 +20,10 @@ export const createMap = (editMapState: MapTypes.IDisplayMap, callBack: (data: S
         mapData.map.map.releasedAt = (new Date(editMapState.releaseDate)).toUTCString();
     }
 
-    SubmitGQL.createMap(mapData, callBack);
+    return SubmitGQL.createMap(mapData);
 };
 
-export const createAuthor = (author: IUserSteamInfo, mapId: string, clientMutationId: string, callBack: () => void) => {
+export const createAuthor = (author: IUserSteamInfo, mapId: string, clientMutationId: string) => {
     const data = {
         author: {
             clientMutationId,
@@ -33,10 +33,10 @@ export const createAuthor = (author: IUserSteamInfo, mapId: string, clientMutati
             }
         }
     };
-    SubmitGQL.createAuthor(data, callBack);
+    return SubmitGQL.createAuthor(data);
 };
 
-export const createStage = (stage: MapTypes.IDisplayStage, mapId: string, clientMutationId: string, callBack: () => void) => {
+export const createStage = (stage: MapTypes.IDisplayStage, mapId: string, clientMutationId: string) => {
     const newStage: SubmitGQL.ICreateStageMutation = {
         stage: {
             clientMutationId,
@@ -52,10 +52,10 @@ export const createStage = (stage: MapTypes.IDisplayStage, mapId: string, client
         newStage.stage.stage.name = stage.name;
     }
 
-    SubmitGQL.createStage(newStage, callBack);
+    return SubmitGQL.createStage(newStage);
 };
 
-export const createDescription = (editMapState: MapTypes.IDisplayMap, mapId: string, callBack: () => void) => {
+export const createDescription = async (editMapState: MapTypes.IDisplayMap, mapId: string) => {
     const data = {
         description: {
             clientMutationId: editMapState.submitter.userId,
@@ -65,23 +65,21 @@ export const createDescription = (editMapState: MapTypes.IDisplayMap, mapId: str
             }
         }
     };
-    SubmitGQL.createDescription(data, (response: SubmitGQL.ICreateDescriptionResponse) => {
-        const descriptionData = {
-            description: {
-                clientMutationId: editMapState.submitter.userId,
-                mapDescription: {
-                    mapId,
-                    textMarkdownId: response.createTextMarkdown.textMarkdown.rowId,
-                    order: 0,
-                }
+    const description = await SubmitGQL.createDescription(data)
+    const descriptionData = {
+        description: {
+            clientMutationId: editMapState.submitter.userId,
+            mapDescription: {
+                mapId,
+                textMarkdownId: description.createTextMarkdown.textMarkdown.rowId,
+                order: 0,
             }
-        };
-        console.log(descriptionData)
-        SubmitGQL.createMapDescription(descriptionData, callBack);
-    })
+        }
+    };
+    return SubmitGQL.createMapDescription(descriptionData);
 };
 
-export const createMapContribution = (userId: string, text: string, mapId: string, clientMutationId: string, callBack: () => void) => {
+export const createMapContribution = (userId: string, text: string, mapId: string, clientMutationId: string) => {
     const data = {
         contribution: {
             clientMutationId,
@@ -92,10 +90,10 @@ export const createMapContribution = (userId: string, text: string, mapId: strin
             }
         }
     };
-    SubmitGQL.createContribution(data, callBack);
+    return SubmitGQL.createContribution(data);
 };
 
-export const createImage = (uploaderId: string, cb: (response: SubmitGQL.ICreateImageResponse) => void) => {
+export const createImage = (uploaderId: string) => {
     const data = {
         image: {
             clientMutationId: uploaderId,
@@ -105,7 +103,7 @@ export const createImage = (uploaderId: string, cb: (response: SubmitGQL.ICreate
             }
         }
     }
-    SubmitGQL.createImage(data, cb);
+    return SubmitGQL.createImage(data);
 };
 
 export const createMapImage = (
@@ -113,7 +111,6 @@ export const createMapImage = (
     clientMutationId: string,
     response: SubmitGQL.ICreateImageResponse,
     order: number,
-    callBack: () => void,
     backgroundImage: boolean = false,
     primaryImage: boolean = false,
 ) => {
@@ -129,14 +126,13 @@ export const createMapImage = (
             }
         }
     };
-    SubmitGQL.createMapImage(data, callBack);
+    return SubmitGQL.createMapImage(data);
 };
 
 export const createStageImage = (
     stageId: string,
     clientMutationId: string,
     response: SubmitGQL.ICreateImageResponse,
-    callBack: () => void,
 ) => {
     const data = {
         image: {
@@ -147,10 +143,10 @@ export const createStageImage = (
             }
         }
     };
-    SubmitGQL.createStageImage(data, callBack);
+    return SubmitGQL.createStageImage(data);
 };
 
-export const createFile = (uploaderId: string, fileTypeId: string, cb: (response: SubmitGQL.ICreateFileResponse) => void) => {
+export const createFile = (uploaderId: string, fileTypeId: string) => {
     const data = {
         file: {
             clientMutationId: uploaderId,
@@ -161,7 +157,7 @@ export const createFile = (uploaderId: string, fileTypeId: string, cb: (response
             }
         }
     }
-    SubmitGQL.createFile(data, cb);
+    return SubmitGQL.createFile(data);
 };
 
 export const createMapFile = (
@@ -170,7 +166,6 @@ export const createMapFile = (
     label: string,
     clientMutationId: string,
     response: SubmitGQL.ICreateFileResponse,
-    callBack: () => void,
     isPrimary: boolean = false,
 ) => {
     const data = {
@@ -185,5 +180,5 @@ export const createMapFile = (
             }
         }
     };
-    SubmitGQL.createMapFile(data, callBack);
+    return SubmitGQL.createMapFile(data);
 };

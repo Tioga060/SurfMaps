@@ -104,9 +104,18 @@ export class EditMapDrawerContent extends React.Component<IProps, IState> {
                 canPressAdd: false,
             }));
             if (this.props.mode === MODES.ADD) {
-                submitMap(this.state.map, this.props.refreshMap);
+                const mapId = await submitMap(this.state.map);
+                this.props.refreshMap(mapId);
+                this.setState(() => ({
+                    canPressAdd: true,
+                }));
             } else if (this.props.mode === MODES.EDIT) {
-                modifyMap(convertIMapToEditState(this.props.originalMap!) as IDisplayMap, this.state.map, this.props.refreshMap);
+                const results = await modifyMap(convertIMapToEditState(this.props.originalMap!) as IDisplayMap, this.state.map);
+                console.log(results);
+                this.props.refreshMap(this.state.map.mapId!);
+                this.setState(() => ({
+                    canPressAdd: true,
+                }));
             }
         }
     }
