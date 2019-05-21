@@ -3,7 +3,7 @@ import { globalSizes } from 'shared/styles';
 
 //todo update this dynamically
 export const classNames = {
-    topBar: style({
+    topBarDrawerOffset: style({
         marginLeft: globalSizes.modalWidth,
         width: `calc(100% - ${globalSizes.modalWidth}px)`,
     }),

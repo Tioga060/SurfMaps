@@ -3,7 +3,7 @@ import { MuiThemeProvider } from '@material-ui/core/styles';
 import { theme } from 'shared/styles';
 import { TopBar } from './components/TopBar';
 import { EditMap } from 'pages/MapPage/views/EditMap';
-import { MapPageContainer } from 'pages/MapPage';
+import { PageRouter } from './components/Router';
 import './App.scss'; // used for bootstrap utils
 
 class App extends Component {
@@ -11,7 +11,7 @@ class App extends Component {
     return (
       <MuiThemeProvider theme={theme}>
         <TopBar/>
-        <EditMap mapId="e20a024f-58de-415a-bc81-a84cdf2036f3"/> 
+        <PageRouter/> 
       </MuiThemeProvider>
     );
   }

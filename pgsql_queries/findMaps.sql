@@ -14,3 +14,7 @@ create function search_maps(search text)
   -- End the function declaring the language we used as SQL and add the
   -- `STABLE` marker so PostGraphile knows its a query and not a mutation.
   $$ language sql stable;
+
+create function search_maps_by_name(search text) returns setof public."Map" as $$
+	select * from public."Map" where "name" = search or "name" ilike ('%' || search || '%') limit 1
+$$ language sql stable;

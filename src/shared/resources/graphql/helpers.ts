@@ -1,4 +1,4 @@
-import { commitMutation } from 'react-relay';
+import { commitMutation, fetchQuery } from 'react-relay';
 import { Environment, GraphQLTaggedNode } from 'relay-runtime';
 
 export const mutationCreator = <IData, IResponseData=any> (environment: Environment, query: GraphQLTaggedNode) =>
@@ -20,3 +20,7 @@ export const mutationCreator = <IData, IResponseData=any> (environment: Environm
             )
         })
     );
+
+export const queryCreator = <IData, IResponseData=any> (environment: Environment, query: GraphQLTaggedNode) =>
+    async (data: IData): Promise<IResponseData> => (fetchQuery(environment, query, data));
+

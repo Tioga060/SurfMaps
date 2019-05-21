@@ -7,8 +7,8 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { classNames as cn } from './styles';
 
-export const TopBar: React.StatelessComponent = (props) => (
-    <AppBar position="sticky" className={cn.topBar}>
+export const TopBar: React.StatelessComponent = () => (
+    <AppBar position="sticky" className={cn.topBarDrawerOffset}>
         <Toolbar>
             <IconButton color="inherit" aria-label="Menu" className={cn.menuButton}>
                 <MenuIcon />
