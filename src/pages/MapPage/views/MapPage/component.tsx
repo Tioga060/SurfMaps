@@ -16,6 +16,7 @@ import { hasImage } from '../../helpers';
 
 interface IProps {
     map: IDisplayMap;
+    canEditMap?: boolean;
 }
 
 interface IState {

@@ -1,6 +1,7 @@
 import React from 'react';
 import debounce from 'lodash/debounce';
 import { QueryRenderer } from 'react-relay';
+import { RootContext } from 'shared/context';
 import { query } from '../MapPage/MapPageGQL';
 import { environment } from 'shared/resources/graphql';
 import { EditMap } from './component';
@@ -30,17 +31,22 @@ export class EditMapContainer extends React.Component<IProps, IState> {
 
     public render() {
         return (
-            <QueryRenderer
-                environment={environment}
-                query={query}
-                variables={{mapId: this.state.mapId}}
-                render={({ error, props }) => {
-                    if (error || !props) {
-                        return <EditMap refreshMap={this.refreshMap}/>
-                    }
-                    return <EditMap map={props.mapByRowId} refreshMap={this.refreshMap}/>
-                }}
-            />
+            <RootContext.Consumer>
+                {({setSidebarIsOpen}) => (
+                    <QueryRenderer
+                        environment={environment}
+                        query={query}
+                        variables={{mapId: this.state.mapId}}
+                        render={({ error, props }) => {
+                            setSidebarIsOpen(true);
+                            if (error || !props) {
+                                return <EditMap refreshMap={this.refreshMap}/>
+                            }
+                            return <EditMap map={props.mapByRowId} refreshMap={this.refreshMap}/>
+                        }}
+                    />
+                )}
+            </RootContext.Consumer>
         )
     }
 }

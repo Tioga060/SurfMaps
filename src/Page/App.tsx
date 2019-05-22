@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { theme } from 'shared/styles';
-import { TopBar } from './components/TopBar';
-import { EditMap } from 'pages/MapPage/views/EditMap';
-import { PageRouter } from './components/Router';
+import { Body } from './components/Body';
+
 import './App.scss'; // used for bootstrap utils
 
 class App extends Component {
   render() {
     return (
       <MuiThemeProvider theme={theme}>
-        <TopBar/>
-        <PageRouter/> 
+        <Body />
       </MuiThemeProvider>
     );
   }
