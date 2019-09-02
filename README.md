@@ -1,3 +1,7 @@
+# Surfmaps
+
+A proof of concept website for hosting and uploading surf maps, developed in parallel with the surfmaps-restfunctions and surfmaps-auth microservices
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
@@ -42,43 +46,3 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
-
-postgraphile -c 'postgres://postgres:a@localhost:5432/postgres' -a -j -o --export-schema-graphql './schema.graphql'
-
-mutation {
-  createSurfMap(
-    input: { surfMap: { mapname: "surf_treefort", tier: 6, author: "Tioga060" } }
-  ) {
-    surfMap {
-      mapname
-      author
-      tier
-    }
-  }
-}
-
-Look for babel-plugin-macros typescript support or just native react-relay in cra2
-
-article on how to do roles well in postgres: https://stackoverflow.com/questions/760210/how-do-you-create-a-read-only-user-in-postgresql
-
-https://material.io/design/components/text-fields.html#usage steal this earch bar
-
-in index.d.ts for react-relay-network-modern
-
-export interface BatchMiddlewareOpts {
-  batchUrl?: string | Promise<string> | ((req: RelayRequest) => string | Promise<string>);
-  batchTimeout?: number;
-  maxBatchSize?: string;
-  allowMutations?: boolean;
-  method?: string;
-}
-
-export function batchMiddleware(opts?: BatchMiddlewareOpts): Middleware;
-
-todo - look into https://docs.microsoft.com/en-us/azure/postgresql/concepts-firewall-rules azure settings authentication
-
-.\pg_dump.exe -d postgres://postgres:a@localhost:5432/postgres -f "C:\Users\jeffh\Documents\test_dump_f" -x
-
-.\psql.exe -U 'shandy_kubota@surfmaps-pg' -d 'postgres' -h 'surfmaps-pg.postgres.database.azure.com' -f 'C:\Users\jeffh\Documents\test_dump_f'
-
-TODO - index foreign keys https://www.graphile.org/postgraphile/best-practices/
